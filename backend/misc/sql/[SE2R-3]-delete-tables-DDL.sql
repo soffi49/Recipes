@@ -1,7 +1,7 @@
-DROP TABLE shopingredient;
-DROP TABLE restaurantrecipe;
-DROP TABLE userrecipe;
-DROP TABLE recipeingredients;
+DROP TABLE shop_ingredient;
+DROP TABLE restaurant_recipe;
+DROP TABLE user_recipe;
+DROP TABLE recipe_ingredient;
 DROP TABLE shop;
 DROP TABLE restaurant;
 DROP TABLE user;

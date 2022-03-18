@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS user (
 	user_id  INT(20) NOT NULL AUTO_INCREMENT,
     username VARCHAR(20) NOT NULL,
     password VARCHAR(64) NOT NULL,
-    token 	 VARCHAR(36) NOT NULL,
     is_admin BINARY(1) NOT NULL DEFAULT 0,
     profile_photo VARCHAR(512) NOT NULL,
 
@@ -54,7 +53,7 @@ CREATE TABLE IF NOT EXISTS shop (
 		UNIQUE KEY (name)
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS recipeingredients (
+CREATE TABLE IF NOT EXISTS recipe_ingredient (
 	recipe_id     INT(20) NOT NULL,
     ingredient_id INT(20) NOT NULL,
 
@@ -68,7 +67,7 @@ CREATE TABLE IF NOT EXISTS recipeingredients (
 		UNIQUE KEY (recipe_id, ingredient_id)
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS userrecipe (
+CREATE TABLE IF NOT EXISTS user_recipe (
 	recipe_id     INT(20) NOT NULL,
     user_id       INT(20) NOT NULL,
 
@@ -82,7 +81,7 @@ CREATE TABLE IF NOT EXISTS userrecipe (
 		UNIQUE KEY (recipe_id, user_id)
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS restaurantrecipe (
+CREATE TABLE IF NOT EXISTS restaurant_recipe (
 	restaurant_id INT(20) NOT NULL,
     recipe_id 	  INT(20) NOT NULL,
     price	      INT(10) NOT NULL,
@@ -97,7 +96,7 @@ CREATE TABLE IF NOT EXISTS restaurantrecipe (
 		UNIQUE KEY (restaurant_id, recipe_id)
 ) ENGINE = INNODB;
 
-CREATE TABLE IF NOT EXISTS shopingredient (
+CREATE TABLE IF NOT EXISTS shop_ingredient (
 	shop_id 		  INT(20) NOT NULL,
     ingredient_id 	  INT(20) NOT NULL,
     price	      	  INT(10) NOT NULL,
