@@ -1,10 +1,10 @@
 package com.recipes.backend.repo.domain;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,6 +26,10 @@ public class UserDTO {
     @NotNull
     @Column(name = "password")
     private String password;
+
+    @NotNull
+    @Column(name = "securityToken")
+    private String securityToken;
 
     @NotNull
     @Column(name = "is_admin")
