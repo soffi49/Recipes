@@ -1,4 +1,4 @@
 package com.recipes.backend.bizz.ingredient;
 
-public class IngredientServiceImpl {
+public class IngredientServiceImpl implements  IngredientService{
 }
