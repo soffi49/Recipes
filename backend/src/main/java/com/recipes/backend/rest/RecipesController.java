@@ -1,6 +1,6 @@
 package com.recipes.backend.rest;
 
-import com.recipes.backend.repo.ExampleRepo;
+import com.recipes.backend.repo.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/recipe")
 public class RecipesController {
 
-    private final ExampleRepo exampleRepo;
+    private final IngredientRepository exampleRepo;
 
     @Autowired
-    public RecipesController(final ExampleRepo exampleRepo) {
+    public RecipesController(final IngredientRepository exampleRepo) {
         this.exampleRepo = exampleRepo;
     }
 
