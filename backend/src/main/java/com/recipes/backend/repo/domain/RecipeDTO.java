@@ -35,6 +35,14 @@ public class RecipeDTO {
     )
     private Set<IngredientDTO> ingredientSet;
 
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_tag",
+            joinColumns = @JoinColumn( name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<TagDTO> tagSet;
+
     @ManyToMany(mappedBy = "recipeSet")
     private Set<UserDTO> userSet;
 

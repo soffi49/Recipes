@@ -28,6 +28,10 @@ public class UserDTO {
     private String password;
 
     @NotNull
+    @Column(name = "token")
+    private String token;
+
+    @NotNull
     @Column(name = "is_admin")
     private int isAdmin;
 
