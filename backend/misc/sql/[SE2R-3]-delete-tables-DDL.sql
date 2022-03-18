@@ -1,0 +1,9 @@
+DROP TABLE shopingredient;
+DROP TABLE restaurantrecipe;
+DROP TABLE userrecipe;
+DROP TABLE recipeingredients;
+DROP TABLE shop;
+DROP TABLE restaurant;
+DROP TABLE user;
+DROP TABLE recipe;
+DROP TABLE ingredient;
