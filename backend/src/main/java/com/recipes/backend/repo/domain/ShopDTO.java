@@ -1,5 +1,6 @@
 package com.recipes.backend.repo.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class ShopDTO {
     @Column(name = "shop_id")
     private long shopId;
 
+    @NotNull
     @Column(name = "name")
     private String name;
 

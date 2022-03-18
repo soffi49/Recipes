@@ -1,6 +1,7 @@
 package com.recipes.backend.repo.domain;
 
 import com.recipes.backend.repo.domain.keys.RestaurantRecipeId;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,10 @@ public class RestaurantRecipeDTO {
     @EmbeddedId
     private RestaurantRecipeId restaurantRecipeId;
 
+    @NotNull
+    @Column(name = "price")
+    private long price;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("restaurantId")
     @JoinColumn(name = "restaurant_id")
@@ -25,9 +30,6 @@ public class RestaurantRecipeDTO {
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
     private RecipeDTO recipe;
-
-    @Column(name = "price")
-    private long price;
 
     @Override
     public boolean equals(Object o) {

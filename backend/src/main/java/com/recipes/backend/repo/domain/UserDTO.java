@@ -1,5 +1,6 @@
 package com.recipes.backend.repo.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,12 +19,15 @@ public class UserDTO {
     @Column(name = "user_id")
     private long userId;
 
+    @NotNull
     @Column(name = "username")
     private String username;
 
+    @NotNull
     @Column(name = "password")
     private String password;
 
+    @NotNull
     @Column(name = "is_admin")
     private int isAdmin;
 

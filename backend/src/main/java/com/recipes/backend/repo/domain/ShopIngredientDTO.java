@@ -1,6 +1,7 @@
 package com.recipes.backend.repo.domain;
 
 import com.recipes.backend.repo.domain.keys.ShopIngredientId;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class ShopIngredientDTO {
     @EmbeddedId
     private ShopIngredientId shopIngredientId;
 
+    @NotNull
     @Column(name = "price")
     private long price;
 
