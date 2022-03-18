@@ -1,4 +1,4 @@
 package com.recipes.backend.bizz.vendor;
 
-public class VendorServiceImpl {
+public class VendorServiceImpl implements VendorService{
 }

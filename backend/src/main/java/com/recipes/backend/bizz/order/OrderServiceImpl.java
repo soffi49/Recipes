@@ -1,4 +1,4 @@
 package com.recipes.backend.bizz.order;
 
-public class OrderServiceImpl {
+public class OrderServiceImpl implements  OrderService{
 }

@@ -1,4 +1,4 @@
 package com.recipes.backend.bizz.login;
 
-public class LoginServiceImpl {
+public class LoginServiceImpl implements LoginService {
 }

@@ -1,4 +1,4 @@
 package com.recipes.backend.bizz.user;
 
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 }
