@@ -1,5 +1,6 @@
 package com.recipes.backend.repo.domain;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

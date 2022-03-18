@@ -1,8 +1,10 @@
 package com.recipes.backend.bizz.login;
 
-import org.springframework.stereotype.Service;
+import com.recipes.backend.rest.domain.LoginRest;
 
-@Service
+import java.util.Optional;
+
 public interface LoginService {
 
+    Optional<String> loginToSystem(LoginRest loginForm);
 }
