@@ -1,11 +1,11 @@
 package com.recipes.backend.repo.domain;
 
 import com.recipes.backend.repo.domain.keys.RestaurantRecipeId;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
