@@ -2,10 +2,9 @@ package com.recipes.backend.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -14,16 +13,17 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IngredientRest implements Serializable {
 
-    private static final long serialVersionUID = -6252784107184220279L;
+    private static final long serialVersionUID = 780145697608886440L;
 
-    @JsonProperty("id")
-    private long id;
+    @NotNull
+    @JsonProperty(value = "id")
+    private Long id;
 
+    @NotNull
     @EqualsAndHashCode.Include
-    @JsonProperty("name")
+    @JsonProperty(value = "name", required = true)
     private String name;
 
     @JsonProperty("photo")
     private String photo;
-
 }

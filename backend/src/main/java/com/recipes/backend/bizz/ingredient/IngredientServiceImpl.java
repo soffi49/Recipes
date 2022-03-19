@@ -12,35 +12,31 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
 @Service
-public class IngredientServiceImpl implements  IngredientService{
+public class IngredientServiceImpl implements IngredientService {
 
     private final IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientServiceImpl (final IngredientRepository ingredientRepository) {
+    public IngredientServiceImpl(final IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
 
     @Override
     public void addIngredient(final Ingredient ingredient) {
+        final Optional<IngredientDTO> ingredientDTOOpt = IngredientMapper.mapToIngredientDTO(ingredient);
 
-        if(Objects.nonNull(ingredient.getName())) {
-            final Optional<IngredientDTO> ingredientDTOOpt = IngredientMapper.mapToIngredientDTO(ingredient);
-
-            ingredientDTOOpt.ifPresent(ingredientDTO -> {
-                try {
-                    ingredientRepository.save(ingredientDTO);
-                } catch (DataIntegrityViolationException e) {
-                    throw new IngredientDuplicateException(ingredient.getName());
-                } catch (DataAccessException e) {
-                    throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
-                }
-            });
-        }
+        ingredientDTOOpt.ifPresent(ingredientDTO -> {
+            try {
+                ingredientRepository.save(ingredientDTO);
+            } catch (DataIntegrityViolationException e) {
+                throw new IngredientDuplicateException(ingredient.getName());
+            } catch (DataAccessException e) {
+                throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
+            }
+        });
     }
 }

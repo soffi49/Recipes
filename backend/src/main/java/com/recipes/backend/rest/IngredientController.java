@@ -11,11 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpHeaders;
-import java.util.Optional;
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/ingredients")
+@RequestMapping(path = "/api/ingredients")
 public class IngredientController {
 
     private final IngredientService ingredientService;
@@ -26,8 +25,7 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addIngredient (@RequestHeader HttpHeaders headers,
-                                         @RequestBody final IngredientRest ingredient) {
+    public ResponseEntity<Object> addIngredient (@RequestBody @Valid IngredientRest ingredient) {
 
         final Ingredient ingredientToAdd =
                 IngredientMapper.mapToIngredient(ingredient).orElseThrow(IngredientEmptyException::new);

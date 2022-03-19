@@ -18,23 +18,31 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IngredientDuplicateException.class)
     protected ResponseEntity<Object> handleForbiddenException(final IngredientDuplicateException ex,
-                                                               final WebRequest webRequest) {
+                                                              final WebRequest webRequest) {
         final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_DUPLICATE;
-        return handleExceptionInternal(ex, exceptionType.getMessage(), new HttpHeaders(), exceptionType.getStatus(), webRequest);
+        return handleCustomException(exceptionType, ex, webRequest);
     }
 
     @ExceptionHandler(IngredientEmptyException.class)
     protected ResponseEntity<Object> handleForbiddenException(final IngredientEmptyException ex,
                                                               final WebRequest webRequest) {
         final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.MAPPER_NULL;
-        return handleExceptionInternal(ex, exceptionType.getMessage(), new HttpHeaders(), exceptionType.getStatus(), webRequest);
+        return handleCustomException(exceptionType, ex, webRequest);
     }
 
     @ExceptionHandler(DatabaseSaveException.class)
     protected ResponseEntity<Object> handleInternalException(final IngredientDuplicateException ex,
-                                                               final WebRequest webRequest) {
+                                                             final WebRequest webRequest) {
         final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_INTERNAL;
-        return handleExceptionInternal(ex, exceptionType.getMessage(), new HttpHeaders(), exceptionType.getStatus(), webRequest);
+        return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    private ResponseEntity<Object> handleCustomException(final ExceptionTypeEnum exceptionTypeEnum,
+                                                         final Exception exception,
+                                                         final WebRequest webRequest) {
+
+        log.error(String.format("Exception: %s", exceptionTypeEnum.getMessage()));
+        exception.printStackTrace();
+        return handleExceptionInternal(exception, exceptionTypeEnum.getMessage(), new HttpHeaders(), exceptionTypeEnum.getStatus(), webRequest);
+    }
 }
