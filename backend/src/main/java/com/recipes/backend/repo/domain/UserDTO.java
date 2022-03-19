@@ -28,8 +28,8 @@ public class UserDTO {
     private String password;
 
     @NotNull
-    @Column(name = "securityToken")
-    private String securityToken;
+    @Column(name = "token")
+    private String token;
 
     @NotNull
     @Column(name = "is_admin")

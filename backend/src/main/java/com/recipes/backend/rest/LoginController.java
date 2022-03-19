@@ -31,6 +31,7 @@ public class LoginController {
         logHeaders(headers);
 
         final Optional<String> tokenOptional = loginService.loginToSystem(loginForm);
+
         return tokenOptional.map(s -> ResponseEntity.ok(JSONObject.quote(s)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
