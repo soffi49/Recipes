@@ -15,8 +15,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LoginServiceImplUnitTest {
@@ -29,10 +29,9 @@ class LoginServiceImplUnitTest {
 
     @ParameterizedTest
     @MethodSource("provideIncorrectLoginRests")
-    void shouldInvalidateIncorrectLoginRequest(LoginRest loginRest, LoginRest realUser, UserDTO userEntity) {
+    void shouldInvalidateIncorrectLoginRequest(LoginRest loginRest, LoginRest realUser, Optional<UserDTO> userEntity) {
         // given
-        lenient().when(userRepository.findByUsername(eq(realUser.getUsername()))).thenReturn(Optional.of(userEntity));
-        //lenient().when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(anyString())).thenReturn(userEntity);
 
         // when
         Optional<String> token = loginService.loginToSystem(loginRest);
@@ -51,11 +50,11 @@ class LoginServiceImplUnitTest {
                 Arguments.of(
                         new LoginRest("user1", "pass1"),
                         new LoginRest("user2", "pass2"),
-                        userEntity),
+                        Optional.empty()),
                 Arguments.of(
                         new LoginRest("user2", "pass1"),
                         new LoginRest("user2", "pass2"),
-                        userEntity)
+                        Optional.of(userEntity))
         );
     }
 }
