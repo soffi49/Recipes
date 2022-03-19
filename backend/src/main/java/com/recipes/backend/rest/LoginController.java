@@ -15,7 +15,7 @@ import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 
 @RestController
-@RequestMapping("/api/login")
+@RequestMapping("/login")
 public class LoginController {
 
     private final LoginService loginService;
