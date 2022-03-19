@@ -37,6 +37,6 @@ public class LoginServiceImpl implements LoginService {
             return Optional.empty();
         }
 
-        return userOptional.map(UserDTO::getSecurityToken);
+        return userOptional.map(UserDTO::getToken);
     }
 }
