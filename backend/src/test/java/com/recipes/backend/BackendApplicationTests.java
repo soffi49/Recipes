@@ -1,13 +1,12 @@
 package com.recipes.backend;
 
-import com.recipes.backend.common.AbstractTestConfig;
+import com.recipes.backend.common.AbstractIntegrationTestConfig;
 import org.junit.jupiter.api.Test;
 
 
-class BackendApplicationTests extends AbstractTestConfig {
+class BackendApplicationTests extends AbstractIntegrationTestConfig {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

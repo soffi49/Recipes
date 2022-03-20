@@ -1,6 +1,5 @@
 package com.recipes.backend.repo;
 
-import com.recipes.backend.common.AbstractTestConfig;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RecipeRepositoryTest extends AbstractTestConfig {
+class RecipeRepositoryTest {
 
     @Autowired
     private RecipeRepository recipeRepository;
