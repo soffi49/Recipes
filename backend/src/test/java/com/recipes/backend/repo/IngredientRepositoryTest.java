@@ -1,7 +1,10 @@
 package com.recipes.backend.repo;
 
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
+import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.repo.domain.IngredientDTO;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +14,11 @@ import org.springframework.test.context.jdbc.Sql;
 
 import javax.validation.ConstraintViolationException;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 
 @Sql({"/data/drop-db.sql", "/data/create-db.sql", "/data/insert-1-ingredient.sql"})
 class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
@@ -26,6 +31,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
     @BeforeEach
     public void setUp() {
         mockIngredient = new IngredientDTO();
+        mockIngredient.setIngredientId(0);
         mockIngredient.setName("Test Ingredient");
         mockIngredient.setPhoto("Test Photo");
     }
@@ -68,5 +74,22 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
 
         assertThatThrownBy(() -> ingredientRepository.save(mockIngredient))
                 .hasRootCauseInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    @DisplayName("Find ingredient by id when present")
+    void findByIdPresent() {
+        final Optional<IngredientDTO> retrievedIngredient  = ingredientRepository.findById(1000L);
+
+        assertThat(retrievedIngredient).isPresent();
+        assertThat(retrievedIngredient.get().getName()).isEqualTo("Name");
+    }
+
+    @Test
+    @DisplayName("Find ingredient by id when not present")
+    void findByIdNotPresent() {
+        final Optional<IngredientDTO> retrievedIngredient  = ingredientRepository.findById(4000L);
+
+        assertThat(retrievedIngredient).isEmpty();
     }
 }

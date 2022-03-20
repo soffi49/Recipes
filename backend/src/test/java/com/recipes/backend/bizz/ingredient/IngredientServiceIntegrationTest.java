@@ -1,31 +1,68 @@
 package com.recipes.backend.bizz.ingredient;
 
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
+import com.recipes.backend.exception.domain.IngredientDuplicateException;
 import com.recipes.backend.repo.IngredientRepository;
 import com.recipes.backend.repo.domain.IngredientDTO;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
+
+@Sql({"/data/drop-db.sql", "/data/create-db.sql", "/data/insert-1-ingredient.sql"})
 class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Autowired
     private IngredientService ingredientService;
 
-    @MockBean
+    @Autowired
     private IngredientRepository ingredientRepository;
 
-    private IngredientDTO mockIngredientDTO;
+    @Test
+    @DisplayName("Add ingredient with all data")
+    void addIngredientWithAllData() {
+        final Ingredient ingredient = new Ingredient();
+        ingredient.setIngredientId(0);
+        ingredient.setName("Test Name");
+        ingredient.setPhoto("Test Photo");
 
-    @BeforeEach
-    public void setUp() {
-        setUpIngredientMock();
+        assertThatNoException().isThrownBy(() -> ingredientService.addIngredient(ingredient));
+
+        final Optional<IngredientDTO> databaseIngredient = ingredientRepository.findById(1L);
+        assertThat(databaseIngredient).isPresent();
+        assertThat(databaseIngredient.get().getPhoto()).isEqualTo("Test Photo");
     }
 
+    @Test
+    @DisplayName("Add ingredient without photo")
+    void addIngredientWithoutPhoto() {
+        final Ingredient ingredient = new Ingredient();
+        ingredient.setIngredientId(0);
+        ingredient.setName("Test Name");
 
-    private void setUpIngredientMock() {
-        mockIngredientDTO = new IngredientDTO();
-        mockIngredientDTO.setIngredientId(1);
-        mockIngredientDTO.setName("Test Name");
+        assertThatNoException().isThrownBy(() -> ingredientService.addIngredient(ingredient));
+
+        final Optional<IngredientDTO> databaseIngredient = ingredientRepository.findById(1L);
+        assertThat(databaseIngredient).isPresent();
+        assertThat(databaseIngredient.get().getName()).isEqualTo("Test Name");
+        assertThat(databaseIngredient.get().getPhoto()).isNull();
     }
+
+    @Test
+    @DisplayName("Add ingredient duplicate")
+    void addIngredientDuplicate() {
+        final Ingredient ingredient = new Ingredient();
+        ingredient.setIngredientId(0);
+        ingredient.setName("Name");
+
+        assertThatThrownBy(() -> ingredientService.addIngredient(ingredient))
+                .isExactlyInstanceOf(IngredientDuplicateException.class)
+                .hasMessage("Ingredient with name: Name does exist in database");
+    }
+
 }
