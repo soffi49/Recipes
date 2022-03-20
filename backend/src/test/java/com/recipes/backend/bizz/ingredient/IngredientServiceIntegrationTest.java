@@ -34,9 +34,8 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
         assertThatNoException().isThrownBy(() -> ingredientService.addIngredient(ingredient));
 
-        final Optional<IngredientDTO> databaseIngredient = ingredientRepository.findById(1L);
-        assertThat(databaseIngredient).isPresent();
-        assertThat(databaseIngredient.get().getPhoto()).isEqualTo("Test Photo");
+        final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(databaseIngredients).anyMatch(el -> el.getName().equals("Test Name"));
     }
 
     @Test
