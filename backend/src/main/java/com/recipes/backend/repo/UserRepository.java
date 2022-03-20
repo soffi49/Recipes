@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface UserRepository extends PagingAndSortingRepository<UserDTO, Long> {
 
     Optional<UserDTO> findByUsername(String username);
-    void deleteByUserId(String userId);
+    Optional<UserDTO> findByToken(String token);
 }

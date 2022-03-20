@@ -2,7 +2,7 @@ package com.recipes.backend.rest;
 
 import com.recipes.backend.bizz.login.LoginService;
 import com.recipes.backend.rest.domain.LoginRest;
-import org.json.JSONObject;
+import com.recipes.backend.rest.domain.TokenRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,13 +26,13 @@ public class LoginController {
     }
 
     @PostMapping
-    public ResponseEntity<String> login(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<TokenRest> login(@RequestHeader HttpHeaders headers,
                                         @RequestBody LoginRest loginForm) {
         logHeaders(headers);
 
         final Optional<String> tokenOptional = loginService.loginToSystem(loginForm);
 
-        return tokenOptional.map(s -> ResponseEntity.ok(JSONObject.quote(s)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        return tokenOptional.map(s -> ResponseEntity.ok(new TokenRest(s)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 }

@@ -42,7 +42,7 @@ class LoginServiceImplUnitTest {
                 .isEmpty();
     }
 
-    static Stream<Arguments> provideIncorrectLoginRests() {
+    private static Stream<Arguments> provideIncorrectLoginRests() {
         var userEntity = new UserDTO();
         userEntity.setPassword("pass2");
 
