@@ -41,8 +41,11 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<IngredientRest>> getAllIngredients(@RequestParam(value = "page") int page,
+    public ResponseEntity<Set<IngredientRest>> getAllIngredients(@RequestHeader HttpHeaders headers,
+                                                                 @RequestParam(value = "page") int page,
                                                                  @RequestParam(value = "limit") int limit) {
+
+        //TODO check headers
 
         final Set<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit).stream()
@@ -51,6 +54,6 @@ public class IngredientController {
                         .map(Optional::get)
                         .collect(Collectors.toSet());
 
-        return new ResponseEntity<>(retrievedIngredients, HttpStatus.OK);
+        return ResponseEntity.ok(retrievedIngredients);
     }
 }
