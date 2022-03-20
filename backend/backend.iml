@@ -106,7 +106,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:mysql:1.16.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:jdbc:1.16.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:database-commons:1.16.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.testcontainers:oracle-xe:1.16.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-core:4.3.1" level="project" />
     <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.11.22" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.11.22" level="project" />
