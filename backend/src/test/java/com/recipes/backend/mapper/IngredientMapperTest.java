@@ -122,30 +122,30 @@ class IngredientMapperTest {
     }
 
     @Test
-    @DisplayName("Map to ingredientRest from ingredientDTO not null with photo")
-    void mapToIngredientRestFromIngredientDTONotNullPhoto() {
-        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest(mockIngredientDTO);
+    @DisplayName("Map to ingredientRest from ingredient not null with photo")
+    void mapToIngredientRestFromIngredientNotNullPhoto() {
+        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest(mockIngredient);
 
         Assertions.assertTrue(retrievedIngredientRest.isPresent());
-        Assertions.assertEquals(1L, retrievedIngredientRest.get().getId());
-        Assertions.assertEquals("Test PhotoDTO", retrievedIngredientRest.get().getPhoto());
+        Assertions.assertEquals(0L, retrievedIngredientRest.get().getId());
+        Assertions.assertEquals("Test Photo", retrievedIngredientRest.get().getPhoto());
     }
 
     @Test
-    @DisplayName("Map to ingredientRest from ingredientDTO not null without photo")
-    void mapToIngredientRestFromIngredientDTONotNul() {
-        mockIngredientDTO.setPhoto(null);
-        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest(mockIngredientDTO);
+    @DisplayName("Map to ingredientRest from ingredient not null without photo")
+    void mapToIngredientRestFromIngredientNotNul() {
+        mockIngredient.setPhoto(null);
+        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest(mockIngredient);
 
         Assertions.assertTrue(retrievedIngredientRest.isPresent());
         Assertions.assertNull(retrievedIngredientRest.get().getPhoto());
-        Assertions.assertEquals("Test IngredientDTO", retrievedIngredientRest.get().getName());
+        Assertions.assertEquals("Test Ingredient", retrievedIngredientRest.get().getName());
     }
 
     @Test
-    @DisplayName("Map to ingredientDTO from ingredient null")
-    void mapToIngredientRestFromIngredientDTONull() {
-        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest((IngredientDTO) null);
+    @DisplayName("Map to ingredientRest from ingredient null")
+    void mapToIngredientRestFromIngredientNull() {
+        final Optional<IngredientRest> retrievedIngredientRest = IngredientMapper.mapToIngredientRest((Ingredient) null);
 
         Assertions.assertFalse(retrievedIngredientRest.isPresent());
     }

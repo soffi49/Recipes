@@ -3,7 +3,7 @@ package com.recipes.backend.rest;
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.IngredientDuplicateException;
-import org.junit.jupiter.api.BeforeEach;
+import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,9 +13,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.LongStream;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(IngredientController.class)
 class IngredientControllerTest {
@@ -27,7 +32,7 @@ class IngredientControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Correct ingredient provided")
+    @DisplayName("Save ingredient - correct ingredient provided")
     void addIngredientWithCorrectData() throws Exception {
         final Ingredient correctIngredient = new Ingredient();
         correctIngredient.setIngredientId(0);
@@ -43,7 +48,7 @@ class IngredientControllerTest {
     }
 
     @Test
-    @DisplayName("Duplicated ingredient provided")
+    @DisplayName("Save ingredient - duplicated ingredient provided")
     void addIngredientWithDuplicatedData() throws Exception {
         final Ingredient correctIngredient = new Ingredient();
         correctIngredient.setIngredientId(0);
@@ -59,11 +64,48 @@ class IngredientControllerTest {
     }
 
     @Test
-    @DisplayName("Ingredient without name provided")
+    @DisplayName("Save ingredient - ingredient without name provided")
     void addIngredientWithoutName() throws Exception {
         mockMvc.perform(post("/ingredients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"photo\" : \"test\"}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Get all ingredients - correct parameters")
+    void getAllIngredientsCorrectParam() throws Exception {
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientServiceMock).getAllIngredients(0, 5);
+
+        mockMvc.perform(get("/ingredients")
+                        .param("limit", "5")
+                        .param("page", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].name", is("Name0")));
+    }
+
+    @Test
+    @DisplayName("Get all ingredients - incorrect parameters")
+    void getAllIngredientsIncorrectParam() throws Exception {
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientServiceMock).getAllIngredients(0, 5);
+
+        mockMvc.perform(get("/ingredients")
+                        .param("limit", "5")
+                        .param("other", "0"))
+                .andExpect(status().isBadRequest());
+    }
+
+    private Set<Ingredient> setUpIngredientSet () {
+        final Set<Ingredient> ingredientRestSet = new HashSet<>();
+
+        LongStream.range(0,3).forEach(val -> {
+            final Ingredient ingredient = new Ingredient();
+            ingredient.setIngredientId(val);
+            ingredient.setName("Name" + val);
+            ingredientRestSet.add(ingredient);
+        });
+
+        return ingredientRestSet;
     }
 }
