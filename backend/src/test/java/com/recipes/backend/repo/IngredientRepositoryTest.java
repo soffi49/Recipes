@@ -53,7 +53,6 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
 
         assertThat(ingredientDTO).usingRecursiveComparison().isEqualTo(mockIngredient);
         assertThat(ingredientDTO.getPhoto()).isNull();
-        assertThat(ingredientDTO.getIngredientId()).isEqualTo(1);
     }
 
     @Test
@@ -91,5 +90,15 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
         final Optional<IngredientDTO> retrievedIngredient  = ingredientRepository.findById(4000L);
 
         assertThat(retrievedIngredient).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Find all ingredients not empty")
+    @Sql("/data/truncate-ingredients.sql")
+    void findAllIngredients() {
+        ingredientRepository.save(mockIngredient);
+        final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
+
+        assertThat(databaseIngredients.size()).isEqualTo(1);
     }
 }

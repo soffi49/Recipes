@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -47,10 +48,8 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
         assertThatNoException().isThrownBy(() -> ingredientService.addIngredient(ingredient));
 
-        final Optional<IngredientDTO> databaseIngredient = ingredientRepository.findById(1L);
-        assertThat(databaseIngredient).isPresent();
-        assertThat(databaseIngredient.get().getName()).isEqualTo("Test Name");
-        assertThat(databaseIngredient.get().getPhoto()).isNull();
+        final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(databaseIngredients).anyMatch(el -> el.getName().equals("Test Name"));
     }
 
     @Test

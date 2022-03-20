@@ -28,7 +28,6 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
         final RecipeDTO savedRecipe = recipeRepository.save(recipeDTO);
         assertThat(savedRecipe).usingRecursiveComparison().isEqualTo(recipeDTO);
-        assertThat(savedRecipe.getRecipeId()).isEqualTo(1);
     }
 
     private void setUpRecipeDTO() {

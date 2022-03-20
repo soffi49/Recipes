@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/api/ingredients")
+@RequestMapping(path = "/ingredients")
 public class IngredientController {
 
     private final IngredientService ingredientService;
