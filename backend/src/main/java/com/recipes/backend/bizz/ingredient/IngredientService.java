@@ -1,7 +1,9 @@
 package com.recipes.backend.bizz.ingredient;
 
-import org.springframework.stereotype.Service;
 
-@Service
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
+
 public interface IngredientService {
+
+    void addIngredient(Ingredient ingredient);
 }
