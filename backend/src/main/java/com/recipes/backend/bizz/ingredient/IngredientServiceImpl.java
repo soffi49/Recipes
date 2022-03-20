@@ -32,9 +32,9 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientDTOOpt.ifPresent(ingredientDTO -> {
             try {
                 ingredientRepository.save(ingredientDTO);
-            } catch (DataIntegrityViolationException e) {
+            } catch (final DataIntegrityViolationException e) {
                 throw new IngredientDuplicateException(ingredient.getName());
-            } catch (DataAccessException e) {
+            } catch (final DataAccessException e) {
                 throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
             }
         });

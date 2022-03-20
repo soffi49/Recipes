@@ -1,17 +1,18 @@
 package com.recipes.backend.mapper;
 
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
-import com.recipes.backend.common.AbstractTestConfig;
 import com.recipes.backend.repo.domain.IngredientDTO;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-class IngredientMapperTest extends AbstractTestConfig {
+@SpringBootTest
+class IngredientMapperTest {
 
     private Ingredient mockIngredient;
     private IngredientRest mockIngredientRest;
