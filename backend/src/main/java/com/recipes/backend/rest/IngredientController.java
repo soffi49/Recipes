@@ -7,7 +7,7 @@ import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +28,16 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addIngredient(@RequestBody @Valid IngredientRest ingredient) {
+    public ResponseEntity<Object> addIngredient(@RequestHeader HttpHeaders headers,
+                                                @RequestBody @Valid IngredientRest ingredient) {
+
+        //TODO add header validation
 
         final Ingredient ingredientToAdd =
                 IngredientMapper.mapToIngredient(ingredient).orElseThrow(IngredientEmptyException::new);
         ingredientService.addIngredient(ingredientToAdd);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
