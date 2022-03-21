@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS ingredient (
 	ingredient_id INT(20) NOT NULL AUTO_INCREMENT,
     name    	  VARCHAR(40) NOT NULL,
+    photo 	   	  VARCHAR(512) NULL,
 
     CONSTRAINT pk_ingredient
         PRIMARY KEY (ingredient_id),
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(64) NOT NULL,
     token    VARCHAR(36) NOT NULL,
     is_admin BINARY(1) NOT NULL DEFAULT 0,
+    profile_photo VARCHAR(512) NULL,
 
     CONSTRAINT pk_user
 		PRIMARY KEY(user_id),
