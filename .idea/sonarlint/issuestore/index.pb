@@ -39,12 +39,8 @@ Ubackend/src/main/java/com/recipes/backend/exception/domain/DatabaseSaveExceptio
 Pbackend/src/main/java/com/recipes/backend/bizz/ingredient/IngredientService.java,8\7\876b19eb0b22bd482341de1084acae97683a7491
 u
 Ebackend/src/main/java/com/recipes/backend/rest/VendorsController.java,3\6\364def7d0a174c59e1da6c5f71f3521d6b8e89d9
-C
-backend/backend.iml,a\d\adf0df56c10f8900e98e773639795e50e810683c
 }
 Mbackend/src/main/java/com/recipes/backend/exception/RestExceptionHandler.java,e\e\ee9b974277faad6c1c6597dc96b2c73c46c98b45
-?
-backend/pom.xml,f\9\f9590cd73598b6f2427c8b1327d922c50d1dc504
 ƒ
 Sbackend/src/test/java/com/recipes/backend/common/AbstractIntegrationTestConfig.java,6\8\6875b8544fdaf6da2767db15916c5464023b5d2b
 9
