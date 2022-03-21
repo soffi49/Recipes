@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(SpringExtension.class)
-@Sql({"/data/drop-db.sql","/data/create-user-db.sql", "/data/insert-1-user.sql"})
+@Sql({"/data/drop-db-if-exists.sql","/data/create-user-db.sql", "/data/insert-1-user.sql"})
 class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -28,12 +28,12 @@ class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
     private int port;
 
     @Test
-    void shouldCorrectlyLoginGivenCorrectCredentials() throws JSONException, JsonProcessingException {
+    void shouldCorrectlyLoginGivenCorrectCredentials() throws JsonProcessingException {
         // given
         HEADERS.add("Content-type", "application/json");
         var user = new LoginRest("username", "password");
         var expectedString = "{\"token\":\"security_token\"}";
-        var entity = new HttpEntity<String>(MAPPER.writeValueAsString(user), HEADERS);
+        var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
 
         // when
         ResponseEntity<String> response = REST_TEMPLATE.exchange(
@@ -50,7 +50,7 @@ class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
         HEADERS.add("Content-type", "application/json");
         var user = new LoginRest("username", "wrongPassword");
         var expectedString = "{\"token\":\"security_token\"}";
-        var entity = new HttpEntity<String>(MAPPER.writeValueAsString(user), HEADERS);
+        var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
 
         // when
         ResponseEntity<String> response = REST_TEMPLATE.exchange(
