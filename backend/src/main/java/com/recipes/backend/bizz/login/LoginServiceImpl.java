@@ -24,19 +24,19 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Optional<String> loginToSystem(final LoginRest loginForm)
     {
-        var userOptional = userRepository.findByUsername(loginForm.getUsername());
+        var userDTOOptional = userRepository.findByUsername(loginForm.getUsername());
 
-        if(userOptional.isEmpty())
+        if(userDTOOptional.isEmpty())
         {
             log.warn("User {} doesn't exists", loginForm.getUsername());
             return Optional.empty();
         }
 
-        if(!userOptional.get().getPassword().equals(loginForm.getPassword())) {
+        if(!userDTOOptional.get().getPassword().equals(loginForm.getPassword())) {
             log.warn("Wrong password for user {}", loginForm.getUsername());
             return Optional.empty();
         }
 
-        return userOptional.map(UserDTO::getToken);
+        return userDTOOptional.map(UserDTO::getToken);
     }
 }
