@@ -1,10 +1,7 @@
 package com.recipes.backend.repo;
 
-import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
-import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.repo.domain.IngredientDTO;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.validation.ConstraintViolationException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -33,33 +29,21 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
         mockIngredient = new IngredientDTO();
         mockIngredient.setIngredientId(0);
         mockIngredient.setName("Test Ingredient");
-        mockIngredient.setPhoto("Test Photo");
     }
 
     @Test
-    @DisplayName("Save ingredient with photo")
-    void saveIngredientWithPhoto() {
+    @DisplayName("Save ingredient all data")
+    void saveIngredientAllData() {
         final IngredientDTO ingredientDTO = ingredientRepository.save(mockIngredient);
 
         assertThat(ingredientDTO).usingRecursiveComparison().isEqualTo(mockIngredient);
-        assertThat(ingredientDTO.getPhoto()).isEqualTo("Test Photo");
-    }
-
-    @Test
-    @DisplayName("Save ingredient without photo")
-    void saveIngredientWithoutPhoto() {
-        mockIngredient.setPhoto(null);
-        final IngredientDTO ingredientDTO = ingredientRepository.save(mockIngredient);
-
-        assertThat(ingredientDTO).usingRecursiveComparison().isEqualTo(mockIngredient);
-        assertThat(ingredientDTO.getPhoto()).isNull();
+        assertThat(ingredientDTO.getName()).isEqualTo("Test Ingredient");
     }
 
     @Test
     @DisplayName("Save ingredient duplicate")
     void saveIngredientDuplicate() {
         mockIngredient.setName("Name");
-        mockIngredient.setPhoto("Photo");
 
         assertThatThrownBy(() -> ingredientRepository.save(mockIngredient))
                 .isExactlyInstanceOf(DataIntegrityViolationException.class);
@@ -69,7 +53,6 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
     @DisplayName("Save ingredient with null name")
     void saveIngredientNullName() {
         mockIngredient.setName(null);
-        mockIngredient.setPhoto("Photo");
 
         assertThatThrownBy(() -> ingredientRepository.save(mockIngredient))
                 .hasRootCauseInstanceOf(ConstraintViolationException.class);
@@ -78,7 +61,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
     @Test
     @DisplayName("Find ingredient by id when present")
     void findByIdPresent() {
-        final Optional<IngredientDTO> retrievedIngredient  = ingredientRepository.findById(1000L);
+        final Optional<IngredientDTO> retrievedIngredient = ingredientRepository.findById(1000L);
 
         assertThat(retrievedIngredient).isPresent();
         assertThat(retrievedIngredient.get().getName()).isEqualTo("Name");
@@ -87,7 +70,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
     @Test
     @DisplayName("Find ingredient by id when not present")
     void findByIdNotPresent() {
-        final Optional<IngredientDTO> retrievedIngredient  = ingredientRepository.findById(4000L);
+        final Optional<IngredientDTO> retrievedIngredient = ingredientRepository.findById(4000L);
 
         assertThat(retrievedIngredient).isEmpty();
     }

@@ -24,6 +24,4 @@ public class IngredientRest implements Serializable {
     @JsonProperty(value = "name", required = true)
     private String name;
 
-    @JsonProperty("photo")
-    private String photo;
 }

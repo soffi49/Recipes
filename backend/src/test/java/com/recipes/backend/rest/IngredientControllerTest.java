@@ -3,7 +3,6 @@ package com.recipes.backend.rest;
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.IngredientDuplicateException;
-import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -17,10 +16,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.LongStream;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(IngredientController.class)
 class IngredientControllerTest {
@@ -37,13 +37,12 @@ class IngredientControllerTest {
         final Ingredient correctIngredient = new Ingredient();
         correctIngredient.setIngredientId(0);
         correctIngredient.setName("Name");
-        correctIngredient.setPhoto("Photo");
 
         Mockito.doNothing().when(ingredientServiceMock).addIngredient(correctIngredient);
 
         mockMvc.perform(post("/ingredients")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\" : \"0\", \"name\" : \"Name\", \"photo\" : \"Photo\"}"))
+                        .content("{\"id\" : \"0\", \"name\" : \"Name\"}"))
                 .andExpect(status().isOk());
     }
 
@@ -96,10 +95,10 @@ class IngredientControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    private Set<Ingredient> setUpIngredientSet () {
+    private Set<Ingredient> setUpIngredientSet() {
         final Set<Ingredient> ingredientRestSet = new HashSet<>();
 
-        LongStream.range(0,3).forEach(val -> {
+        LongStream.range(0, 3).forEach(val -> {
             final Ingredient ingredient = new Ingredient();
             ingredient.setIngredientId(val);
             ingredient.setName("Name" + val);
