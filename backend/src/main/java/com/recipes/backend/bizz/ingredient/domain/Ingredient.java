@@ -14,9 +14,6 @@ public class Ingredient {
 
     private String name;
 
-    @Nullable
-    private String photo;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

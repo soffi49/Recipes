@@ -15,10 +15,6 @@ public class IngredientMapper {
             final Ingredient ingredient = new Ingredient();
             ingredient.setIngredientId(ingredientRest.getId());
             ingredient.setName(ingredientRest.getName());
-
-            if (Objects.nonNull(ingredientRest.getPhoto())) {
-                ingredient.setPhoto(ingredientRest.getPhoto());
-            }
             return Optional.of(ingredient);
         }
         return Optional.empty();
@@ -30,10 +26,6 @@ public class IngredientMapper {
             final Ingredient ingredient = new Ingredient();
             ingredient.setIngredientId(ingredientDTO.getIngredientId());
             ingredient.setName(ingredientDTO.getName());
-
-            if (Objects.nonNull(ingredientDTO.getPhoto())) {
-                ingredient.setPhoto(ingredientDTO.getPhoto());
-            }
             return Optional.of(ingredient);
         }
         return Optional.empty();
@@ -44,10 +36,6 @@ public class IngredientMapper {
         if (Objects.nonNull(ingredient)) {
             final IngredientDTO ingredientDTO = new IngredientDTO();
             ingredientDTO.setName(ingredient.getName());
-
-            if (Objects.nonNull(ingredient.getPhoto())) {
-                ingredientDTO.setPhoto(ingredient.getPhoto());
-            }
             return Optional.of(ingredientDTO);
         }
         return Optional.empty();
@@ -59,10 +47,6 @@ public class IngredientMapper {
             final IngredientRest ingredientRest = new IngredientRest();
             ingredientRest.setId(ingredient.getIngredientId());
             ingredientRest.setName(ingredient.getName());
-
-            if (Objects.nonNull(ingredient.getPhoto())) {
-                ingredientRest.setPhoto(ingredient.getPhoto());
-            }
             return Optional.of(ingredientRest);
         }
         return Optional.empty();
