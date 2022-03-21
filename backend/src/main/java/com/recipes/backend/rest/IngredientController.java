@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/ingredients")
@@ -35,5 +38,22 @@ public class IngredientController {
         ingredientService.addIngredient(ingredientToAdd);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Set<IngredientRest>> getAllIngredients(@RequestHeader HttpHeaders headers,
+                                                                 @RequestParam(value = "page") int page,
+                                                                 @RequestParam(value = "limit") int limit) {
+
+        //TODO check headers
+
+        final Set<IngredientRest> retrievedIngredients =
+                ingredientService.getAllIngredients(page, limit).stream()
+                        .map(IngredientMapper::mapToIngredientRest)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(retrievedIngredients);
     }
 }

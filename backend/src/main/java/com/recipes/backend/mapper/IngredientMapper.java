@@ -53,15 +53,15 @@ public class IngredientMapper {
         return Optional.empty();
     }
 
-    public static Optional<IngredientRest> mapToIngredientRest(final IngredientDTO ingredientDTO) {
+    public static Optional<IngredientRest> mapToIngredientRest(final Ingredient ingredient) {
 
-        if (Objects.nonNull(ingredientDTO)) {
+        if (Objects.nonNull(ingredient)) {
             final IngredientRest ingredientRest = new IngredientRest();
-            ingredientRest.setId(ingredientDTO.getIngredientId());
-            ingredientRest.setName(ingredientDTO.getName());
+            ingredientRest.setId(ingredient.getIngredientId());
+            ingredientRest.setName(ingredient.getName());
 
-            if (Objects.nonNull(ingredientDTO.getPhoto())) {
-                ingredientRest.setPhoto(ingredientDTO.getPhoto());
+            if (Objects.nonNull(ingredient.getPhoto())) {
+                ingredientRest.setPhoto(ingredient.getPhoto());
             }
             return Optional.of(ingredientRest);
         }

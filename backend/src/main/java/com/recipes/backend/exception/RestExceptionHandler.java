@@ -1,9 +1,6 @@
 package com.recipes.backend.exception;
 
-import com.recipes.backend.exception.domain.DatabaseSaveException;
-import com.recipes.backend.exception.domain.ExceptionTypeEnum;
-import com.recipes.backend.exception.domain.IngredientDuplicateException;
-import com.recipes.backend.exception.domain.IngredientEmptyException;
+import com.recipes.backend.exception.domain.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DatabaseSaveException.class)
-    protected ResponseEntity<Object> handleInternalException(final IngredientDuplicateException ex,
+    protected ResponseEntity<Object> handleInternalException(final DatabaseSaveException ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_INTERNAL;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(DatabaseFindException.class)
+    protected ResponseEntity<Object> handleInternalException(final DatabaseFindException ex,
                                                              final WebRequest webRequest) {
         final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_INTERNAL;
         return handleCustomException(exceptionType, ex, webRequest);

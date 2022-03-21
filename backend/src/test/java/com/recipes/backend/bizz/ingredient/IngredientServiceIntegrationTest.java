@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -61,6 +62,46 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
         assertThatThrownBy(() -> ingredientService.addIngredient(ingredient))
                 .isExactlyInstanceOf(IngredientDuplicateException.class)
                 .hasMessage("Ingredient with name: Name does exist in database");
+    }
+
+    @Test
+    @DisplayName("Get all ingredients one page")
+    @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
+    void getAllIngredientsOnePage() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit);
+        final Set<String> ingredientsNames = retrievedList.stream().map(Ingredient::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList.size()).isEqualTo(5);
+        assertThat(ingredientsNames).contains("Name4");
+    }
+
+    @Test
+    @DisplayName("Get all ingredients more pages")
+    @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
+    void getAllIngredientsMorePages() {
+        final int limit = 3;
+
+        final Set<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit);
+        final Set<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit);
+
+        assertThat(retrievedList1.size()).isEqualTo(3);
+        assertThat(retrievedList2.size()).isEqualTo(2);
+        assertThat(retrievedList1.stream().anyMatch(el -> el.getName().equals("Name4"))).isFalse();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients empty")
+    @Sql("/data/truncate-ingredients.sql")
+    void getAllIngredientsEmpty() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit);
+
+        assertThat(retrievedList.size()).isZero();
     }
 
 }
