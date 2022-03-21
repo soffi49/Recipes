@@ -137,7 +137,8 @@ fabric.properties
 # CodeStream plugin
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
-
+.idea/*
+.idea/
 .idea/sonarlint/
 .idea/sonarlint/issuestore/index.pb
 
