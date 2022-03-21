@@ -80,7 +80,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Get all ingredients empty")
-    @Sql("/data/truncate-ingredients.sql")
+    @Sql({"/data/create-db.sql", "/data/truncate-ingredients.sql"})
     void getAllIngredientsEmpty() {
         final int limit = 5;
         final int page = 0;
