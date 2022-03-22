@@ -1,11 +1,9 @@
-import React from 'react';
+import IngredientsTableAdminView from "./components/ingredients-table-admin-view/ingredients-table-admin-view.component";
 
-function App() {
+export default function App() {
   return (
-    <div>
-        App
-    </div>
+    <>
+      <IngredientsTableAdminView />
+    </>
   );
 }
-
-export default App;

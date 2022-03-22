@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class BackendApplicationTests extends AbstractIntegrationTestConfig {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }
