@@ -20,6 +20,7 @@ import { BrowserRouter, Router } from "react-router-dom";
 beforeAll(() => server.listen());
 beforeEach(() => {
     
+    
     jest.restoreAllMocks();
     jest.spyOn(window.sessionStorage.__proto__, 'setItem');
     
