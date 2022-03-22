@@ -21,9 +21,6 @@ public class RecipesController {
     public ResponseEntity<String> deleteRecipe(@RequestHeader HttpHeaders headers,
                                                @PathVariable(name = "id") Long recipeId) {
         //TODO add header validation
-        if (recipeService.deleteRecipe(recipeId)) {
-            return ResponseEntity.ok(recipeId.toString());
-        }
-        return ResponseEntity.badRequest().body("Bad request!");
+        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
     }
 }

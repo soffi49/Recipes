@@ -59,9 +59,6 @@ public class IngredientController {
     public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
                                                    @PathVariable(name = "id") Long ingredientId) {
         //TODO add header validation
-        if (ingredientService.deleteIngredient(ingredientId)) {
-            return ResponseEntity.ok(ingredientId.toString());
-        }
-        return ResponseEntity.badRequest().body("Bad request!");
+        return ingredientService.deleteIngredient(ingredientId) ? ResponseEntity.ok(ingredientId.toString()) : ResponseEntity.badRequest().body("Bad request!");
     }
 }
