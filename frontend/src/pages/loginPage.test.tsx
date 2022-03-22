@@ -45,12 +45,5 @@ describe('Login page tests', () => {
     test('Login page renders a password text input', () => {
         render(<BrowserRouter><LoginPage/></BrowserRouter>);
         expect(screen.getByLabelText("Password")).toBeTruthy();
-    }),
-
-    test('Login page sets a session storage', () => {
-        render(<BrowserRouter><LoginPage/></BrowserRouter>);
-        const button = screen.getByRole("button");
-        fireEvent.click(button);
-        expect(window.sessionStorage.setItem).toHaveBeenCalled();
     })
 });
