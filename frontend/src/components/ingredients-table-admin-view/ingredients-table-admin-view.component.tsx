@@ -21,7 +21,7 @@ export default function IngredientsTableAdminView() {
         });
     };
 
-    const addIngredient = async (name: string) => {
+    const addIngredient = (name: string) => {
         setIsFetching(true);
         addIngredientApi(name).then(() => getAllIngredients());
     }
