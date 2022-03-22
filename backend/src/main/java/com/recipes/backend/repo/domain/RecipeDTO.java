@@ -29,14 +29,6 @@ public class RecipeDTO {
 
     @ManyToMany
     @JoinTable(
-            name = "recipe_ingredient",
-            joinColumns = @JoinColumn( name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
-    )
-    private Set<IngredientDTO> ingredientSet;
-
-    @ManyToMany
-    @JoinTable(
             name = "recipe_tag",
             joinColumns = @JoinColumn( name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
@@ -48,6 +40,9 @@ public class RecipeDTO {
 
     @OneToMany(mappedBy = "recipe")
     private Set<RestaurantRecipeDTO> restaurantSet;
+
+    @OneToMany(mappedBy = "recipe")
+    private Set<RecipeIngredientDTO> ingredientSet;
 
     @Override
     public boolean equals(Object o) {

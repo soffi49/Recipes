@@ -80,7 +80,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Get all ingredients empty")
-    @Sql({"/data/create-db.sql", "/data/truncate-ingredients.sql"})
+    @Sql({"/data/truncate-ingredients.sql"})
     void getAllIngredientsEmpty() {
         final int limit = 5;
         final int page = 0;
@@ -88,6 +88,24 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
         final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit);
 
         assertThat(retrievedList.size()).isZero();
+    }
+
+    @Test
+    @DisplayName("Count ingredients non empty")
+    @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
+    void countIngredientsNonEmpty() {
+        final long retrievedList = ingredientService.getIngredientsCount();
+
+        assertThat(retrievedList).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Count ingredients empty")
+    @Sql({"/data/truncate-ingredients.sql"})
+    void countIngredientsEmpty() {
+        final long retrievedList = ingredientService.getIngredientsCount();
+
+        assertThat(retrievedList).isZero();
     }
 
 }

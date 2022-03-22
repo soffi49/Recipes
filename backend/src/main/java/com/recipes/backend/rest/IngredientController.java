@@ -5,6 +5,7 @@ import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
+import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +42,7 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<IngredientRest>> getAllIngredients(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
                                                                  @RequestParam(value = "page") int page,
                                                                  @RequestParam(value = "limit") int limit) {
 
@@ -53,7 +54,8 @@ public class IngredientController {
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toSet());
+        final long totalIngredients = ingredientService.getIngredientsCount();
 
-        return ResponseEntity.ok(retrievedIngredients);
+        return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));
     }
 }
