@@ -1,6 +1,4 @@
 package com.recipes.backend.rest;
-
-
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
@@ -55,5 +53,15 @@ public class IngredientController {
                         .collect(Collectors.toSet());
 
         return ResponseEntity.ok(retrievedIngredients);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
+                                                   @PathVariable(name = "id") Long ingredientId) {
+        //TODO add header validation
+        if (ingredientService.deleteIngredient(ingredientId)) {
+            return ResponseEntity.ok(ingredientId.toString());
+        }
+        return ResponseEntity.badRequest().body("Bad request!");
     }
 }

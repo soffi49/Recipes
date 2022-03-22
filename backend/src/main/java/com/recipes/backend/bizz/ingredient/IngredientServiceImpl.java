@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -43,6 +44,17 @@ public class IngredientServiceImpl implements IngredientService {
                 throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
             }
         });
+    }
+
+    @Override
+    public boolean deleteIngredient(Long ingredientId) {
+        try {
+            ingredientRepository.deleteById(ingredientId);
+            return true;
+        } catch (final EmptyResultDataAccessException e) {
+            log.warn("Ingredient id {} deletion failed!", ingredientId, e);
+            return false;
+        }
     }
 
     @Override
