@@ -34,4 +34,3 @@ public class Recipe {
         return Objects.hash(name);
     }
 }
-}
