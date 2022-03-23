@@ -71,4 +71,13 @@ public class IngredientServiceImpl implements IngredientService {
             throw new DatabaseFindException("couldn't persist full ingredient list");
         }
     }
+
+    @Override
+    public long getIngredientsCount() {
+        try {
+            return StreamSupport.stream(ingredientRepository.findAll().spliterator(), false).count();
+        } catch (final DataAccessException e) {
+            throw new DatabaseFindException("couldn't persist ingredients count");
+        }
+    }
 }
