@@ -9,12 +9,16 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IngredientDetails } from '../../models/models';
-
+import { deleteIngredientApi } from '../../api/api.api';
 interface IngredientTableProps {
     ingredients: IngredientDetails[];
+    getAllIngredients: () => void;
 }
 
-export default function IngredientsTable({ingredients}: IngredientTableProps) {
+export default function IngredientsTable({ingredients,getAllIngredients}: IngredientTableProps) {
+  const clickDelete = async (id: number) => {
+    await deleteIngredientApi(id).then(() => getAllIngredients()).catch((e) => console.log(e));
+  }
     return (
         <>
           <TableContainer component={Paper}>
@@ -37,7 +41,7 @@ export default function IngredientsTable({ingredients}: IngredientTableProps) {
                         <IconButton aria-label="Edit button">
                             <EditIcon />
                         </IconButton>
-                        <IconButton aria-label="Delete button">
+                        <IconButton aria-label="Delete button" onClick={() => clickDelete(row.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </TableCell>

@@ -14,6 +14,7 @@ export default function IngredientsTableAdminView() {
     const [limit, setLimit] = useState<number>(100);
     const getAllIngredients = () => {
         getIngredientsApi(page, limit).then((response) => {
+            setIsFetching(true);
             if(!!response){
                 setIngredients(response)
             };
@@ -40,6 +41,7 @@ export default function IngredientsTableAdminView() {
             <AddIngredient addIngredient={addIngredient}/>
             <IngredientsTable 
                 ingredients={ingredients}
+                getAllIngredients={getAllIngredients}
             />
         </>
       );

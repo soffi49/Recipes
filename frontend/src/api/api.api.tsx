@@ -20,3 +20,11 @@ export async function addIngredientApi(name: string) {
         throw error;
     }
 }
+
+export async function deleteIngredientApi(id: number) {
+    try {
+        await axios.delete(`${server}ingredients/${id}`)
+    } catch (error) {
+        throw error;
+    }
+}
