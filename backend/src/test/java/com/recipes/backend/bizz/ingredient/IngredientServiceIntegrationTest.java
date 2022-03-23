@@ -91,6 +91,29 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
     }
 
     @Test
+    @DisplayName("Delete one existing ingredient")
+    @Sql({"/data/truncate-ingredients.sql", "/data/insert-1-ingredient.sql"})
+    void deleteOneProperIngredient() {
+
+        assertThat(ingredientService.deleteIngredient((long) 1000)).isTrue();
+
+        final List<IngredientDTO> ingredientList = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(ingredientList).isEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Delete one not existing ingredient")
+    @Sql({"/data/truncate-ingredients.sql", "/data/insert-1-ingredient.sql"})
+    void deleteOneNotExistingIngredient() {
+
+        assertThat(ingredientService.deleteIngredient((long) 1)).isFalse();
+
+        final List<IngredientDTO> ingredientList = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(ingredientList).isNotEmpty();
+    }
+
+    @Test
     @DisplayName("Count ingredients non empty")
     @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
     void countIngredientsNonEmpty() {
@@ -107,5 +130,6 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
         assertThat(retrievedList).isZero();
     }
+
 
 }
