@@ -23,8 +23,8 @@ public class IngredientDTO {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "ingredientSet")
-    private Set<RecipeDTO> recipeSet;
+    @OneToMany(mappedBy = "ingredient")
+    private Set<RecipeIngredientDTO> recipeSet;
 
     @OneToMany(mappedBy = "ingredient")
     private Set<ShopIngredientDTO> shopSet;

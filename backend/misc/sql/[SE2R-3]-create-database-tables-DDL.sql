@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS shop (
 CREATE TABLE IF NOT EXISTS recipe_ingredient (
 	recipe_id     INT(20) NOT NULL,
     ingredient_id INT(20) NOT NULL,
+    quantity      VARCHAR(50) NOT NULL,
 
     CONSTRAINT fk_recipe_ingredient_recipe
 		FOREIGN KEY (recipe_id)

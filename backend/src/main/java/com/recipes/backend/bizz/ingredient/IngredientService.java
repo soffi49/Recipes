@@ -10,4 +10,6 @@ public interface IngredientService {
     void addIngredient(Ingredient ingredient);
 
     Set<Ingredient> getAllIngredients(Integer page, Integer limit);
+
+    long getIngredientsCount();
 }
