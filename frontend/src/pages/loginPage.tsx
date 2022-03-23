@@ -24,9 +24,9 @@ const LoginPage = () => {
                 <StyledTypography>
                     You are not authorized. Please login before proceeding.
                 </StyledTypography>
-                <StyledTextField id="standard-basic" label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
+                <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
                 <FormContainer>
-                    <StyledTextField id="standard-basic" label="Password" type="password" onChange={handleChangePassword}/>
+                    <StyledTextField label="Password" type="password" onChange={handleChangePassword}/>
                     <StyledButton variant="outlined" onClick={async () => {
                         await AuthService.login(loginInfo);
                         navigate('/');
