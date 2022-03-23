@@ -21,7 +21,6 @@ function createAuthService(): AuthService {
             if (response.data) {
                 data = response.data.token;
                 sessionStorage.setItem('key', response.data.token);
-                console.log(response.data.token);
             }
         });
         return data;
