@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 import static com.recipes.backend.utils.LogWriter.logHeaders;
@@ -27,7 +28,7 @@ public class LoginController {
 
     @PostMapping
     public ResponseEntity<TokenRest> login(@RequestHeader HttpHeaders headers,
-                                        @RequestBody LoginRest loginForm) {
+                                           @RequestBody @Valid LoginRest loginForm) {
         logHeaders(headers);
 
         final Optional<String> tokenOptional = loginService.loginToSystem(loginForm);

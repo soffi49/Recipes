@@ -16,12 +16,14 @@ import java.util.Set;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IngredientAllRest implements Serializable {
 
+    private static final long serialVersionUID = 7810709014293012771L;
+
     @NotNull
-    @JsonProperty("total_ingredients")
+    @JsonProperty(value = "total_ingredients", required = true)
     private long totalIngredients;
 
     @NotNull
-    @JsonProperty("ingredients")
+    @JsonProperty(value = "ingredients", required = true)
     private Set<IngredientRest> ingredients;
 
 }
