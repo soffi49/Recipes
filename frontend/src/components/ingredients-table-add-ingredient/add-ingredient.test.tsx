@@ -4,14 +4,14 @@ import userEvent from "@testing-library/user-event"
 import AddIngredient from "./add-ingredient.component";
 
 describe("AddIngredient", () => {
-    it("should rendet add ingredient button", () => {
+    it("should render add ingredient button", () => {
         render(
             <AddIngredient addIngredient={() => {}} />
         )
         expect(screen.getByLabelText("Add Ingredient Button")).toBeTruthy();
     })
 
-    it("should rendet add button", () => {
+    it("should render add button", () => {
         render(
             <AddIngredient addIngredient={() => {}} />
         )
