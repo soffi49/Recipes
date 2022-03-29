@@ -1,4 +1,5 @@
 package com.recipes.backend.rest;
+
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
@@ -41,8 +42,8 @@ public class IngredientController {
 
     @GetMapping
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
-                                                                 @RequestParam(value = "page") int page,
-                                                                 @RequestParam(value = "limit") int limit) {
+                                                               @RequestParam(value = "page") int page,
+                                                               @RequestParam(value = "limit") int limit) {
 
         //TODO check headers
 

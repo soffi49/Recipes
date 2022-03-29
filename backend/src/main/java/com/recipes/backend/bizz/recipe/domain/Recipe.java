@@ -17,9 +17,11 @@ public class Recipe {
 
     private Set<RecipeTagEnum> tags;
 
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 
     private String name;
+
+    private String instructions;
 
     @Override
     public boolean equals(Object o) {
