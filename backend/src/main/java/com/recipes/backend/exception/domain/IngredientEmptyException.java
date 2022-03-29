@@ -5,6 +5,6 @@ public class IngredientEmptyException extends RuntimeException{
     private static final long serialVersionUID = -1758358840739830705L;
 
     public IngredientEmptyException() {
-        super("The persisted ingredient is empty");
+        super("The given ingredient is empty");
     }
 }

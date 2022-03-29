@@ -4,7 +4,6 @@ import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
