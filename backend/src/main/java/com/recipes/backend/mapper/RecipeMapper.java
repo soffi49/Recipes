@@ -1,12 +1,15 @@
 package com.recipes.backend.mapper;
 
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import com.recipes.backend.rest.domain.RecipeRest;
 
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class RecipeMapper {
@@ -36,11 +39,14 @@ public class RecipeMapper {
 
         if (Objects.nonNull(recipe)) {
             final RecipeRest recipeRest = new RecipeRest();
+            final Set<RecipeTagEnum> tagSet = Objects.isNull(recipe.getTags()) ? Collections.emptySet() : recipe.getTags();
+            final Set<Ingredient> ingredientSet = Objects.isNull(recipe.getIngredients()) ? Collections.emptySet() : recipe.getIngredients();
+
             recipeRest.setId(recipe.getRecipeId());
             recipeRest.setName(recipe.getName());
-            recipeRest.setTags(recipe.getTags().stream().map(RecipeTagEnum::getName).collect(Collectors.toSet()));
+            recipeRest.setTags(tagSet.stream().map(RecipeTagEnum::getName).collect(Collectors.toSet()));
             recipeRest.setInstructions(recipe.getInstructions());
-            recipeRest.setIngredients(recipe.getIngredients().stream()
+            recipeRest.setIngredients(ingredientSet.stream()
                     .map(IngredientMapper::mapToIngredientRecipeRest)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
