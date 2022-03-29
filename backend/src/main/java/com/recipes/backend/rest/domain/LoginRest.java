@@ -1,6 +1,7 @@
 package com.recipes.backend.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,9 +9,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginRest {
 
-    @JsonProperty("username")
+    @NotNull
+    @JsonProperty(value = "username", required = true)
     private String username;
-    @JsonProperty("password")
+
+    @NotNull
+    @JsonProperty(value = "password", required = true)
     private String password;
 
 }

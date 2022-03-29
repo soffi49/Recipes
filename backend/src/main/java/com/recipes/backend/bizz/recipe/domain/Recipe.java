@@ -15,7 +15,7 @@ public class Recipe {
 
     private long recipeId;
 
-    private Set<RecipeTypeEnum> tags;
+    private Set<RecipeTagEnum> tags;
 
     private List<Ingredient> ingredients;
 
