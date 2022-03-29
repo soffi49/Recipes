@@ -1,8 +1,6 @@
 package com.recipes.backend.mapper;
 
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
-import com.recipes.backend.bizz.recipe.domain.Recipe;
-import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.exception.domain.MissingQuantityException;
 import com.recipes.backend.repo.domain.IngredientDTO;
 import com.recipes.backend.repo.domain.RecipeDTO;
