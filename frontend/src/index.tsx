@@ -10,9 +10,9 @@ ReactDOM.render(
     <BrowserRouter>
             <Routes>
                 <Route path="/" element={
-                    <RequireAuth>
+                    
                         <App/>
-                    </RequireAuth>
+                    
                     }
                 />
                 <Route path="/not-authorized" element={<LoginPage/>}/>
