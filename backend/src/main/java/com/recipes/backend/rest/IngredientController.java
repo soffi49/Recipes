@@ -87,7 +87,9 @@ public class IngredientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
                                                    @PathVariable(name = "id") Long ingredientId) {
-        //TODO add header validation
+        if (!securityService.isAuthenticated(headers)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         return ingredientService.deleteIngredient(ingredientId) ? ResponseEntity.ok(ingredientId.toString()) : ResponseEntity.badRequest().body("Bad request!");
     }

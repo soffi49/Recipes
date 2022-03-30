@@ -37,15 +37,17 @@ public class IngredientServiceImpl implements IngredientService {
     public void addIngredient(final Ingredient ingredient) {
         final Optional<IngredientDTO> ingredientDTOOpt = mapToIngredientDTO(ingredient);
 
-        ingredientDTOOpt.ifPresent(ingredientDTO -> {
-            try {
-                ingredientRepository.save(ingredientDTO);
-            } catch (final DataIntegrityViolationException e) {
-                throw new IngredientDuplicateException(ingredient.getName());
-            } catch (final DataAccessException e) {
-                throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
-            }
-        });
+        ingredientDTOOpt.ifPresent(
+                ingredientDTO -> {
+                    try {
+                        ingredientRepository.save(ingredientDTO);
+                    } catch (final DataIntegrityViolationException e) {
+                        throw new IngredientDuplicateException(ingredient.getName());
+                    } catch (final DataAccessException e) {
+                        throw new DatabaseSaveException(
+                                "couldn't save ingredient " + ingredient.getName());
+                    }
+                });
     }
 
     @Override
