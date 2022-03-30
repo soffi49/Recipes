@@ -1,36 +1,25 @@
 package com.recipes.backend.rest;
 
-import com.recipes.backend.common.AbstractIntegrationTestConfig;
 import com.recipes.backend.rest.domain.LoginRest;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 
 @ExtendWith(SpringExtension.class)
-@Sql({"/data/drop-db-if-exists.sql","/data/create-user-db.sql", "/data/insert-1-user.sql"})
-class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final TestRestTemplate REST_TEMPLATE = new TestRestTemplate();
-    private static final HttpHeaders HEADERS = new HttpHeaders();
-
-    @LocalServerPort
-    private int port;
+@Sql("/data/insert-1-user.sql")
+class LoginControllerIntegrationTest extends AbstractControllerIntegrationTest {
 
     @Test
     void shouldCorrectlyLoginGivenCorrectCredentials() throws JsonProcessingException {
         // given
-        HEADERS.add("Content-type", "application/json");
         var user = new LoginRest("username", "password");
         var expectedString = "{\"token\":\"security_token\"}";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
@@ -45,9 +34,8 @@ class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
     }
 
     @Test
-    void shuouldNotLoginGivenIncorrectCredentials() throws JsonProcessingException {
+    void shouldNotLoginGivenIncorrectCredentials() throws JsonProcessingException {
         // given
-        HEADERS.add("Content-type", "application/json");
         var user = new LoginRest("username", "wrongPassword");
         var expectedString = "{\"token\":\"security_token\"}";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
@@ -59,9 +47,5 @@ class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
 
         // then
         assertThat(response).matches(r -> r.getStatusCode() == HttpStatus.FORBIDDEN);
-    }
-
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
     }
 }

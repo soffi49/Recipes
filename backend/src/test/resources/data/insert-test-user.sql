@@ -1,0 +1,1 @@
+INSERT INTO user (user_id, username, password, token, is_admin, profile_photo) VALUES (1337, "test-name", "test-password", "test-token", 0, "photo-link");
