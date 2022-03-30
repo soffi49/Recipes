@@ -85,14 +85,21 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient updateIngredient(Ingredient ingredient) {
+        IngredientDTO ingredientDTO;
         try {
-            var ingredientDTO =
-                    ingredientRepository.findById(ingredient.getIngredientId()).orElseThrow();
+            ingredientDTO = ingredientRepository.findById(ingredient.getIngredientId()).orElseThrow();
+        } catch (final DataAccessException e) {
+            throw new DatabaseFindException(
+                String.format("couldn't find ingredient with id %d to update", ingredient.getIngredientId()));
+        }
+
+        try {
             ingredientDTO.setName(ingredient.getName());
             ingredientRepository.save(ingredientDTO);
-            return mapToIngredient(ingredientDTO).orElseThrow();
         } catch (final DataAccessException | NoSuchElementException e) {
             throw new DatabaseSaveException("couldn't persist updated ingredient");
         }
+
+        return mapToIngredient(ingredientDTO).orElseThrow();
     }
 }
