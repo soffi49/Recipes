@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(RecipesController.class)
-public class RecipeControllerTest {
+public class RecipeControllerIntegrationTest {
 
     @MockBean
     private static RecipeService recipeServiceMock;

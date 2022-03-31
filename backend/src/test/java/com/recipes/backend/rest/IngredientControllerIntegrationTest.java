@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IngredientController.class)
-class IngredientControllerTest {
+class IngredientControllerIntegrationTest {
 
     @MockBean
     private static IngredientService ingredientServiceMock;
