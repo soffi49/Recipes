@@ -1,4 +1,5 @@
 import IngredientsTableAdminView from "./components/ingredients-table-admin-view/ingredients-table-admin-view.component";
+import RecipesAdminView from "./components/recipes-admin-view/RecipesAdminView";
 import Menu from "./components/menu/menu.component"
 import { Box } from "@mui/system";
 import { Routes, Route } from "react-router-dom";
@@ -13,7 +14,7 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<IngredientsTableAdminView />} />
-          <Route path="/Recipes" element={<div>Recipes</div>} />
+          <Route path="/Recipes" element={ <RecipesAdminView />} />
         </Routes>
       </Box>
     </div>
