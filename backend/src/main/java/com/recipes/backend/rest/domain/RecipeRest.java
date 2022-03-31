@@ -23,6 +23,7 @@ public class RecipeRest implements Serializable {
     private Long id;
 
     @NotNull
+    @EqualsAndHashCode.Include
     @JsonProperty(value = "name", required = true)
     private String name;
 

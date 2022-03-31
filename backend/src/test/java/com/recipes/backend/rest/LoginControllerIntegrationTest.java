@@ -2,7 +2,6 @@ package com.recipes.backend.rest;
 
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
 import com.recipes.backend.rest.domain.LoginRest;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -17,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(SpringExtension.class)
-@Sql({"/data/drop-db-if-exists.sql","/data/create-user-db.sql", "/data/insert-1-user.sql"})
+@Sql({"/data/drop-db-if-exists.sql", "/data/user/create-user-db.sql", "/data/user/insert-1-user.sql"})
 class LoginControllerIntegrationTest extends AbstractIntegrationTestConfig {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();

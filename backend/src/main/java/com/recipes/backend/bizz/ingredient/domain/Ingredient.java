@@ -14,6 +14,8 @@ public class Ingredient {
 
     private String name;
 
+    private String quantity;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

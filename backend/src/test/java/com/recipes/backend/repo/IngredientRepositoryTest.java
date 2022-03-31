@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Sql({"/data/drop-db.sql", "/data/create-db.sql", "/data/insert-1-ingredient.sql"})
+@Sql({"/data/drop-db.sql", "/data/create-db.sql", "/data/ingredient/insert-1-ingredient.sql"})
 class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Autowired
@@ -77,7 +77,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Find all ingredients not empty")
-    @Sql("/data/truncate-ingredients.sql")
+    @Sql("/data/ingredient/truncate-ingredients.sql")
     void findAllIngredients() {
         ingredientRepository.save(mockIngredient);
         final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
