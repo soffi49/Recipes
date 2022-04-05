@@ -1,8 +1,5 @@
 package com.recipes.backend.bizz.ingredient;
 
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientDTO;
-
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.exception.domain.DatabaseFindException;
 import com.recipes.backend.exception.domain.DatabaseSaveException;
@@ -10,17 +7,23 @@ import com.recipes.backend.exception.domain.IngredientDuplicateException;
 import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.repo.IngredientRepository;
 import com.recipes.backend.repo.domain.IngredientDTO;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
 
 @Slf4j
 @Service
@@ -35,19 +38,17 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public void addIngredient(final Ingredient ingredient) {
-        final Optional<IngredientDTO> ingredientDTOOpt = mapToIngredientDTO(ingredient);
+        final Optional<IngredientDTO> ingredientDTOOpt = IngredientMapper.mapToIngredientDTO(ingredient);
 
-        ingredientDTOOpt.ifPresent(
-                ingredientDTO -> {
-                    try {
-                        ingredientRepository.save(ingredientDTO);
-                    } catch (final DataIntegrityViolationException e) {
-                        throw new IngredientDuplicateException(ingredient.getName());
-                    } catch (final DataAccessException e) {
-                        throw new DatabaseSaveException(
-                                "couldn't save ingredient " + ingredient.getName());
-                    }
-                });
+        ingredientDTOOpt.ifPresent(ingredientDTO -> {
+            try {
+                ingredientRepository.save(ingredientDTO);
+            } catch (final DataIntegrityViolationException e) {
+                throw new IngredientDuplicateException(ingredient.getName());
+            } catch (final DataAccessException e) {
+                throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
+            }
+        });
     }
 
     @Override
@@ -62,9 +63,16 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public Set<Ingredient> getAllIngredients(final Integer page, final Integer limit) {
+    public Set<Ingredient> getAllIngredients(final Integer page,
+                                             final Integer limit,
+                                             @Nullable Long ingredientId,
+                                             @Nullable String name) {
         try {
+            final Predicate<IngredientDTO> filterIngredientById = (ingredient -> (Objects.isNull(ingredientId) || (ingredient.getIngredientId() == ingredientId)));
+            final Predicate<IngredientDTO> filterIngredientByName = (ingredient -> (Objects.isNull(name) || (ingredient.getName().equals(name))));
+
             return StreamSupport.stream(ingredientRepository.findAll().spliterator(), false)
+                    .filter(filterIngredientById.and(filterIngredientByName))
                     .map(IngredientMapper::mapToIngredient)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

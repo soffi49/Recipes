@@ -11,7 +11,10 @@ public interface IngredientService {
 
     boolean deleteIngredient(Long ingredientId);
 
-    Set<Ingredient> getAllIngredients(Integer page, Integer limit);
+    Set<Ingredient> getAllIngredients(final Integer page,
+                                      final Integer limit,
+                                      final Long ingredientId,
+                                      final String name);
 
     long getIngredientsCount();
 
