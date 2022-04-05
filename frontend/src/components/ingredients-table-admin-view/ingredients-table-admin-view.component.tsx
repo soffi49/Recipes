@@ -15,6 +15,7 @@ export default function IngredientsTableAdminView() {
     const [count, setCount] = useState<number>(0);
     const getAllIngredients = () => {
         getIngredientsApi(page, limit).then((response) => {
+            setIsFetching(true);
             if(!!response.ingredients){
                 setIngredients(response.ingredients);
                 setCount(response.total_ingredients);
@@ -63,6 +64,7 @@ export default function IngredientsTableAdminView() {
                 count={count}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleChangePage={handleChangePage}
+                getAllIngredients={getAllIngredients}
             />
         </>
       );

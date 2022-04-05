@@ -35,9 +35,6 @@ public class UserDTO {
     @Column(name = "is_admin")
     private int isAdmin;
 
-    @Column(name = "profile_photo")
-    private String profilePhoto;
-
     @ManyToMany
     @JoinTable(
             name = "user_recipe",

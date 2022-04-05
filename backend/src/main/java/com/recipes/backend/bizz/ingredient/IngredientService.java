@@ -14,4 +14,6 @@ public interface IngredientService {
     Set<Ingredient> getAllIngredients(Integer page, Integer limit);
 
     long getIngredientsCount();
+
+    Ingredient updateIngredient(Ingredient ingredient);
 }

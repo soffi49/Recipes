@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IngredientDetails } from '../../models/models';
+import { deleteIngredientApi } from '../../api/api.api';
 import { TableFooter } from '@mui/material';
 import { TablePagination } from '@mui/material';
 
@@ -19,9 +20,13 @@ interface IngredientTableProps {
     count: number;
     handleChangeRowsPerPage: ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     handleChangePage: ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
+    getAllIngredients: () => void;
 }
 
-export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage}: IngredientTableProps) {
+export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage, getAllIngredients}: IngredientTableProps) {
+  const clickDelete = async (id: number) => {
+    await deleteIngredientApi(id).then(() => getAllIngredients()).catch((e) => console.log(e));
+  }
     return (
         <>
           <TableContainer component={Paper}>
@@ -44,7 +49,7 @@ export default function IngredientsTable({ingredients, page, limit, count, handl
                         <IconButton aria-label="Edit button">
                             <EditIcon />
                         </IconButton>
-                        <IconButton aria-label="Delete button">
+                        <IconButton aria-label="Delete button" onClick={() => clickDelete(row.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </TableCell>
