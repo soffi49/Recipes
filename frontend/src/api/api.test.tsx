@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getIngredientsApi, addIngredientApi} from "./api.api";
+import {getIngredientsApi, addIngredientApi, deleteIngredientApi} from "./api.api";
 import data from "../constants/ingredient-table.data.json";
 
 describe("Api tests", () => {
@@ -26,5 +26,16 @@ describe("Api tests", () => {
         const errorMessage = new Error("rejected");
         axios.post = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
         await expect(addIngredientApi("test")).rejects.toThrow(errorMessage);
+    });
+
+    it("delete ingredient", async () => {
+        axios.delete = jest.fn().mockImplementationOnce(() => Promise.resolve());
+        await expect(deleteIngredientApi(0)).resolves.toBeUndefined();
+    });
+
+    it("should throw error while deleting ingredients", async () => {
+        const errorMessage = new Error("rejected");
+        axios.delete = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
+        await expect(deleteIngredientApi(0)).rejects.toThrow(errorMessage);
     });
 });

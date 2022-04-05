@@ -64,8 +64,8 @@ public class IngredientController {
 
     @GetMapping
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
-                                                                 @RequestParam(value = "page") int page,
-                                                                 @RequestParam(value = "limit") int limit) {
+                                                               @RequestParam(value = "page") int page,
+                                                               @RequestParam(value = "limit") int limit) {
 
         logHeaders(headers);
 

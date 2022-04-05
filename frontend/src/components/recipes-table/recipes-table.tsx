@@ -8,17 +8,20 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IngredientDetails } from '../../models/models';
-import { deleteIngredientApi } from '../../api/api.api';
-interface IngredientTableProps {
-    ingredients: IngredientDetails[];
-    getAllIngredients: () => void;
+import SearchIcon from '@mui/icons-material/Search';
+import { RecipeDetails } from '../../models/models';
+import { useState } from 'react';
+import DetailsModal from './details-modal';
+interface RecipeTableProps {
+    recipes: RecipeDetails[];
+}
+interface propsDetailsModal{
+  isVisible: boolean;
+  recipe?: RecipeDetails;
 }
 
-export default function IngredientsTable({ingredients,getAllIngredients}: IngredientTableProps) {
-  const clickDelete = async (id: number) => {
-    await deleteIngredientApi(id).then(() => getAllIngredients()).catch((e) => console.log(e));
-  }
+export default function RecipesTable({recipes}: RecipeTableProps) {
+    const [detailsState,setDetailsState] = useState<propsDetailsModal>({isVisible: false});
     return (
         <>
           <TableContainer component={Paper}>
@@ -31,7 +34,7 @@ export default function IngredientsTable({ingredients,getAllIngredients}: Ingred
                 </TableRow>
               </TableHead>
               <TableBody>
-                {ingredients.map((row) => (
+                {recipes.map((row) => (
                   <TableRow
                     key={row.id}
                   >
@@ -41,8 +44,11 @@ export default function IngredientsTable({ingredients,getAllIngredients}: Ingred
                         <IconButton aria-label="Edit button">
                             <EditIcon />
                         </IconButton>
-                        <IconButton aria-label="Delete button" onClick={() => clickDelete(row.id)}>
+                        <IconButton aria-label="Delete button">
                             <DeleteIcon />
+                        </IconButton>
+                        <IconButton aria-label="Details button" onClick = {() => setDetailsState({isVisible: true, recipe: row})}>
+                            <SearchIcon />
                         </IconButton>
                     </TableCell>
                   </TableRow>
@@ -50,6 +56,7 @@ export default function IngredientsTable({ingredients,getAllIngredients}: Ingred
               </TableBody>
             </Table>
           </TableContainer>
+          <DetailsModal visible={detailsState.isVisible} onCancel={() =>setDetailsState({isVisible: false,recipe: detailsState.recipe})} recipe = {detailsState.recipe}/>
         </>
       );
 }

@@ -45,7 +45,6 @@ class IngredientControllerUnitTest {
     private static IngredientService ingredientService;
     @MockBean
     private static SecurityService securityService;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -53,7 +52,7 @@ class IngredientControllerUnitTest {
     void init() {
         lenient().when(securityService.isAuthenticated(any())).thenReturn(true);
     }
-
+  
     @Test
     @DisplayName("Save ingredient - correct ingredient provided")
     void addIngredientWithCorrectData() throws Exception {
@@ -97,7 +96,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - correct parameters")
     void getAllIngredientsCorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientServiceMock).getAllIngredients(0, 5);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")
