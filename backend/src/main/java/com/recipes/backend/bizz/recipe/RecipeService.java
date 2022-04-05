@@ -10,5 +10,7 @@ public interface RecipeService {
 
     Set<Recipe> getAllRecipes(Integer page, Integer limit);
 
+    void addRecipe(Recipe recipe);
+
     long getRecipesCount();
 }
