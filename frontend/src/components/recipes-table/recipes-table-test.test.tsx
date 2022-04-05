@@ -13,6 +13,7 @@ describe("AddIngredient", () => {
                 count={0}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getAllByRole("columnheader").length).toEqual(3);
@@ -27,6 +28,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getAllByRole("row").length).toEqual(2);
@@ -41,6 +43,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Delete button")).toBeTruthy();
@@ -55,6 +58,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Edit button")).toBeTruthy();
@@ -68,6 +72,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Details button")).toBeTruthy();
@@ -81,6 +86,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         const button =screen.getByLabelText("Details button");
@@ -97,6 +103,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to next page")).toBeTruthy();
@@ -111,6 +118,7 @@ describe("AddIngredient", () => {
                 count={data.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
+                deleteRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to previous page")).toBeTruthy();
