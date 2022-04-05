@@ -1,9 +1,8 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import { render, screen} from "@testing-library/react";
 import IngredientsTable from "./ingredients-table.component";
 import data from "../../constants/ingredient-table.data.json";
 import { IngredientDetails } from "../../models/models";
 import userEvent from "@testing-library/user-event";
-import * as moduleApi from "../../api/api.api";
 
 describe("AddIngredient", () => {
     it("should Check ammount of headers", () => {
@@ -15,7 +14,7 @@ describe("AddIngredient", () => {
                 count={0}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getAllByRole("columnheader").length).toEqual(3);
@@ -30,7 +29,7 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getAllByRole("row").length).toEqual(2);
@@ -45,7 +44,7 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Delete button")).toBeTruthy();
@@ -60,7 +59,7 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Edit button")).toBeTruthy();
@@ -75,7 +74,7 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to next page")).toBeTruthy();
@@ -90,14 +89,14 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to previous page")).toBeTruthy();
     })
     
     it("should call delete api function", () => {
-        jest.spyOn(moduleApi ,"deleteIngredientApi");
+        const deleteIngredient = jest.fn();
         render(
             <IngredientsTable
                 ingredients={data.ingredients as IngredientDetails[]}
@@ -106,10 +105,10 @@ describe("AddIngredient", () => {
                 count={data.ingredients.length}
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
-                getAllIngredients={() => {}}
+                deleteIngredient={deleteIngredient}
             />
         )
-        fireEvent.click(screen.getByLabelText("Delete button"));
-        expect(moduleApi.deleteIngredientApi).toHaveBeenCalled();
+        userEvent.click(screen.getByLabelText("Delete button"));
+        expect(deleteIngredient).toHaveBeenCalled();
     })
 })
