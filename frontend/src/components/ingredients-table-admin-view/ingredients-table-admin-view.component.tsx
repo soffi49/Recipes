@@ -11,15 +11,33 @@ export default function IngredientsTableAdminView() {
     const [ingredients, setIngredients] = useState<IngredientDetails[]>([]);
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
-    const [limit, setLimit] = useState<number>(100);
+    const [limit, setLimit] = useState<number>(10);
+    const [count, setCount] = useState<number>(0);
     const getAllIngredients = () => {
         getIngredientsApi(page, limit).then((response) => {
             setIsFetching(true);
             if(!!response.ingredients){
-                setIngredients(response.ingredients)
+                setIngredients(response.ingredients);
+                setCount(response.total_ingredients);
             };
         setIsFetching(false);
         });
+    };
+
+    const handleChangePage = (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => {
+      setIsFetching(true);
+      setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      setIsFetching(true);
+      setPage(0);
+      setLimit(parseInt(event.target.value));
     };
 
     const addIngredient = (name: string) => {
@@ -30,7 +48,7 @@ export default function IngredientsTableAdminView() {
 
     useEffect(() => {
         getAllIngredients();
-    }, [])
+    }, [limit, page])
 
     return isFetching ? (
         <Box sx={{ display: 'flex', justifyContent: 'center',}}>
@@ -41,6 +59,11 @@ export default function IngredientsTableAdminView() {
             <AddIngredient addIngredient={addIngredient}/>
             <IngredientsTable 
                 ingredients={ingredients}
+                page={page}
+                limit={limit}
+                count={count}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+                handleChangePage={handleChangePage}
                 getAllIngredients={getAllIngredients}
             />
         </>

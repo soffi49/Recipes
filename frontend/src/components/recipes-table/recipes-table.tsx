@@ -12,15 +12,21 @@ import SearchIcon from '@mui/icons-material/Search';
 import { RecipeDetails } from '../../models/models';
 import { useState } from 'react';
 import DetailsModal from './details-modal';
+import { TableFooter, TablePagination } from '@mui/material';
 interface RecipeTableProps {
     recipes: RecipeDetails[];
+    page: number;
+    limit: number;
+    count: number;
+    handleChangeRowsPerPage: ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    handleChangePage: ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
 }
 interface propsDetailsModal{
   isVisible: boolean;
   recipe?: RecipeDetails;
 }
 
-export default function RecipesTable({recipes}: RecipeTableProps) {
+export default function RecipesTable({recipes, page, limit, count, handleChangeRowsPerPage, handleChangePage}: RecipeTableProps) {
     const [detailsState,setDetailsState] = useState<propsDetailsModal>({isVisible: false});
     return (
         <>
@@ -54,6 +60,15 @@ export default function RecipesTable({recipes}: RecipeTableProps) {
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter>
+                <TablePagination
+                  count={count}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={limit}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableFooter>
             </Table>
           </TableContainer>
           <DetailsModal visible={detailsState.isVisible} onCancel={() =>setDetailsState({isVisible: false,recipe: detailsState.recipe})} recipe = {detailsState.recipe}/>

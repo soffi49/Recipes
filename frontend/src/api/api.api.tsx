@@ -32,8 +32,7 @@ export async function deleteIngredientApi(id: number) {
 
 export async function getRecipesApi(page: number, limit: number) {
     try {
-        const response = await axios.get(`${server}/recipes`);
-        console.log(response.data);
+        const response = await axios.get(`${server}/recipes?page=${page}&limit=${limit}`);
         return response.data;
 
     } catch (error) {
