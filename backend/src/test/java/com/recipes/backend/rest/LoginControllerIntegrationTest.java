@@ -14,7 +14,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 
 
 @ExtendWith(SpringExtension.class)
-@Sql("/data/insert-1-user.sql")
+@Sql("/data/user/insert-1-user.sql")
 class LoginControllerIntegrationTest extends AbstractControllerIntegrationTest {
 
     @Test

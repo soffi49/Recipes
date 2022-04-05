@@ -18,8 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
 
 @ExtendWith(SpringExtension.class)
-@Sql("/data/insert-1-ingredient.sql")
-public class IngredientControllerIntegrationTest extends AbstractControllerIntegrationTest {
+@Sql("/data/ingredient/insert-1-ingredient.sql")
+class IngredientControllerIntegrationTest extends AbstractControllerIntegrationTest {
 
     @Test
     void shouldCorrectlyUpdateIngredientGivenExistingId() throws JsonProcessingException {

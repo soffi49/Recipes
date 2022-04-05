@@ -18,11 +18,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class IngredientServiceUnitTest {
+class IngredientServiceUnitTest {
 
     private static final long ID = 1L;
     private static final String OLD_NAME = "OLD_NAME";
     private static final String NEW_NAME = "NEW_NAME";
+    private static final String QUANTITY = "QUANTITY";
 
     @Mock
     IngredientRepository ingredientRepository;
@@ -36,7 +37,7 @@ public class IngredientServiceUnitTest {
     @Test
     void shouldCorrectlyUpdateIngredient() {
         // given
-        var ingredient = new Ingredient(ID, NEW_NAME);
+        var ingredient = new Ingredient(ID, NEW_NAME, QUANTITY);
         var ingredientDTO = new IngredientDTO();
         ingredientDTO.setName(OLD_NAME);
         ingredientDTO.setIngredientId(ID);

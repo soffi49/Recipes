@@ -40,6 +40,7 @@ class IngredientControllerUnitTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Long INGREDIENT_ID = 1L;
     private static final String INGREDIENT_NAME = "TEST_NAME";
+    private static final String INGREDIENT_QUANTITY = "QUANTITY";
 
     @MockBean
     private static IngredientService ingredientService;
@@ -96,7 +97,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - correct parameters")
     void getAllIngredientsCorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientServiceMock).getAllIngredients(0, 5);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")
@@ -122,7 +123,7 @@ class IngredientControllerUnitTest {
     void shouldCorrectlyUpdateIngredientGivenCorrectParams() throws Exception {
         // given
         var ingredientRest = new IngredientRest(INGREDIENT_ID, INGREDIENT_NAME);
-        var savedIngredient = new Ingredient(INGREDIENT_ID,INGREDIENT_NAME);
+        var savedIngredient = new Ingredient(INGREDIENT_ID, INGREDIENT_NAME, INGREDIENT_QUANTITY);
 
         when(ingredientService.updateIngredient(any(Ingredient.class))).thenReturn(savedIngredient);
 
