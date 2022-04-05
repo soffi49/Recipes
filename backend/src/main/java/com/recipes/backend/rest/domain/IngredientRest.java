@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class IngredientRest implements Serializable {

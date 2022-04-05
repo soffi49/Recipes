@@ -132,4 +132,19 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
     }
 
 
+    @Test
+    void getUpdatedIngredient() {
+        var ingredient = new Ingredient(1000L, "NEW_NAME", "QUANTITY");
+
+        var ingredientToBeUpdated = ingredientRepository.findById(1000L);
+        var updatedIngredient = ingredientService.updateIngredient(ingredient);
+        var ingredientAfterUpdate = ingredientRepository.findById(1000L);
+
+        assertThat(ingredientToBeUpdated).isPresent();
+        assertThat(ingredientToBeUpdated.get().getName()).isEqualTo("Name");
+        assertThat(updatedIngredient.getName()).isEqualTo("NEW_NAME");
+        assertThat(updatedIngredient.getIngredientId()).isEqualTo(1000L);
+        assertThat(ingredientAfterUpdate).isPresent();
+        assertThat(ingredientAfterUpdate.get().getName()).isEqualTo("NEW_NAME");
+    }
 }

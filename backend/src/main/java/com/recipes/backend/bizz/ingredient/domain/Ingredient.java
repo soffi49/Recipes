@@ -1,6 +1,8 @@
 package com.recipes.backend.bizz.ingredient.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
@@ -8,6 +10,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ingredient {
 
     private long ingredientId;
