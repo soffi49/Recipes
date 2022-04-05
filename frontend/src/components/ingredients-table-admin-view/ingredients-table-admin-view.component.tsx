@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { getIngredientsApi, addIngredientApi } from '../../api/api.api';
+import { getIngredientsApi, addIngredientApi, deleteIngredientApi, editIngredientApi } from '../../api/api.api';
 import Box from '@mui/system/Box';
 import IngredientsTable from '../ingredients-table/ingredients-table.component';
 import { IngredientDetails } from '../../models/models';
@@ -45,6 +45,15 @@ export default function IngredientsTableAdminView() {
         addIngredientApi(name).then(() => getAllIngredients());
     }
 
+    const editIngredient = (name: string, id: number) => {
+        setIsFetching(true);
+        editIngredientApi(name, id).then(() => getAllIngredients());
+    }
+
+    const deleteIngredient = (id: number) => {
+        setIsFetching(true);
+        deleteIngredientApi(id).then(() => getAllIngredients());
+    }
 
     useEffect(() => {
         getAllIngredients();
@@ -64,7 +73,8 @@ export default function IngredientsTableAdminView() {
                 count={count}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleChangePage={handleChangePage}
-                getAllIngredients={getAllIngredients}
+                deleteIngredient={deleteIngredient}
+                editIngredient={editIngredient}
             />
         </>
       );

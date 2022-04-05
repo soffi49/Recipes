@@ -20,13 +20,14 @@ interface RecipeTableProps {
     count: number;
     handleChangeRowsPerPage: ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     handleChangePage: ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
+    deleteRecipe: (id: number) => void;
 }
 interface propsDetailsModal{
   isVisible: boolean;
   recipe?: RecipeDetails;
 }
 
-export default function RecipesTable({recipes, page, limit, count, handleChangeRowsPerPage, handleChangePage}: RecipeTableProps) {
+export default function RecipesTable({recipes, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteRecipe}: RecipeTableProps) {
     const [detailsState,setDetailsState] = useState<propsDetailsModal>({isVisible: false});
     return (
         <>
@@ -51,7 +52,7 @@ export default function RecipesTable({recipes, page, limit, count, handleChangeR
                             <EditIcon />
                         </IconButton>
                         <IconButton aria-label="Delete button">
-                            <DeleteIcon />
+                            <DeleteIcon onClick={() => deleteRecipe(row.id)}/>
                         </IconButton>
                         <IconButton aria-label="Details button" onClick = {() => setDetailsState({isVisible: true, recipe: row})}>
                             <SearchIcon />

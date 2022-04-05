@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { getRecipesApi } from '../../api/api.api';
+import { deleteRecipeApi, getRecipesApi } from '../../api/api.api';
 import Box from '@mui/system/Box';
 import { RecipeDetails } from '../../models/models';
 import RecipesTable from '../recipes-table/recipes-table';
@@ -38,6 +38,10 @@ export default function RecipesAdminView() {
       setLimit(parseInt(event.target.value));
     };
 
+    const deleteRecipe = (id: number) => {
+        setIsFetching(true);
+        deleteRecipeApi(id).then(() => getAllRecipes());
+    }
 
     useEffect(() => {
         getAllRecipes();
@@ -56,6 +60,7 @@ export default function RecipesAdminView() {
                 count={count}
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleChangePage={handleChangePage}
+                deleteRecipe={deleteRecipe}
             />
         </>
       );

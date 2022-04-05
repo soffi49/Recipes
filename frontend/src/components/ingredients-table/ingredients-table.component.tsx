@@ -6,13 +6,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton'
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IngredientDetails } from '../../models/models';
-import { deleteIngredientApi } from '../../api/api.api';
 import { TableFooter } from '@mui/material';
 import { TablePagination } from '@mui/material';
-
+import EditIngredient from '../ingredients-table-edit-ingredient/edit-ingredient.component';
 interface IngredientTableProps {
     ingredients: IngredientDetails[];
     page: number;
@@ -20,13 +18,11 @@ interface IngredientTableProps {
     count: number;
     handleChangeRowsPerPage: ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     handleChangePage: ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
-    getAllIngredients: () => void;
+    deleteIngredient: (id: number) => void;
+    editIngredient: (name: string, id: number) => void;
 }
 
-export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage, getAllIngredients}: IngredientTableProps) {
-  const clickDelete = async (id: number) => {
-    await deleteIngredientApi(id).then(() => getAllIngredients()).catch((e) => console.log(e));
-  }
+export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteIngredient, editIngredient}: IngredientTableProps) {
     return (
         <>
           <TableContainer component={Paper}>
@@ -46,10 +42,8 @@ export default function IngredientsTable({ingredients, page, limit, count, handl
                     <TableCell align="center">{row.id}</TableCell>
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="center">
-                        <IconButton aria-label="Edit button">
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton aria-label="Delete button" onClick={() => clickDelete(row.id)}>
+                        <EditIngredient oldName={row.name} id={row.id} editIngredient={editIngredient}/>
+                        <IconButton aria-label="Delete button" onClick={() => deleteIngredient(row.id)}>
                             <DeleteIcon />
                         </IconButton>
                     </TableCell>
