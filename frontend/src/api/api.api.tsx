@@ -21,9 +21,21 @@ export async function addIngredientApi(name: string) {
     }
 }
 
+
 export async function deleteIngredientApi(id: number) {
     try {
         await axios.delete(`${server}ingredients/${id}`)
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getRecipesApi(page: number, limit: number) {
+    try {
+        const response = await axios.get(`${server}/recipes`);
+        console.log(response.data);
+        return response.data;
+
     } catch (error) {
         throw error;
     }

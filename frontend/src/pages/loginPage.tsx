@@ -22,43 +22,51 @@ const LoginPage = () => {
         <>
             <StyledBox>
                 <StyledTypography>
-                    You are not authorized. Please login before proceeding.
+                    You are not logged in
                 </StyledTypography>
-                <StyledTextField id="standard-basic" label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
-                <FormContainer>
-                    <StyledTextField id="standard-basic" label="Password" type="password" onChange={handleChangePassword}/>
-                    <StyledButton variant="outlined" onClick={async () => {
+                <div>
+                    <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
+                </div>
+                <div>
+                    <StyledTextField label="Password" type="password" style={{ marginBottom: '20px' }} onChange={handleChangePassword}/>
+                </div>
+                <div>
+                    <StyledButton variant="contained" onClick={async () => {
                         await AuthService.login(loginInfo);
                         navigate('/');
                     }}>Login</StyledButton>
-                </FormContainer>
+                </div>
             </StyledBox>
         </>
     )
 }
 
 const StyledBox = styled(Box)`
-    width: 100%;
-    max-width: 500px;
-    margin: 50px;
+    background-color: #fff;
+    position: absolute;
+    max-width: 300;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px;
+    border: 1px solid;
+    border-color: black;
+    border-radius: 4px;
 `;
 
 const StyledTypography = styled(Typography)`
   margin-bottom: 25px;
+  text-align: center;
 `
 
 const StyledTextField = styled(TextField)`
     font-size: 12px;
     min-width: 300px;
-    margin-right: 30px;
 `
 
 const StyledButton = styled(Button)`
     min-width: 100px;
+    margin-left: 100px;
 `
-
-const FormContainer = styled.div`
-    display: flex;
-`;
 
 export default LoginPage;

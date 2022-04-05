@@ -15,8 +15,8 @@ export default function IngredientsTableAdminView() {
     const getAllIngredients = () => {
         getIngredientsApi(page, limit).then((response) => {
             setIsFetching(true);
-            if(!!response){
-                setIngredients(response)
+            if(!!response.ingredients){
+                setIngredients(response.ingredients)
             };
         setIsFetching(false);
         });

@@ -1,0 +1,35 @@
+[{
+    "id": 0,
+    "name": "harnas ice tea",
+    "instructions": "wymieszaj i wpij pyszna lodoherbate",
+    "ingredients": [
+        {
+            "ingredient":{
+                "id": 0,
+                "name": "piwo"
+            },
+            "quantity": "6"
+        },
+        {
+            "ingredient":{
+                "id": 1,
+                "name": "ice tea"
+            },
+            "quantity": "3"
+        },
+        {
+            "ingredient":{
+                "id": 2,
+                "name": "zubrowa"
+            },
+            "quantity": "1"
+        }
+    ],
+    "tags":[
+        "pyszne",
+        "student",
+        "biedny"
+    ]
+}
+
+]

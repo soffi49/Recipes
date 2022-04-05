@@ -1,1 +1,0 @@
-INSERT INTO ingredient (ingredient_id, name, photo) VALUES (1000, "Name", "Photo")

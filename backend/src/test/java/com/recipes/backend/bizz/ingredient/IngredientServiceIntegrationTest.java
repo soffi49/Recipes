@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Sql({"/data/drop-db-if-exists.sql", "/data/create-db.sql", "/data/insert-1-ingredient.sql"})
+@Sql({"/data/drop-db-if-exists.sql", "/data/create-db.sql", "/data/ingredient/insert-1-ingredient.sql"})
 class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Autowired
@@ -52,7 +52,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Get all ingredients one page")
-    @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
     void getAllIngredientsOnePage() {
         final int limit = 5;
         final int page = 0;
@@ -66,7 +66,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Get all ingredients more pages")
-    @Sql({"/data/truncate-ingredients.sql", "/data/insert-5-ingredients.sql"})
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
     void getAllIngredientsMorePages() {
         final int limit = 3;
 
@@ -80,7 +80,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Get all ingredients empty")
-    @Sql({"/data/create-db.sql", "/data/truncate-ingredients.sql"})
+    @Sql({"/data/create-db.sql", "/data/ingredient/truncate-ingredients.sql"})
     void getAllIngredientsEmpty() {
         final int limit = 5;
         final int page = 0;
@@ -89,5 +89,47 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
 
         assertThat(retrievedList.size()).isZero();
     }
+
+    @Test
+    @DisplayName("Delete one existing ingredient")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-1-ingredient.sql"})
+    void deleteOneProperIngredient() {
+
+        assertThat(ingredientService.deleteIngredient((long) 1000)).isTrue();
+
+        final List<IngredientDTO> ingredientList = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(ingredientList).isEmpty();
+
+    }
+
+    @Test
+    @DisplayName("Delete one not existing ingredient")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-1-ingredient.sql"})
+    void deleteOneNotExistingIngredient() {
+
+        assertThat(ingredientService.deleteIngredient((long) 1)).isFalse();
+
+        final List<IngredientDTO> ingredientList = (List<IngredientDTO>) ingredientRepository.findAll();
+        assertThat(ingredientList).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Count ingredients non empty")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void countIngredientsNonEmpty() {
+        final long retrievedList = ingredientService.getIngredientsCount();
+
+        assertThat(retrievedList).isEqualTo(5);
+    }
+
+    @Test
+    @DisplayName("Count ingredients empty")
+    @Sql({"/data/create-db.sql", "/data/ingredient/truncate-ingredients.sql"})
+    void countIngredientsEmpty() {
+        final long retrievedList = ingredientService.getIngredientsCount();
+
+        assertThat(retrievedList).isZero();
+    }
+
 
 }

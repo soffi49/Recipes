@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IngredientController.class)
-class IngredientControllerTest {
+class IngredientControllerUnitTest {
 
     @MockBean
     private static IngredientService ingredientServiceMock;
@@ -80,8 +80,8 @@ class IngredientControllerTest {
                         .param("limit", "5")
                         .param("page", "0"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].name", is("Name0")));
+                .andExpect(jsonPath("$.ingredients", hasSize(3)))
+                .andExpect(jsonPath("$.ingredients[0].name", is("Name0")));
     }
 
     @Test
