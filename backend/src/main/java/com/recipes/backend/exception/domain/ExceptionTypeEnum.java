@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ExceptionTypeEnum {
     MAPPER_NULL("The object passed to mapper is null", HttpStatus.FORBIDDEN),
+    NOT_FOUND("The object was not found", HttpStatus.NOT_FOUND),
     DATABASE_DUPLICATE("The object already exists in the database", HttpStatus.FORBIDDEN),
     DATABASE_INTERNAL("There was internal database error", HttpStatus.INTERNAL_SERVER_ERROR);
 

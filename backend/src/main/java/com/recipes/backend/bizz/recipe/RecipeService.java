@@ -11,4 +11,6 @@ public interface RecipeService {
     Set<Recipe> getAllRecipes(Integer page, Integer limit);
 
     long getRecipesCount();
+
+    void updateRecipe(Recipe recipe);
 }

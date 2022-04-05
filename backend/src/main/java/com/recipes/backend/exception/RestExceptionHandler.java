@@ -27,6 +27,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(RecipeEmptyException.class)
+    protected ResponseEntity<Object> handleForbiddenException(final RecipeEmptyException ex,
+                                                              final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.MAPPER_NULL;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     @ExceptionHandler(MissingQuantityException.class)
     protected ResponseEntity<Object> handleForbiddenException(final MissingQuantityException ex,
                                                               final WebRequest webRequest) {
@@ -45,6 +52,27 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleInternalException(final DatabaseFindException ex,
                                                              final WebRequest webRequest) {
         final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_INTERNAL;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(IngredientNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final IngredientNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(RecipeNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final RecipeNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(TagNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final TagNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
         return handleCustomException(exceptionType, ex, webRequest);
     }
 

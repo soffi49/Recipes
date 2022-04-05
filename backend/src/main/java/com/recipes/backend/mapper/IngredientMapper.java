@@ -47,6 +47,18 @@ public class IngredientMapper {
         return Optional.empty();
     }
 
+    public static Optional<Ingredient> mapToIngredient(final IngredientRecipeRest ingredientRecipeRest) {
+
+        if (Objects.nonNull(ingredientRecipeRest)) {
+            final Ingredient ingredient = new Ingredient();
+            ingredient.setIngredientId(ingredientRecipeRest.getIngredient().getId());
+            ingredient.setName(ingredientRecipeRest.getIngredient().getName());
+            ingredient.setQuantity(ingredientRecipeRest.getQuantity());
+            return Optional.of(ingredient);
+        }
+        return Optional.empty();
+    }
+
     public static Optional<IngredientDTO> mapToIngredientDTO(final Ingredient ingredient) {
 
         if (Objects.nonNull(ingredient)) {

@@ -1,6 +1,7 @@
 package com.recipes.backend.rest;
 
 import com.recipes.backend.bizz.recipe.RecipeService;
+import com.recipes.backend.exception.domain.RecipeEmptyException;
 import com.recipes.backend.mapper.RecipeMapper;
 import com.recipes.backend.rest.domain.RecipeAllRest;
 import com.recipes.backend.rest.domain.RecipeRest;
@@ -46,5 +47,15 @@ public class RecipesController {
                                                @PathVariable(name = "id") Long recipeId) {
         //TODO add header validation
         return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateRecipe(@RequestHeader HttpHeaders headers,
+                                               @PathVariable(name = "id") Long recipeId,
+                                               @RequestBody RecipeRest recipeRest)
+    {
+        recipeService.updateRecipe(RecipeMapper.mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
+
+        return ResponseEntity.ok().build();
     }
 }
