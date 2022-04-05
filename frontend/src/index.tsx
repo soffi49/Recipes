@@ -9,7 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
             <Routes>
-                <Route path="/" element={
+                <Route path="/*" element={
                     <RequireAuth>
                         <App/>
                     </RequireAuth>

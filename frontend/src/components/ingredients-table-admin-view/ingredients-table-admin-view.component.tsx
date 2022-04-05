@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { getIngredientsApi, addIngredientApi } from '../../api/api.api';
+import { getIngredientsApi, addIngredientApi, deleteIngredientApi, editIngredientApi } from '../../api/api.api';
 import Box from '@mui/system/Box';
 import IngredientsTable from '../ingredients-table/ingredients-table.component';
 import { IngredientDetails } from '../../models/models';
@@ -11,14 +11,33 @@ export default function IngredientsTableAdminView() {
     const [ingredients, setIngredients] = useState<IngredientDetails[]>([]);
     const [isFetching, setIsFetching] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
-    const [limit, setLimit] = useState<number>(100);
+    const [limit, setLimit] = useState<number>(10);
+    const [count, setCount] = useState<number>(0);
     const getAllIngredients = () => {
         getIngredientsApi(page, limit).then((response) => {
+            setIsFetching(true);
             if(!!response.ingredients){
-                setIngredients(response.ingredients)
+                setIngredients(response.ingredients);
+                setCount(response.total_ingredients);
             };
         setIsFetching(false);
         });
+    };
+
+    const handleChangePage = (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => {
+      setIsFetching(true);
+      setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+      setIsFetching(true);
+      setPage(0);
+      setLimit(parseInt(event.target.value));
     };
 
     const addIngredient = (name: string) => {
@@ -26,10 +45,19 @@ export default function IngredientsTableAdminView() {
         addIngredientApi(name).then(() => getAllIngredients());
     }
 
+    const editIngredient = (name: string, id: number) => {
+        setIsFetching(true);
+        editIngredientApi(name, id).then(() => getAllIngredients());
+    }
+
+    const deleteIngredient = (id: number) => {
+        setIsFetching(true);
+        deleteIngredientApi(id).then(() => getAllIngredients());
+    }
 
     useEffect(() => {
         getAllIngredients();
-    }, [])
+    }, [limit, page])
 
     return isFetching ? (
         <Box sx={{ display: 'flex', justifyContent: 'center',}}>
@@ -40,6 +68,13 @@ export default function IngredientsTableAdminView() {
             <AddIngredient addIngredient={addIngredient}/>
             <IngredientsTable 
                 ingredients={ingredients}
+                page={page}
+                limit={limit}
+                count={count}
+                handleChangeRowsPerPage={handleChangeRowsPerPage}
+                handleChangePage={handleChangePage}
+                deleteIngredient={deleteIngredient}
+                editIngredient={editIngredient}
             />
         </>
       );

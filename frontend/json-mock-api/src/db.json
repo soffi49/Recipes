@@ -1,0 +1,84 @@
+{"recipes":
+[{
+    "id": 0,
+    "name": "harnas ice tea",
+    "instructions": "wymieszaj i wypij pyszna lodoherbate",
+    "ingredients": [
+        {
+            "ingredient":{
+                "id": 0,
+                "name": "piwo"
+            },
+            "quantity": "6"
+        },
+        {
+            "ingredient":{
+                "id": 1,
+                "name": "ice tea"
+            },
+            "quantity": "3"
+        },
+        {
+            "ingredient":{
+                "id": 2,
+                "name": "zubrowa"
+            },
+            "quantity": "1"
+        }
+    ],
+    "tags":[
+        "pyszne",
+        "student",
+        "biedny"
+    ]
+},
+{
+    "id": 1,
+    "name": "kociolek panoramixa",
+    "instructions": "wymieszaj i wypij pyszny wywar",
+    "ingredients": [
+        {
+            "ingredient":{
+                "id": 0,
+                "name": "piwo"
+            },
+            "quantity": "6"
+        },
+        {
+            "ingredient":{
+                "id": 1,
+                "name": "zubrowa"
+            },
+            "quantity": "3"
+        },
+        {
+            "ingredient":{
+                "id": 2,
+                "name": "whisky"
+            },
+            "quantity": "1"
+        },
+        {
+            "ingredient":{
+                "id": 3,
+                "name": "wino"
+            },
+            "quantity": "1"
+        }
+    ],
+    "tags":[
+        "mniej pyszne",
+        "student",
+        "bardzo biedny",
+        "mniej pyszne",
+        "student",
+        "bardzo biedny",
+        "mniej pyszne",
+        "student",
+        "bardzo biedny",
+        "mniej pyszne",
+        "student",
+        "bardzo biedny"
+    ]
+}
+]}
