@@ -5,6 +5,7 @@ import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientDTO;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
+import com.recipes.backend.exception.domain.RecipeEmptyException;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import com.recipes.backend.rest.domain.RecipeRest;
@@ -19,18 +20,24 @@ public class RecipeMapper {
     public static Optional<Recipe> mapToRecipe(final RecipeRest recipeRest) {
         if (Objects.nonNull(recipeRest)) {
             final Recipe recipe = new Recipe();
-            recipe.setRecipeId(recipeRest.getId());
-            recipe.setName(recipeRest.getName());
-            recipe.setInstructions(recipeRest.getInstructions());
-            recipe.setTags(recipeRest.getTags().stream()
-                .map(RecipeTagEnum::findTagByName)
-                .collect(Collectors.toSet()));
-            recipe.setIngredients(recipeRest.getIngredients().stream()
-                .map(ingredient ->
-                    IngredientMapper.mapToIngredient(ingredient.getIngredient()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet()));
+
+            try {
+                recipe.setRecipeId(recipeRest.getId());
+                recipe.setName(recipeRest.getName());
+                recipe.setInstructions(recipeRest.getInstructions());
+                recipe.setTags(recipeRest.getTags().stream()
+                    .map(RecipeTagEnum::findTagByName)
+                    .collect(Collectors.toSet()));
+                recipe.setIngredients(recipeRest.getIngredients().stream()
+                    .map(ingredient ->
+                        IngredientMapper.mapToIngredient(ingredient.getIngredient()))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet()));
+            } catch (NullPointerException e) {
+                throw new RecipeEmptyException();
+            }
+
             return Optional.of(recipe);
         }
 
