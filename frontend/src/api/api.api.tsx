@@ -42,6 +42,21 @@ export async function deleteIngredientApi(id: number) {
     }
 }
 
+export async function editIngredientApi(name: string, id: number) {
+    const key = "" + sessionStorage.getItem("key");
+    try {
+        await axios.put(`${server}/ingredients/${id}`, {
+            id: id,
+            name: name
+        },{
+            headers: {
+              'security_header': key
+        }})
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function deleteRecipeApi(id: number) {
     try {
         await axios.delete(`${server}/recipes/${id}`)
