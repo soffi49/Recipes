@@ -15,6 +15,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getAllByRole("columnheader").length).toEqual(3);
@@ -30,6 +31,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getAllByRole("row").length).toEqual(2);
@@ -45,6 +47,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Delete button")).toBeTruthy();
@@ -60,6 +63,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Edit button")).toBeTruthy();
@@ -75,6 +79,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to next page")).toBeTruthy();
@@ -90,6 +95,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={() => {}}
+                editIngredient={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to previous page")).toBeTruthy();
@@ -106,6 +112,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteIngredient={deleteIngredient}
+                editIngredient={() => {}}
             />
         )
         userEvent.click(screen.getByLabelText("Delete button"));
