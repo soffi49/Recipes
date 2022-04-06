@@ -1,7 +1,6 @@
 package com.recipes.backend.repo.domain;
 
 import com.recipes.backend.repo.domain.keys.RecipeIngredientId;
-import com.recipes.backend.repo.domain.keys.RestaurantRecipeId;
 import lombok.Getter;
 import lombok.Setter;
 

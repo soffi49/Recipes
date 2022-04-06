@@ -1,7 +1,26 @@
 package com.recipes.backend.rest;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
+import com.recipes.backend.bizz.security.SecurityService;
+import com.recipes.backend.rest.domain.IngredientRecipeRest;
+import com.recipes.backend.rest.domain.IngredientRest;
+import com.recipes.backend.rest.domain.RecipeRest;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.LongStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,21 +29,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.LongStream;
-
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(RecipesController.class)
-public class RecipeControllerUnitTest {
+class RecipeControllerUnitTest {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @MockBean
     private static RecipeService recipeServiceMock;
+    @MockBean
+    private static SecurityService securityService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,6 +46,7 @@ public class RecipeControllerUnitTest {
     @DisplayName("Get all recipes - correct parameters")
     void getAllRecipesCorrectParam() throws Exception {
         Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5);
+        when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(get("/recipes")
                 .param("limit", "5")
@@ -46,11 +60,41 @@ public class RecipeControllerUnitTest {
     @DisplayName("Get all recipes - incorrect parameters")
     void getAllRecipesIncorrectParam() throws Exception {
         Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5);
+        when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(get("/recipes")
                 .param("limit", "5")
                 .param("other", "0"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Should add recipe - correct parameters")
+    void addRecipeCorrectParam() throws Exception {
+        // given
+        var recipeRest = new RecipeRest(1L, "NAME", "INSTRUCTION",
+            Set.of(new IngredientRecipeRest(new IngredientRest(1L, "INGREDIENT"), "QUANTITY")),
+            Set.of("vegetarian"));
+        when(securityService.isAuthenticated(any())).thenReturn(true);
+
+        mockMvc.perform(post("/recipes")
+                .contentType(APPLICATION_JSON)
+                .content(MAPPER.writeValueAsString(recipeRest)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Should not add recipe - incorrect parameters")
+    void addRecipeIncorrectParam() throws Exception {
+        // given
+        MAPPER.setSerializationInclusion(Include.NON_NULL);
+        var recipeRest = new RecipeRest(1L, null, null, null, null);
+        when(securityService.isAuthenticated(any())).thenReturn(true);
+
+        mockMvc.perform(post("/recipes")
+                .contentType(APPLICATION_JSON)
+                .content(MAPPER.writeValueAsString(recipeRest)))
+            .andExpect(status().isForbidden());
     }
 
     private Set<Recipe> setUpRecipeSet() {

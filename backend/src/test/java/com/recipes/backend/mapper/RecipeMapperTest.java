@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public class RecipeMapperTest {
+class RecipeMapperTest {
 
     private RecipeDTO mockRecipeDTO;
 
@@ -34,7 +34,7 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipe from recipeDTO not null")
-    public void mapToRecipeFromRecipeDTO() {
+    void mapToRecipeFromRecipeDTO() {
         final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeDTO);
 
         Assertions.assertTrue(retrievedRecipe.isPresent());
@@ -45,7 +45,7 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipe from recipeDTO without Tags")
-    public void mapToRecipeFromRecipeWithoutTags() {
+    void mapToRecipeFromRecipeWithoutTags() {
         mockRecipeDTO.setTagSet(Collections.emptySet());
         final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeDTO);
 
@@ -55,7 +55,7 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipe from recipeDTO without ingredients")
-    public void mapToRecipeFromRecipeWithoutIngredients() {
+    void mapToRecipeFromRecipeWithoutIngredients() {
         mockRecipeDTO.setIngredientSet(Collections.emptySet());
         final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeDTO);
 
@@ -65,15 +65,15 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipe from recipeDTO null")
-    public void mapToRecipeFromRecipeDTONull() {
-        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(null);
+    void mapToRecipeFromRecipeDTONull() {
+        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe((RecipeDTO) null);
 
         Assertions.assertTrue(retrievedRecipe.isEmpty());
     }
 
     @Test
     @DisplayName("Map to recipeRest from recipe not null")
-    public void mapToRecipeRectFromRecipeNotNull() {
+    void mapToRecipeRectFromRecipeNotNull() {
         mockRecipe.getIngredients().stream().findFirst().get().setQuantity("10g");
         final Optional<RecipeRest> retrievedRecipeRest = RecipeMapper.mapToRecipeRest(mockRecipe);
 
@@ -84,7 +84,7 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipeRest from recipe quantity null")
-    public void mapToRecipeRectFromRecipeQuantityNull() {
+    void mapToRecipeRectFromRecipeQuantityNull() {
         assertThatThrownBy(() -> RecipeMapper.mapToRecipeRest(mockRecipe))
                 .isExactlyInstanceOf(MissingQuantityException.class)
                 .hasMessage("The quantity is missing in the provided ingredient");
@@ -92,7 +92,7 @@ public class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipeRest from recipe is null")
-    public void mapToRecipeRectFromRecipeNull() {
+    void mapToRecipeRectFromRecipeNull() {
         final Optional<RecipeRest> retrievedRecipeRest = RecipeMapper.mapToRecipeRest(null);
 
         Assertions.assertTrue(retrievedRecipeRest.isEmpty());

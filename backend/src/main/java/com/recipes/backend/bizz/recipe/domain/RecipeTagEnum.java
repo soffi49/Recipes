@@ -31,4 +31,11 @@ public enum RecipeTagEnum {
                 .findFirst()
                 .orElse(null);
     }
+
+    public static RecipeTagEnum findTagByName(final String name) {
+        return Arrays.stream(RecipeTagEnum.values())
+            .filter(tag -> tag.name.equals(name))
+            .findFirst()
+            .orElse(null);
+    }
 }

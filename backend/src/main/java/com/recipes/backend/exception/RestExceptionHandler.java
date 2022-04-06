@@ -27,6 +27,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(RecipeEmptyException.class)
+    protected ResponseEntity<Object> handleForbiddenException(final RecipeEmptyException ex,
+                                                              final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.MAPPER_NULL;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     @ExceptionHandler(MissingQuantityException.class)
     protected ResponseEntity<Object> handleForbiddenException(final MissingQuantityException ex,
                                                               final WebRequest webRequest) {
