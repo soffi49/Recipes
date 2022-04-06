@@ -57,7 +57,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit);
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit,null,null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Ingredient::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList.size()).isEqualTo(5);
@@ -70,8 +70,8 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
     void getAllIngredientsMorePages() {
         final int limit = 3;
 
-        final Set<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit);
-        final Set<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit);
+        final Set<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit, null,null);
+        final Set<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit, null,null);
 
         assertThat(retrievedList1.size()).isEqualTo(3);
         assertThat(retrievedList2.size()).isEqualTo(2);
@@ -85,7 +85,79 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit);
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null,null);
+
+        assertThat(retrievedList.size()).isZero();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with existing id")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllIngredientsWithSpecifiedId() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, (long)3,null);
+
+        assertThat(retrievedList.size()).isOne();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with not existing id")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllNotExistingIngredientsWithSpecifiedId() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, (long)10,null);
+
+        assertThat(retrievedList.size()).isZero();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with existing name")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllIngredientsWithSpecifiedName() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null,"Name1");
+
+        assertThat(retrievedList.size()).isOne();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with not existing name")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllNotExistingIngredientsWithSpecifiedName() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null,"Name10");
+
+        assertThat(retrievedList.size()).isZero();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with existing name and id")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllIngredientsWithSpecifiedNameAndId() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, (long)1,"Name1");
+
+        assertThat(retrievedList.size()).isOne();
+    }
+
+    @Test
+    @DisplayName("Get all ingredients with not existing name and id")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-5-ingredients.sql"})
+    void getAllNotExistingIngredientsWithSpecifiedNameAndId() {
+        final int limit = 5;
+        final int page = 0;
+
+        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, (long)10,"Name10");
 
         assertThat(retrievedList.size()).isZero();
     }

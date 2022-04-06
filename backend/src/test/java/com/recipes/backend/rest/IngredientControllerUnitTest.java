@@ -22,15 +22,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.LongStream;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -97,7 +94,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - correct parameters")
     void getAllIngredientsCorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null,null);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")
@@ -110,7 +107,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - incorrect parameters")
     void getAllIngredientsIncorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null,null);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")

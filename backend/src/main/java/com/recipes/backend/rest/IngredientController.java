@@ -32,9 +32,7 @@ public class IngredientController
     private final SecurityService securityService;
 
     @Autowired
-    public IngredientController(
-            final IngredientService ingredientService, final SecurityService securityService)
-    {
+    public IngredientController(final IngredientService ingredientService, final SecurityService securityService) {
         this.ingredientService = ingredientService;
         this.securityService = securityService;
     }
@@ -60,8 +58,10 @@ public class IngredientController
 
     @GetMapping
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
-                                                               @RequestParam(value = "page") int page,
-                                                               @RequestParam(value = "limit") int limit)
+                                                               @RequestParam(value = "page") Integer page,
+                                                               @RequestParam(value = "limit") Integer limit,
+                                                               @RequestParam(value = "id", required = false) Long id,
+                                                               @RequestParam(value = "name", required = false) String name)
     {
 
         logHeaders(headers);
@@ -72,7 +72,7 @@ public class IngredientController
         }
 
         final Set<IngredientRest> retrievedIngredients =
-                ingredientService.getAllIngredients(page, limit).stream()
+                ingredientService.getAllIngredients(page, limit, id, name).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
