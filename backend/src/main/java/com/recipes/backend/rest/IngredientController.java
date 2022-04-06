@@ -1,10 +1,5 @@
 package com.recipes.backend.rest;
 
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
-import static com.recipes.backend.utils.LogWriter.logHeaders;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
@@ -12,24 +7,21 @@ import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestController
 @RequestMapping(path = "/ingredients")
@@ -39,8 +31,7 @@ public class IngredientController {
     private final SecurityService securityService;
 
     @Autowired
-    public IngredientController(
-            final IngredientService ingredientService, final SecurityService securityService) {
+    public IngredientController(final IngredientService ingredientService, final SecurityService securityService) {
         this.ingredientService = ingredientService;
         this.securityService = securityService;
     }
@@ -64,8 +55,11 @@ public class IngredientController {
 
     @GetMapping
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
-                                                               @RequestParam(value = "page") int page,
-                                                               @RequestParam(value = "limit") int limit) {
+                                                               @RequestParam(value = "page") Integer page,
+                                                               @RequestParam(value = "limit") Integer limit,
+                                                               @RequestParam(value = "id", required = false) Long id,
+                                                               @RequestParam(value = "name", required = false) String name
+                                                               ) {
 
         logHeaders(headers);
 
@@ -74,7 +68,7 @@ public class IngredientController {
         }
 
         final Set<IngredientRest> retrievedIngredients =
-                ingredientService.getAllIngredients(page, limit).stream()
+                ingredientService.getAllIngredients(page, limit, id, name).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
