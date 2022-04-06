@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public class RecipeMapperTest {
+class RecipeMapperTest {
 
     private RecipeDTO mockRecipeDTO;
     private Recipe mockRecipe;

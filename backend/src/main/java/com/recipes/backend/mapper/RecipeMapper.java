@@ -1,12 +1,14 @@
 package com.recipes.backend.mapper;
 
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientDTO;
+
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.repo.domain.RecipeDTO;
+import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import com.recipes.backend.rest.domain.IngredientRecipeRest;
 import com.recipes.backend.rest.domain.RecipeRest;
-
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
@@ -81,6 +83,32 @@ public class RecipeMapper
                                               .map(Optional::get)
                                               .collect(Collectors.toSet()));
             return Optional.of(recipeRest);
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<RecipeDTO> mapToRecipeDTO(final Recipe recipe) {
+
+        if (Objects.nonNull(recipe)) {
+            final RecipeDTO recipeDTO = new RecipeDTO();
+            recipeDTO.setRecipeId(recipe.getRecipeId());
+            recipeDTO.setName(recipe.getName());
+            recipeDTO.setInstructions(recipe.getInstructions());
+            recipeDTO.setTagSet(
+                    recipe.getTags().stream()
+                            .map(TagMapper::mapToTagDTO)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .collect(Collectors.toSet()));
+            recipeDTO.setIngredientSet(
+                    recipe.getIngredients().stream()
+                            .map(ingredient -> { var recipeIngredientDTO = new RecipeIngredientDTO();
+                                recipeIngredientDTO.setRecipe(recipeDTO);
+                                recipeIngredientDTO.setIngredient(mapToIngredientDTO(ingredient).orElseThrow());
+                                recipeIngredientDTO.setQuantity(ingredient.getQuantity());
+                                return recipeIngredientDTO; })
+                            .collect(Collectors.toSet()));
+            return Optional.of(recipeDTO);
         }
         return Optional.empty();
     }

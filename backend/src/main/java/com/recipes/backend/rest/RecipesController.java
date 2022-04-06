@@ -1,5 +1,8 @@
 package com.recipes.backend.rest;
 
+import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.RecipeEmptyException;
@@ -55,6 +58,20 @@ public class RecipesController
         final long totalRecipes = recipeService.getRecipesCount();
 
         return ResponseEntity.ok(new RecipeAllRest(totalRecipes, retrievedRecipes));
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody RecipeRest recipeRest) {
+        logHeaders(headers);
+
+        if (!securityService.isAuthenticated(headers)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        final var recipeToAdd = mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new);
+        recipeService.addRecipe(recipeToAdd);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

@@ -23,6 +23,7 @@ import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
+
 @RestController
 @RequestMapping(path = "/ingredients")
 public class IngredientController
@@ -91,7 +92,9 @@ public class IngredientController
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ingredientService.deleteIngredient(ingredientId) ? ResponseEntity.ok(ingredientId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+        return ingredientService.deleteIngredient(ingredientId)
+                ? ResponseEntity.ok(ingredientId.toString())
+                : ResponseEntity.badRequest().body("Bad request!");
     }
 
     @PutMapping("/{id}")
