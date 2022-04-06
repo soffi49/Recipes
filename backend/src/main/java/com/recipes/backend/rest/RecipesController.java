@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class RecipesController
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody RecipeRest recipeRest) {
+    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest) {
         logHeaders(headers);
 
         if (!securityService.isAuthenticated(headers)) {

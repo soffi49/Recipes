@@ -51,6 +51,6 @@ class RecipeControllerIntegrationTest extends AbstractControllerIntegrationTest 
             HttpMethod.POST, entity, String.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }
