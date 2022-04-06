@@ -1,10 +1,5 @@
 package com.recipes.backend.rest;
 
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
-import static com.recipes.backend.utils.LogWriter.logHeaders;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-
 import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
@@ -12,46 +7,47 @@ import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestController
 @RequestMapping(path = "/ingredients")
-public class IngredientController {
+public class IngredientController
+{
 
     private final IngredientService ingredientService;
     private final SecurityService securityService;
 
     @Autowired
     public IngredientController(
-            final IngredientService ingredientService, final SecurityService securityService) {
+            final IngredientService ingredientService, final SecurityService securityService)
+    {
         this.ingredientService = ingredientService;
         this.securityService = securityService;
     }
 
     @PostMapping
-    public ResponseEntity<Object> addIngredient(
-            @RequestHeader HttpHeaders headers, @RequestBody @Valid IngredientRest ingredient) {
+    public ResponseEntity<Object> addIngredient(@RequestHeader HttpHeaders headers,
+                                                @RequestBody @Valid IngredientRest ingredient)
+    {
 
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -65,11 +61,13 @@ public class IngredientController {
     @GetMapping
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
                                                                @RequestParam(value = "page") int page,
-                                                               @RequestParam(value = "limit") int limit) {
+                                                               @RequestParam(value = "limit") int limit)
+    {
 
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -86,8 +84,10 @@ public class IngredientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
-                                                   @PathVariable(name = "id") Long ingredientId) {
-        if (!securityService.isAuthenticated(headers)) {
+                                                   @PathVariable(name = "id") Long ingredientId)
+    {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -95,12 +95,14 @@ public class IngredientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<IngredientRest> updateExistingIngredient(
-            @RequestHeader HttpHeaders headers, @RequestBody @Valid IngredientRest ingredientRest) {
+    public ResponseEntity<IngredientRest> updateExistingIngredient(@RequestHeader HttpHeaders headers,
+                                                                   @RequestBody @Valid IngredientRest ingredientRest)
+    {
 
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

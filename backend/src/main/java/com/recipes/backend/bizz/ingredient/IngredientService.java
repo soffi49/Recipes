@@ -15,5 +15,7 @@ public interface IngredientService {
 
     long getIngredientsCount();
 
+    boolean isIngredientPresent(long ingredientId);
+
     Ingredient updateIngredient(Ingredient ingredient);
 }

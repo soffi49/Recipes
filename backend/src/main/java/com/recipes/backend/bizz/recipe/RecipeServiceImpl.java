@@ -1,5 +1,6 @@
 package com.recipes.backend.bizz.recipe;
 
+import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.exception.domain.*;
 import com.recipes.backend.mapper.RecipeMapper;
@@ -27,19 +28,19 @@ public class RecipeServiceImpl implements RecipeService
 
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final IngredientRepository ingredientRepository;
+    private final IngredientService ingredientService;
     private final TagRepository tagRepository;
 
     @Autowired
     public RecipeServiceImpl(final RecipeRepository recipeRepository,
-                             final IngredientRepository ingredientRepository,
+                             final IngredientService ingredientService,
                              final RecipeIngredientRepository recipeIngredientRepository,
                              final TagRepository tagRepository)
     {
         this.tagRepository = tagRepository;
         this.recipeRepository = recipeRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
-        this.ingredientRepository = ingredientRepository;
+        this.ingredientService = ingredientService;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class RecipeServiceImpl implements RecipeService
         {
             recipeIngredientRepository.deleteAllByRecipeId(recipeToBeEdited.getRecipeId());
             recipe.getIngredients().forEach(ingredient -> {
-                if (ingredientRepository.findById(ingredient.getIngredientId()).isEmpty())
+                if (!ingredientService.isIngredientPresent(ingredient.getIngredientId()))
                 {
                     throw new IngredientNotFound(ingredient.getIngredientId());
                 }

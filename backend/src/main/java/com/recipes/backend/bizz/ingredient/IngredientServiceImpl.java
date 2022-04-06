@@ -104,4 +104,10 @@ public class IngredientServiceImpl implements IngredientService {
 
         return mapToIngredient(ingredientDTO).orElseThrow();
     }
+
+    @Override
+    public boolean isIngredientPresent(final long ingredientId)
+    {
+        return ingredientRepository.findById(ingredientId).isPresent();
+    }
 }
