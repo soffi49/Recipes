@@ -55,6 +55,27 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(IngredientNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final IngredientNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(RecipeNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final RecipeNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
+    @ExceptionHandler(TagNotFound.class)
+    protected ResponseEntity<Object> handleNotFoundException(final TagNotFound ex,
+                                                             final WebRequest webRequest) {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.NOT_FOUND;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     private ResponseEntity<Object> handleCustomException(final ExceptionTypeEnum exceptionTypeEnum,
                                                          final Exception exception,
                                                          final WebRequest webRequest) {

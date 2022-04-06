@@ -34,8 +34,8 @@ public enum RecipeTagEnum {
 
     public static RecipeTagEnum findTagByName(final String name) {
         return Arrays.stream(RecipeTagEnum.values())
-            .filter(tag -> tag.name.equals(name))
-            .findFirst()
-            .orElse(null);
+                .filter(tag -> tag.name.equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

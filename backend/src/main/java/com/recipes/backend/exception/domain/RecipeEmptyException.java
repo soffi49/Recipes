@@ -1,10 +1,11 @@
 package com.recipes.backend.exception.domain;
 
-public class RecipeEmptyException extends RuntimeException{
+public class RecipeEmptyException extends RuntimeException
+{
+    private static final long serialVersionUID = 8334975981220177579L;
 
-    private static final long serialVersionUID = -1758358840739830707L;
-
-    public RecipeEmptyException() {
+    public RecipeEmptyException()
+    {
         super("The given recipe have some fields which are empty");
     }
 }

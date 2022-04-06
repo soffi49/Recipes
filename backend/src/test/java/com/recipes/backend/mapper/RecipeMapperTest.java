@@ -8,6 +8,8 @@ import com.recipes.backend.repo.domain.IngredientDTO;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import com.recipes.backend.repo.domain.TagDTO;
+import com.recipes.backend.rest.domain.IngredientRecipeRest;
+import com.recipes.backend.rest.domain.IngredientRest;
 import com.recipes.backend.rest.domain.RecipeRest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,13 +25,14 @@ import java.util.Set;
 class RecipeMapperTest {
 
     private RecipeDTO mockRecipeDTO;
-
     private Recipe mockRecipe;
+    private RecipeRest mockRecipeRest;
 
     @BeforeEach
     public void setUp() {
         setUpRecipe();
         setUpRecipeDTO();
+        setUpRecipeRest();
     }
 
     @Test
@@ -72,8 +75,48 @@ class RecipeMapperTest {
     }
 
     @Test
+    @DisplayName("Map to recipe from recipeRest all data")
+    void mapToRecipeFromRecipeRestAllData() {
+        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeRest);
+
+        Assertions.assertTrue(retrievedRecipe.isPresent());
+        Assertions.assertEquals(1, retrievedRecipe.get().getIngredients().size());
+        Assertions.assertEquals("50g", retrievedRecipe.get().getIngredients().stream().findFirst().get().getQuantity());
+    }
+
+    @Test
+    @DisplayName("Map to recipe from recipeRest without tags")
+    void mapToRecipeFromRecipeRestWithoutTags() {
+        mockRecipeRest.setTags(Collections.emptySet());
+        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeRest);
+
+        Assertions.assertTrue(retrievedRecipe.isPresent());
+        Assertions.assertEquals(0, retrievedRecipe.get().getTags().size());
+        Assertions.assertEquals("Test RecipeRest", retrievedRecipe.get().getName());
+    }
+
+    @Test
+    @DisplayName("Map to recipe from recipeRest without ingredients")
+    void mapToRecipeFromRecipeRestWithoutIngredients() {
+        mockRecipeRest.setIngredients(Collections.emptySet());
+        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe(mockRecipeRest);
+
+        Assertions.assertTrue(retrievedRecipe.isPresent());
+        Assertions.assertEquals(0, retrievedRecipe.get().getIngredients().size());
+        Assertions.assertEquals("Test Instructions", retrievedRecipe.get().getInstructions());
+    }
+
+    @Test
+    @DisplayName("Map to recipe from recipeRest null")
+    void mapToRecipeFromRecipeRestNull() {
+        final Optional<Recipe> retrievedRecipe = RecipeMapper.mapToRecipe((RecipeRest) null);
+
+        Assertions.assertTrue(retrievedRecipe.isEmpty());
+    }
+
+    @Test
     @DisplayName("Map to recipeRest from recipe not null")
-    void mapToRecipeRectFromRecipeNotNull() {
+    void mapToRecipeRestFromRecipeNotNull() {
         mockRecipe.getIngredients().stream().findFirst().get().setQuantity("10g");
         final Optional<RecipeRest> retrievedRecipeRest = RecipeMapper.mapToRecipeRest(mockRecipe);
 
@@ -84,7 +127,7 @@ class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipeRest from recipe quantity null")
-    void mapToRecipeRectFromRecipeQuantityNull() {
+    void mapToRecipeRestFromRecipeQuantityNull() {
         assertThatThrownBy(() -> RecipeMapper.mapToRecipeRest(mockRecipe))
                 .isExactlyInstanceOf(MissingQuantityException.class)
                 .hasMessage("The quantity is missing in the provided ingredient");
@@ -92,7 +135,7 @@ class RecipeMapperTest {
 
     @Test
     @DisplayName("Map to recipeRest from recipe is null")
-    void mapToRecipeRectFromRecipeNull() {
+    void mapToRecipeRestFromRecipeNull() {
         final Optional<RecipeRest> retrievedRecipeRest = RecipeMapper.mapToRecipeRest(null);
 
         Assertions.assertTrue(retrievedRecipeRest.isEmpty());
@@ -132,5 +175,22 @@ class RecipeMapperTest {
         mockRecipe.setName("Test Recipe");
         mockRecipe.setTags(Set.of(RecipeTagEnum.VEGETARIAN, RecipeTagEnum.GLUTEN_FREE));
         mockRecipe.setIngredients(Set.of(mockIngredient));
+    }
+
+    private void setUpRecipeRest() {
+        final IngredientRest ingredientRest = new IngredientRest();
+        ingredientRest.setId(1L);
+        ingredientRest.setName("Test Ingredient");
+
+        final IngredientRecipeRest ingredientRecipeRest = new IngredientRecipeRest();
+        ingredientRecipeRest.setQuantity("50g");
+        ingredientRecipeRest.setIngredient(ingredientRest);
+
+        mockRecipeRest = new RecipeRest();
+        mockRecipeRest.setId(1L);
+        mockRecipeRest.setInstructions("Test Instructions");
+        mockRecipeRest.setName("Test RecipeRest");
+        mockRecipeRest.setTags(Set.of("vegetarian", "gluten free"));
+        mockRecipeRest.setIngredients(Set.of(ingredientRecipeRest));
     }
 }

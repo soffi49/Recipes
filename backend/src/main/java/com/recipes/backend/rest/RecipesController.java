@@ -15,19 +15,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+
 @RestController
 @RequestMapping(path = "/recipes")
-public class RecipesController {
+public class RecipesController
+{
 
     private final RecipeService recipeService;
     private final SecurityService securityService;
 
     @Autowired
-    public RecipesController(final RecipeService recipeService, final SecurityService securityService) {
+    public RecipesController(final RecipeService recipeService,
+                             final SecurityService securityService)
+    {
         this.recipeService = recipeService;
         this.securityService = securityService;
     }
@@ -35,10 +41,12 @@ public class RecipesController {
     @GetMapping
     public ResponseEntity<RecipeAllRest> getAllRecipes(@RequestHeader HttpHeaders headers,
                                                        @RequestParam(name = "page") int page,
-                                                       @RequestParam(name = "limit") int limit) {
+                                                       @RequestParam(name = "limit") int limit)
+    {
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -54,7 +62,7 @@ public class RecipesController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody RecipeRest recipeRest) {
+    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest) {
         logHeaders(headers);
 
         if (!securityService.isAuthenticated(headers)) {
@@ -69,13 +77,29 @@ public class RecipesController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRecipe(@RequestHeader HttpHeaders headers,
-                                               @PathVariable(name = "id") Long recipeId) {
+                                               @PathVariable(name = "id") Long recipeId)
+    {
+        logHeaders(headers);
+
+        if (!securityService.isAuthenticated(headers))
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateRecipe(@RequestHeader HttpHeaders headers,
+                                               @PathVariable(name = "id") Long recipeId,
+                                               @RequestBody RecipeRest recipeRest)
+    {
         logHeaders(headers);
 
         if (!securityService.isAuthenticated(headers)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+        recipeService.updateRecipe(RecipeMapper.mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
+        return ResponseEntity.ok().build();
     }
 }

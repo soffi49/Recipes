@@ -13,4 +13,6 @@ public interface RecipeService {
     void addRecipe(Recipe recipe);
 
     long getRecipesCount();
+
+    void updateRecipe(Recipe recipe);
 }

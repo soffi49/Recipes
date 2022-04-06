@@ -26,7 +26,8 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestController
 @RequestMapping(path = "/ingredients")
-public class IngredientController {
+public class IngredientController
+{
 
     private final IngredientService ingredientService;
     private final SecurityService securityService;
@@ -38,12 +39,14 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addIngredient(
-            @RequestHeader HttpHeaders headers, @RequestBody @Valid IngredientRest ingredient) {
+    public ResponseEntity<Object> addIngredient(@RequestHeader HttpHeaders headers,
+                                                @RequestBody @Valid IngredientRest ingredient)
+    {
 
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -59,12 +62,13 @@ public class IngredientController {
                                                                @RequestParam(value = "page") Integer page,
                                                                @RequestParam(value = "limit") Integer limit,
                                                                @RequestParam(value = "id", required = false) Long id,
-                                                               @RequestParam(value = "name", required = false) String name
-                                                               ) {
+                                                               @RequestParam(value = "name", required = false) String name)
+    {
 
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -81,8 +85,10 @@ public class IngredientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
-                                                   @PathVariable(name = "id") Long ingredientId) {
-        if (!securityService.isAuthenticated(headers)) {
+                                                   @PathVariable(name = "id") Long ingredientId)
+    {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -92,11 +98,14 @@ public class IngredientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<IngredientRest> updateExistingIngredient(
-            @RequestHeader HttpHeaders headers, @RequestBody @Valid IngredientRest ingredientRest) {
+    public ResponseEntity<IngredientRest> updateExistingIngredient(@RequestHeader HttpHeaders headers,
+                                                                   @RequestBody @Valid IngredientRest ingredientRest)
+    {
+
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
