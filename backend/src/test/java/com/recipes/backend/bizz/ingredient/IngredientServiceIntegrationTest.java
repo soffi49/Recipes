@@ -131,6 +131,22 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig {
         assertThat(retrievedList).isZero();
     }
 
+    @Test
+    @DisplayName("Is ingredient present true")
+    @Sql({"/data/ingredient/truncate-ingredients.sql", "/data/ingredient/insert-1-ingredient.sql"})
+    void isIngredientPresentTrue() {
+        final boolean result = ingredientService.isIngredientPresent(1000L);
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("Is ingredient present false")
+    @Sql({"/data/ingredient/truncate-ingredients.sql"})
+    void isIngredientPresentFalse() {
+        final boolean result = ingredientService.isIngredientPresent(1000L);
+        assertThat(result).isFalse();
+    }
+
 
     @Test
     void getUpdatedIngredient() {
