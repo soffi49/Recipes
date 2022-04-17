@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Sql({"/data/drop-db.sql", "/data/create-db.sql", "/data/ingredient/insert-1-ingredient.sql"})
+@Sql({"/data/truncate-db.sql", "/data/create-db.sql", "/data/ingredient/insert-1-ingredient.sql"})
 class IngredientRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Autowired

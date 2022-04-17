@@ -1,8 +1,5 @@
 package com.recipes.backend.rest;
 
-import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
-import static com.recipes.backend.utils.LogWriter.logHeaders;
-
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.RecipeEmptyException;
@@ -16,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 @RestController
@@ -62,10 +61,12 @@ public class RecipesController
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest) {
+    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest)
+    {
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -95,7 +96,8 @@ public class RecipesController
     {
         logHeaders(headers);
 
-        if (!securityService.isAuthenticated(headers)) {
+        if (!securityService.isAuthenticated(headers))
+        {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 

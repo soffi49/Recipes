@@ -1,9 +1,7 @@
 package com.recipes.backend.bizz.ingredient;
 
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
-import com.recipes.backend.exception.domain.DatabaseFindException;
-import com.recipes.backend.exception.domain.DatabaseSaveException;
-import com.recipes.backend.exception.domain.IngredientDuplicateException;
+import com.recipes.backend.exception.domain.*;
 import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.repo.IngredientRepository;
 import com.recipes.backend.repo.domain.IngredientDTO;
@@ -27,38 +25,44 @@ import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
 
 @Slf4j
 @Service
-public class IngredientServiceImpl implements IngredientService {
+public class IngredientServiceImpl implements IngredientService
+{
 
     private final IngredientRepository ingredientRepository;
 
     @Autowired
-    public IngredientServiceImpl(final IngredientRepository ingredientRepository) {
+    public IngredientServiceImpl(final IngredientRepository ingredientRepository)
+    {
         this.ingredientRepository = ingredientRepository;
     }
 
     @Override
-    public void addIngredient(final Ingredient ingredient) {
-        final Optional<IngredientDTO> ingredientDTOOpt = IngredientMapper.mapToIngredientDTO(ingredient);
+    public void addIngredient(final Ingredient ingredient)
+    {
+        final IngredientDTO ingredientDTO = IngredientMapper.mapToIngredientDTO(ingredient).orElseThrow(IngredientEmptyException::new);
 
-        ingredientDTOOpt.ifPresent(ingredientDTO -> {
-            try {
-                ingredientRepository.save(ingredientDTO);
-            } catch (final DataIntegrityViolationException e) {
-                throw new IngredientDuplicateException(ingredient.getName());
-            } catch (final DataAccessException e) {
-                throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
-            }
-        });
+        try
+        {
+            ingredientRepository.save(ingredientDTO);
+        } catch (final DataIntegrityViolationException e)
+        {
+            throw new IngredientDuplicateException(ingredient.getName());
+        } catch (final DataAccessException e)
+        {
+            throw new DatabaseSaveException("couldn't save ingredient " + ingredient.getName());
+        }
     }
 
     @Override
-    public boolean deleteIngredient(Long ingredientId) {
-        try {
+    public boolean deleteIngredient(Long ingredientId)
+    {
+        try
+        {
             ingredientRepository.deleteById(ingredientId);
             return true;
-        } catch (final EmptyResultDataAccessException e) {
-            log.warn("Ingredient id {} deletion failed!", ingredientId, e);
-            return false;
+        } catch (final EmptyResultDataAccessException e)
+        {
+            throw new IngredientNotFound(ingredientId);
         }
     }
 
@@ -79,38 +83,49 @@ public class IngredientServiceImpl implements IngredientService {
                     .skip((long) page * limit)
                     .limit(limit)
                     .collect(Collectors.toSet());
-        } catch (final DataAccessException e) {
+        } catch (final DataAccessException e)
+        {
             throw new DatabaseFindException("couldn't persist full ingredient list");
         }
     }
 
     @Override
-    public long getIngredientsCount() {
-        try {
+    public long getIngredientsCount()
+    {
+        try
+        {
             return StreamSupport.stream(ingredientRepository.findAll().spliterator(), false).count();
-        } catch (final DataAccessException e) {
-            throw new DatabaseFindException("couldn't persist ingredients count");
+        } catch (final DataAccessException e)
+        {
+            throw new DatabaseFindException("couldn't retrieve ingredients count");
         }
     }
 
     @Override
-    public Ingredient updateIngredient(Ingredient ingredient) {
+    public Ingredient updateIngredient(final Ingredient ingredient)
+    {
         IngredientDTO ingredientDTO;
-        try {
-            ingredientDTO = ingredientRepository.findById(ingredient.getIngredientId()).orElseThrow();
-        } catch (final DataAccessException e) {
+
+        try
+        {
+            ingredientDTO = ingredientRepository.findById(ingredient.getIngredientId()).orElseThrow(() -> new IngredientNotFound(ingredient.getIngredientId()));
+        } catch (final DataAccessException e)
+        {
             throw new DatabaseFindException(
-                String.format("couldn't find ingredient with id %d to update", ingredient.getIngredientId()));
+                    String.format("couldn't retrieve ingredient with id %d to update", ingredient.getIngredientId()));
         }
 
-        try {
+        try
+        {
             ingredientDTO.setName(ingredient.getName());
             ingredientRepository.save(ingredientDTO);
-        } catch (final DataAccessException | NoSuchElementException e) {
+
+        } catch (final DataAccessException | NoSuchElementException e)
+        {
             throw new DatabaseSaveException("couldn't persist updated ingredient");
         }
 
-        return mapToIngredient(ingredientDTO).orElseThrow();
+        return mapToIngredient(ingredientDTO).orElseThrow(IngredientEmptyException::new);
     }
 
     @Override

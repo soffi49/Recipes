@@ -1,9 +1,7 @@
 package com.recipes.backend.repo;
 
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
-import com.recipes.backend.repo.domain.IngredientDTO;
 import com.recipes.backend.repo.domain.RecipeDTO;
-import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Sql({"/data/drop-db.sql","/data/create-db.sql", "/data/recipe/insert-1-recipe.sql"})
+@Sql({"/data/truncate-db.sql","/data/create-db.sql", "/data/recipe/insert-1-recipe.sql"})
 public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Autowired

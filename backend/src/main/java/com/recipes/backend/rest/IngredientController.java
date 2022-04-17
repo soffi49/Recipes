@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
 import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-
 
 @RestController
 @RequestMapping(path = "/ingredients")
@@ -113,6 +111,6 @@ public class IngredientController
         var updatedIngredient = ingredientService.updateIngredient(ingredient);
         return mapToIngredientRest(updatedIngredient)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(FORBIDDEN).build());
+                .orElseThrow(IngredientEmptyException::new);
     }
 }

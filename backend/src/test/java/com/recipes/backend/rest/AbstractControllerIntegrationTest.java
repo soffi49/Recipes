@@ -15,7 +15,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(SpringExtension.class)
 @Sql("/data/create-db.sql")
-@Sql("/data/insert-test-user.sql")
+@Sql("/data/user/insert-test-user.sql")
 @SqlConfig(errorMode = CONTINUE_ON_ERROR)
 abstract class AbstractControllerIntegrationTest extends AbstractIntegrationTestConfig {
 
