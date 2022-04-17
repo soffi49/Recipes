@@ -4,20 +4,17 @@ import com.recipes.backend.bizz.ingredient.IngredientService;
 import static com.recipes.backend.mapper.RecipeMapper.mapToRecipeDTO;
 
 import com.recipes.backend.bizz.recipe.domain.Recipe;
+import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.exception.domain.*;
 import com.recipes.backend.exception.domain.DatabaseFindException;
 import com.recipes.backend.exception.domain.DatabaseSaveException;
 import com.recipes.backend.exception.domain.IngredientDuplicateException;
 import com.recipes.backend.mapper.RecipeMapper;
-import com.recipes.backend.repo.IngredientRepository;
 import com.recipes.backend.repo.RecipeIngredientRepository;
 import com.recipes.backend.repo.RecipeRepository;
 import com.recipes.backend.repo.TagRepository;
 import com.recipes.backend.repo.domain.RecipeDTO;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import com.sun.istack.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,6 +22,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -61,14 +65,22 @@ public class RecipeServiceImpl implements RecipeService
     }
 
     @Override
-    public Set<Recipe> getAllRecipes(final Integer page, final Integer limit)
+    public Set<Recipe> getAllRecipes(final Integer page,
+                                     final Integer limit,
+                                     @Nullable final String name,
+                                     @Nullable final Set<String> tags)
     {
+
+        final Predicate<Recipe> filterByName = recipe -> (Objects.isNull(name)) || (recipe.getName().contains(name));
+        final Predicate<Recipe> filterByTags = recipe -> (Objects.isNull(tags)) || (recipe.getTags().stream().map(RecipeTagEnum::getName).collect(Collectors.toSet()).containsAll(tags));
+
         try
         {
             return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
                     .map(RecipeMapper::mapToRecipe)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
+                    .filter(filterByName.and(filterByTags))
                     .skip((long) page * limit)
                     .limit(limit)
                     .collect(Collectors.toSet());

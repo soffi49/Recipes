@@ -55,14 +55,14 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     }
 
     @Test
-    @DisplayName("Get all recipes one page")
+    @DisplayName("Get all recipes one page withour filters")
     @Sql({"/data/recipe/insert-5-recipes.sql"})
-    void getAllRecipesOnePage()
+    void getAllRecipesOnePageWithoutFilters()
     {
         final int limit = 5;
         final int page = 0;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit);
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
         final Set<String> recipesNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList.size()).isEqualTo(5);
@@ -70,14 +70,14 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     }
 
     @Test
-    @DisplayName("Get all recipes more pages")
+    @DisplayName("Get all recipes more pages without filters")
     @Sql({"/data/recipe/insert-5-recipes.sql"})
-    void getAllRecipesMorePages()
+    void getAllRecipesMorePagesWithoutFilters()
     {
         final int limit = 3;
 
-        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit);
-        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit);
+        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
+        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
 
         assertThat(retrievedList1.size()).isEqualTo(3);
         assertThat(retrievedList2.size()).isEqualTo(2);
@@ -85,14 +85,14 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     }
 
     @Test
-    @DisplayName("Get all recipes empty")
+    @DisplayName("Get all recipes empty without filters")
     @Sql({"/data/recipe/truncate-recipes.sql"})
-    void getAllRecipesEmpty()
+    void getAllRecipesEmptyWithoutFilters()
     {
         final int limit = 5;
         final int page = 0;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit);
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
 
         assertThat(retrievedList.size()).isZero();
     }

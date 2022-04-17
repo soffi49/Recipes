@@ -45,10 +45,10 @@ class RecipeControllerUnitTest
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Get all recipes - correct parameters")
-    void getAllRecipesCorrectParam() throws Exception
+    @DisplayName("Get all recipes - correct parameters and without filters")
+    void getAllRecipesCorrectParamNoFilters() throws Exception
     {
-        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5);
+        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(get("/recipes")
@@ -60,10 +60,10 @@ class RecipeControllerUnitTest
     }
 
     @Test
-    @DisplayName("Get all recipes - incorrect parameters")
-    void getAllRecipesIncorrectParam() throws Exception
+    @DisplayName("Get all recipes - incorrect parameters and without filters")
+    void getAllRecipesIncorrectParamNoFilters() throws Exception
     {
-        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5);
+        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(get("/recipes")
