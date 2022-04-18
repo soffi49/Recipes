@@ -1,7 +1,9 @@
 package com.recipes.backend.bizz.security;
 
+import com.recipes.backend.exception.domain.MissingSecurityHeaderException;
 import com.recipes.backend.repo.UserRepository;
 import com.recipes.backend.repo.domain.UserDTO;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
@@ -32,29 +35,51 @@ class SecurityServiceUnitTest
     private SecurityServiceImpl securityService;
 
     @ParameterizedTest
-    @MethodSource("provideHttpHeaders")
-    void shouldCorrectlyAuthenticate(HttpHeaders headers, Optional<UserDTO> user, boolean expectedResult)
+    @DisplayName("Is authenticated with correct header")
+    @MethodSource("provideCorrectHttpHeaders")
+    void isAuthenticatedForCorrectHeader(final HttpHeaders headers,
+                                         final Optional<UserDTO> user,
+                                         final boolean expectedResult)
+    {
+        lenient().when(userRepository.findByToken(anyString())).thenReturn(user);
+
+        final boolean result = securityService.isAuthenticated(headers);
+
+        assertThat(result).isEqualTo(expectedResult);
+
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("Is authenticated with incorrect header")
+    @MethodSource("provideIncorrectHttpHeaders")
+    void shouldAuthenticateForIncorrectHeader(final HttpHeaders headers,
+                                              final Optional<UserDTO> user)
     {
         // given
         lenient().when(userRepository.findByToken(anyString())).thenReturn(user);
 
-        // when
-        var result = securityService.isAuthenticated(headers);
-
         // then
-        assertThat(result).isEqualTo(expectedResult);
+        assertThatThrownBy(() -> securityService.isAuthenticated(headers))
+                .isExactlyInstanceOf(MissingSecurityHeaderException.class);
     }
 
-    private static Stream<Arguments> provideHttpHeaders()
+    private static Stream<Arguments> provideIncorrectHttpHeaders()
     {
-        var headers = new HttpHeaders();
+        return Stream.of(
+                Arguments.of(null, Optional.of(new UserDTO())),
+                Arguments.of(new HttpHeaders(), Optional.of(new UserDTO()))
+                        );
+    }
+
+    private static Stream<Arguments> provideCorrectHttpHeaders()
+    {
+        final HttpHeaders headers = new HttpHeaders();
         headers.add(HEADER_KEY, HEADER_VALUE);
 
         return Stream.of(
-                Arguments.of(headers, Optional.of(new UserDTO()), true),
                 Arguments.of(headers, Optional.empty(), false),
-                Arguments.of(null, Optional.of(new UserDTO()), false),
-                Arguments.of(new HttpHeaders(), Optional.of(new UserDTO()), false)
+                Arguments.of(headers, Optional.of(new UserDTO()), true)
                         );
     }
 }

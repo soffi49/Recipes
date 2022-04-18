@@ -101,6 +101,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(MissingSecurityHeaderException.class)
+    protected ResponseEntity<Object> handleUnauthorizedException(final MissingSecurityHeaderException ex,
+                                                              final WebRequest webRequest)
+    {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.MISSING_HEADER;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     //Common
 
     @ExceptionHandler(DatabaseSaveException.class)

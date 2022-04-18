@@ -9,7 +9,6 @@ import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,11 +42,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         final Ingredient ingredientToAdd =
                 mapToIngredient(ingredient).orElseThrow(IngredientEmptyException::new);
@@ -64,11 +59,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         final Set<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit, name).stream()
@@ -85,10 +76,8 @@ public class IngredientController
     public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
                                                    @PathVariable(name = "id") Long ingredientId)
     {
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        logHeaders(headers);
+        securityService.isAuthenticated(headers);
 
         return ingredientService.deleteIngredient(ingredientId)
                 ? ResponseEntity.ok(ingredientId.toString())
@@ -101,11 +90,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         var ingredient = mapToIngredient(ingredientRest).orElseThrow(IngredientEmptyException::new);
         var updatedIngredient = ingredientService.updateIngredient(ingredient);
