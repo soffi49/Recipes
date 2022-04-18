@@ -2,6 +2,7 @@ package com.recipes.backend.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipes.backend.bizz.login.LoginService;
+import com.recipes.backend.exception.domain.UserNotFoundException;
 import com.recipes.backend.rest.domain.LoginRest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +37,7 @@ class LoginControllerUnitTest {
 
     @Test
     void shouldCorrectlyLogin() throws Exception {
-        when(loginService.loginToSystem(USER)).thenReturn(Optional.of(TOKEN));
+        when(loginService.loginToSystem(USER)).thenReturn(TOKEN);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -47,7 +48,7 @@ class LoginControllerUnitTest {
 
     @Test
     void shouldResponseForbiddenGivenWrongUser() throws Exception {
-        when(loginService.loginToSystem(USER)).thenReturn(Optional.empty());
+        when(loginService.loginToSystem(USER)).thenThrow(UserNotFoundException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                         .contentType(MediaType.APPLICATION_JSON)

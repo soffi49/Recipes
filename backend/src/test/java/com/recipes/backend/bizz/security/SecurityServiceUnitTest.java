@@ -19,7 +19,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-class SecurityServiceImplUnitTest {
+class SecurityServiceUnitTest
+{
 
     private static final String HEADER_KEY = "security_header";
     private static final String HEADER_VALUE = "token";
@@ -32,7 +33,8 @@ class SecurityServiceImplUnitTest {
 
     @ParameterizedTest
     @MethodSource("provideHttpHeaders")
-    void shouldCorrectlyAuthenticate(HttpHeaders headers, Optional<UserDTO> user, boolean expectedResult) {
+    void shouldCorrectlyAuthenticate(HttpHeaders headers, Optional<UserDTO> user, boolean expectedResult)
+    {
         // given
         lenient().when(userRepository.findByToken(anyString())).thenReturn(user);
 
@@ -43,7 +45,8 @@ class SecurityServiceImplUnitTest {
         assertThat(result).isEqualTo(expectedResult);
     }
 
-    private static Stream<Arguments> provideHttpHeaders() {
+    private static Stream<Arguments> provideHttpHeaders()
+    {
         var headers = new HttpHeaders();
         headers.add(HEADER_KEY, HEADER_VALUE);
 
@@ -52,6 +55,6 @@ class SecurityServiceImplUnitTest {
                 Arguments.of(headers, Optional.empty(), false),
                 Arguments.of(null, Optional.of(new UserDTO()), false),
                 Arguments.of(new HttpHeaders(), Optional.of(new UserDTO()), false)
-        );
+                        );
     }
 }

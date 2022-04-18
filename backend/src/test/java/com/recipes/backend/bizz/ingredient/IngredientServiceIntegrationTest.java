@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
 {
 
@@ -188,10 +187,9 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
     void deleteOneNotExistingIngredient()
     {
 
-        assertThat(ingredientService.deleteIngredient((long) 1)).isFalse();
-
-        final List<IngredientDTO> ingredientList = (List<IngredientDTO>) ingredientRepository.findAll();
-        assertThat(ingredientList).isNotEmpty();
+        assertThatThrownBy(() -> ingredientService.deleteIngredient(1L))
+                .isExactlyInstanceOf(IngredientNotFound.class)
+                .hasMessage("Ingredient with the id: 1 does not exist");
     }
 
 

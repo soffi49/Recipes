@@ -1,6 +1,8 @@
 package com.recipes.backend.common;
 
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -11,6 +13,7 @@ import org.testcontainers.jdbc.JdbcDatabaseDelegate;
 
 
 @ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractIntegrationTestConfig
 {
@@ -26,7 +29,9 @@ public abstract class AbstractIntegrationTestConfig
                 .withReuse(true);
         mysql.start();
 
-        ScriptUtils.runInitScript(new JdbcDatabaseDelegate(mysql, ""),"data/create-db.sql");
+        JdbcDatabaseDelegate jdbcDatabaseDelegate = new JdbcDatabaseDelegate(mysql, "");
+        ScriptUtils.runInitScript(jdbcDatabaseDelegate,"data/create-db.sql");
+        ScriptUtils.runInitScript(jdbcDatabaseDelegate, "data/insert-data.sql");
     }
 
     @DynamicPropertySource

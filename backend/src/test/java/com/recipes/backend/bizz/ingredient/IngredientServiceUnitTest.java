@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,8 +20,6 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.ITERABLE;
-import static org.assertj.core.api.InstanceOfAssertFactories.PATH;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -308,7 +305,7 @@ class IngredientServiceUnitTest
 
         assertThatThrownBy(() -> ingredientService.updateIngredient(ingredient))
                 .isExactlyInstanceOf(DatabaseFindException.class)
-                .hasMessage("Internal database error while saving: couldn't retrieve ingredient with id 1 to update");
+                .hasMessage("Internal database error while reading data: couldn't retrieve ingredient with id 1 to update");
 
     }
 
@@ -320,10 +317,11 @@ class IngredientServiceUnitTest
         final IngredientDTO ingredientDTO = new IngredientDTO();
         ingredientDTO.setName(OLD_NAME);
         ingredientDTO.setIngredientId(ID);
+        when(ingredientRepository.findById(ID)).thenReturn(Optional.of(ingredientDTO));
         lenient().when(ingredientRepository.save(ingredientDTO)).thenThrow((mock(DataAccessException.class)));
 
         assertThatThrownBy(() -> ingredientService.updateIngredient(ingredient))
-                .isExactlyInstanceOf(DatabaseFindException.class)
+                .isExactlyInstanceOf(DatabaseSaveException.class)
                 .hasMessage("Internal database error while saving: couldn't persist updated ingredient");
 
     }

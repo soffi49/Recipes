@@ -94,7 +94,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - correct parameters")
     void getAllIngredientsCorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null,null);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")
@@ -107,7 +107,7 @@ class IngredientControllerUnitTest {
     @Test
     @DisplayName("Get all ingredients - incorrect parameters")
     void getAllIngredientsIncorrectParam() throws Exception {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null,null);
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5,null);
 
         mockMvc.perform(get("/ingredients")
                         .param("limit", "5")

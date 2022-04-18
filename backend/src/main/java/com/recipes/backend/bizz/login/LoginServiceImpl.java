@@ -1,5 +1,7 @@
 package com.recipes.backend.bizz.login;
 
+import com.recipes.backend.exception.domain.IncorrectPasswordException;
+import com.recipes.backend.exception.domain.UserNotFoundException;
 import com.recipes.backend.repo.UserRepository;
 import com.recipes.backend.repo.domain.UserDTO;
 import com.recipes.backend.rest.domain.LoginRest;
@@ -11,7 +13,8 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class LoginServiceImpl implements LoginService {
+public class LoginServiceImpl implements LoginService
+{
 
     private final UserRepository userRepository;
 
@@ -22,21 +25,15 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Optional<String> loginToSystem(final LoginRest loginForm)
+    public String loginToSystem(final LoginRest loginForm)
     {
-        var userDTOOptional = userRepository.findByUsername(loginForm.getUsername());
+        final UserDTO userDTO = userRepository.findByUsername(loginForm.getUsername()).orElseThrow(() -> new UserNotFoundException(loginForm.getUsername()));
 
-        if(userDTOOptional.isEmpty())
+        if (!userDTO.getPassword().equals(loginForm.getPassword()))
         {
-            log.warn("User {} doesn't exists", loginForm.getUsername());
-            return Optional.empty();
+            throw new IncorrectPasswordException(loginForm.getUsername());
         }
 
-        if(!userDTOOptional.get().getPassword().equals(loginForm.getPassword())) {
-            log.warn("Wrong password for user {}", loginForm.getUsername());
-            return Optional.empty();
-        }
-
-        return userDTOOptional.map(UserDTO::getToken);
+        return userDTO.getToken();
     }
 }

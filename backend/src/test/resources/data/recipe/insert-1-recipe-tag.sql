@@ -1,1 +1,0 @@
-INSERT INTO tag (tag_id, name) VALUES (2, 'gluten free');

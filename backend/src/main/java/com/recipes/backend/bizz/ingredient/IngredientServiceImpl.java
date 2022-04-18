@@ -69,14 +69,12 @@ public class IngredientServiceImpl implements IngredientService
     @Override
     public Set<Ingredient> getAllIngredients(final Integer page,
                                              final Integer limit,
-                                             @Nullable Long ingredientId,
-                                             @Nullable String name) {
+                                             @Nullable final String name) {
         try {
-            final Predicate<IngredientDTO> filterIngredientById = (ingredient -> (Objects.isNull(ingredientId) || (ingredient.getIngredientId() == ingredientId)));
             final Predicate<IngredientDTO> filterIngredientByName = (ingredient -> (Objects.isNull(name) || (ingredient.getName().equals(name))));
 
             return StreamSupport.stream(ingredientRepository.findAll().spliterator(), false)
-                    .filter(filterIngredientById.and(filterIngredientByName))
+                    .filter(filterIngredientByName)
                     .map(IngredientMapper::mapToIngredient)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

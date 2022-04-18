@@ -4,7 +4,6 @@ TRUNCATE TABLE restaurant_recipe;
 TRUNCATE TABLE user_recipe;
 TRUNCATE TABLE recipe_ingredient;
 TRUNCATE TABLE recipe_tag;
-TRUNCATE TABLE tag;
 TRUNCATE TABLE shop;
 TRUNCATE TABLE restaurant;
 TRUNCATE TABLE user;
