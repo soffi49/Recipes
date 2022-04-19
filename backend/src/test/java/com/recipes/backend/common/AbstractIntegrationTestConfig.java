@@ -24,13 +24,14 @@ public abstract class AbstractIntegrationTestConfig
     {
         mysql = new MySQLContainer<>("mysql:5.7")
                 .withDatabaseName("testDatabase")
-                .withUsername("test")
-                .withPassword("test")
+                .withUsername("root")
+                .withPassword("")
                 .withReuse(true);
         mysql.start();
 
         JdbcDatabaseDelegate jdbcDatabaseDelegate = new JdbcDatabaseDelegate(mysql, "");
         ScriptUtils.runInitScript(jdbcDatabaseDelegate,"data/create-db.sql");
+        ScriptUtils.runInitScript(jdbcDatabaseDelegate,"data/truncate-db.sql");
         ScriptUtils.runInitScript(jdbcDatabaseDelegate, "data/insert-data.sql");
     }
 

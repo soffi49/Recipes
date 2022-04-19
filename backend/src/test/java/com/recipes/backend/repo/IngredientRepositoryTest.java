@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.validation.ConstraintViolationException;
@@ -35,7 +36,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Save ingredient all data")
-    @Sql("/data/ingredient/insert-1-ingredient.sql")
+    @Sql({"/data/truncate-db.sql", "/data/ingredient/insert-1-ingredient.sql"})
     @Order(1)
     void saveIngredientAllData()
     {
@@ -47,6 +48,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Save ingredient duplicate")
+    @Order(2)
     void saveIngredientDuplicate()
     {
         mockIngredient.setName("Name");
@@ -57,6 +59,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Save ingredient with null name")
+    @Order(3)
     void saveIngredientNullName()
     {
         mockIngredient.setName(null);
@@ -67,6 +70,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Find ingredient by id when present")
+    @Order(4)
     void findByIdPresent()
     {
         final Optional<IngredientDTO> retrievedIngredient = ingredientRepository.findById(1000L);
@@ -77,6 +81,7 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Find ingredient by id when not present")
+    @Order(5)
     void findByIdNotPresent()
     {
         final Optional<IngredientDTO> retrievedIngredient = ingredientRepository.findById(4000L);
@@ -86,12 +91,43 @@ class IngredientRepositoryTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Find all ingredients not empty")
-    @Sql("/data/ingredient/truncate-ingredients.sql")
+    @Order(6)
     void findAllIngredients()
     {
-        ingredientRepository.save(mockIngredient);
         final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
 
-        assertThat(databaseIngredients.size()).isEqualTo(1);
+        assertThat(databaseIngredients).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("Find all ingredients empty")
+    @Sql("/data/truncate-db.sql")
+    @Order(7)
+    void findAllIngredientsEmpty()
+    {
+        final List<IngredientDTO> databaseIngredients = (List<IngredientDTO>) ingredientRepository.findAll();
+
+        assertThat(databaseIngredients).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Delete existing ingredient by id")
+    @Sql("/data/ingredient/insert-1-ingredient.sql")
+    @Order(8)
+    void deleteByIdExistingIngredient()
+    {
+        ingredientRepository.deleteById(1000L);
+
+        assertThat(ingredientRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Delete non existing ingredient by id")
+    @Order(9)
+    void deleteByIdNonExistingIngredient()
+    {
+        assertThatThrownBy(() -> ingredientRepository.deleteById(1000L))
+                .isExactlyInstanceOf(EmptyResultDataAccessException.class)
+                .hasMessage("No class com.recipes.backend.repo.domain.IngredientDTO entity with id 1000 exists!");
     }
 }
