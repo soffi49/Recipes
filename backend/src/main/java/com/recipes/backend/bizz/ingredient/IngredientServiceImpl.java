@@ -71,7 +71,7 @@ public class IngredientServiceImpl implements IngredientService
                                              final Integer limit,
                                              @Nullable final String name) {
         try {
-            final Predicate<IngredientDTO> filterIngredientByName = (ingredient -> (Objects.isNull(name) || (ingredient.getName().equals(name))));
+            final Predicate<IngredientDTO> filterIngredientByName = (ingredient -> (Objects.isNull(name) || (ingredient.getName().contains(name))));
 
             return StreamSupport.stream(ingredientRepository.findAll().spliterator(), false)
                     .filter(filterIngredientByName)
@@ -83,7 +83,7 @@ public class IngredientServiceImpl implements IngredientService
                     .collect(Collectors.toSet());
         } catch (final DataAccessException e)
         {
-            throw new DatabaseFindException("couldn't persist full ingredient list");
+            throw new DatabaseFindException("couldn't retrieve full ingredient list");
         }
     }
 
