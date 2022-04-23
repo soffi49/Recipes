@@ -34,10 +34,8 @@ public class LoginController {
                                            @RequestBody @Valid LoginRest loginForm) {
         logHeaders(headers);
 
-        final Optional<String> tokenOptional = loginService.loginToSystem(loginForm);
+        final String retrievedToken = loginService.loginToSystem(loginForm);
 
-        return tokenOptional
-                .map(s -> ResponseEntity.ok(new TokenRest(s)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+        return ResponseEntity.ok(new TokenRest(retrievedToken));
     }
 }

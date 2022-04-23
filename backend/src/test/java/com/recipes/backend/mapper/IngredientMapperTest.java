@@ -94,6 +94,14 @@ class IngredientMapperTest {
     }
 
     @Test
+    @DisplayName("Map to ingredient from quantity with null ingredientDTO")
+    void mapToIngredientFromQuantityWithIngredientDTONull() {
+        final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient(null, "10g");
+
+        Assertions.assertTrue(retrievedIngredient.isEmpty());
+    }
+
+    @Test
     @DisplayName("Map to ingredient from ingredientRecipeRest all data")
     void mapToIngredientFromIngredientRecipeRestAllData() {
         final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient(mockIngredientRecipeRest);

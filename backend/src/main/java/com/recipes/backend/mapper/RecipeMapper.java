@@ -1,19 +1,22 @@
 package com.recipes.backend.mapper;
 
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientDTO;
-
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
+import com.recipes.backend.exception.domain.IngredientEmptyException;
+import com.recipes.backend.exception.domain.MissingQuantityException;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import com.recipes.backend.rest.domain.IngredientRecipeRest;
 import com.recipes.backend.rest.domain.RecipeRest;
+
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientDTO;
 
 public class RecipeMapper
 {
@@ -87,9 +90,11 @@ public class RecipeMapper
         return Optional.empty();
     }
 
-    public static Optional<RecipeDTO> mapToRecipeDTO(final Recipe recipe) {
+    public static Optional<RecipeDTO> mapToRecipeDTO(final Recipe recipe)
+    {
 
-        if (Objects.nonNull(recipe)) {
+        if (Objects.nonNull(recipe))
+        {
             final RecipeDTO recipeDTO = new RecipeDTO();
             recipeDTO.setRecipeId(recipe.getRecipeId());
             recipeDTO.setName(recipe.getName());
@@ -102,11 +107,17 @@ public class RecipeMapper
                             .collect(Collectors.toSet()));
             recipeDTO.setIngredientSet(
                     recipe.getIngredients().stream()
-                            .map(ingredient -> { var recipeIngredientDTO = new RecipeIngredientDTO();
+                            .map(ingredient -> {
+                                final RecipeIngredientDTO recipeIngredientDTO = new RecipeIngredientDTO();
                                 recipeIngredientDTO.setRecipe(recipeDTO);
-                                recipeIngredientDTO.setIngredient(mapToIngredientDTO(ingredient).orElseThrow());
+                                recipeIngredientDTO.setIngredient(mapToIngredientDTO(ingredient).orElseThrow(IngredientEmptyException::new));
+                                if(Objects.isNull(ingredient.getQuantity()))
+                                {
+                                    throw new MissingQuantityException();
+                                }
                                 recipeIngredientDTO.setQuantity(ingredient.getQuantity());
-                                return recipeIngredientDTO; })
+                                return recipeIngredientDTO;
+                            })
                             .collect(Collectors.toSet()));
             return Optional.of(recipeDTO);
         }

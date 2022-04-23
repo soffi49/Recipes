@@ -1,1 +1,1 @@
-INSERT INTO ingredient (ingredient_id, name) VALUES (2000, "Ingredient2")
+INSERT INTO ingredient (ingredient_id, name) VALUES (1000, "Ingredient")
