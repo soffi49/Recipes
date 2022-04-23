@@ -55,6 +55,7 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
                 String.class);
 
         // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).contains(expectedString);
     }
 }

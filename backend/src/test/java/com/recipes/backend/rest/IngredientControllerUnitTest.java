@@ -6,6 +6,7 @@ import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.IngredientDuplicateException;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
+import com.recipes.backend.exception.domain.IngredientNotFound;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -136,6 +137,26 @@ class IngredientControllerUnitTest
                                 .param("name", "Name0"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ingredients", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("Delete ingredients - correct data")
+    void deleteIngredientCorrectIngredient() throws Exception
+    {
+        Mockito.doReturn(true).when(ingredientService).deleteIngredient(INGREDIENT_ID);
+
+        mockMvc.perform(delete("/ingredients/{id}", INGREDIENT_ID))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Delete ingredients - not found ingredient")
+    void deleteIngredientNotFound() throws Exception
+    {
+        Mockito.doThrow(new IngredientNotFound(INGREDIENT_ID)).when(ingredientService).deleteIngredient(INGREDIENT_ID);
+
+        mockMvc.perform(delete("/ingredients/{id}", INGREDIENT_ID))
+                .andExpect(status().isNotFound());
     }
 
     @Test
