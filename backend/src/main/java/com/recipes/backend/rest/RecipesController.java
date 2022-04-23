@@ -73,7 +73,7 @@ public class RecipesController
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
-        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("Bad request!");
     }
 
     @PutMapping("/{id}")

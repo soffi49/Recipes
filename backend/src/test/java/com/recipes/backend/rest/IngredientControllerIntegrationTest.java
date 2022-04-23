@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,7 +24,6 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
     {
         // given
         var ingredient = new IngredientRest(1000L, "new_name");
-        var expectedString = "{\"id\":1000,\"name\":\"new_name\"}";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(ingredient), HEADERS);
 
         // when
@@ -34,7 +34,7 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
                 String.class);
 
         // then
-        assertThat(response.getBody()).isEqualTo(expectedString);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test

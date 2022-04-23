@@ -5,6 +5,7 @@ import com.recipes.backend.bizz.ingredient.IngredientService;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.IngredientDuplicateException;
+import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,8 +26,7 @@ import java.util.stream.LongStream;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -61,7 +61,7 @@ class IngredientControllerUnitTest
         correctIngredient.setIngredientId(0);
         correctIngredient.setName("Name");
 
-        Mockito.doNothing().when(ingredientService).addIngredient(correctIngredient);
+        doNothing().when(ingredientService).addIngredient(correctIngredient);
 
         mockMvc.perform(post("/ingredients")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -146,16 +146,14 @@ class IngredientControllerUnitTest
         var ingredientRest = new IngredientRest(INGREDIENT_ID, INGREDIENT_NAME);
         var savedIngredient = new Ingredient(INGREDIENT_ID, INGREDIENT_NAME, INGREDIENT_QUANTITY);
 
-        when(ingredientService.updateIngredient(any(Ingredient.class))).thenReturn(savedIngredient);
+        doNothing().when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
         mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(ingredientRest)))
                 // then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(INGREDIENT_ID.intValue())))
-                .andExpect(jsonPath("$.name", is(INGREDIENT_NAME)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -165,7 +163,7 @@ class IngredientControllerUnitTest
         // given
         var ingredientRest = new IngredientRest(INGREDIENT_ID, INGREDIENT_NAME);
 
-        when(ingredientService.updateIngredient(any(Ingredient.class))).thenReturn(null);
+        doThrow(IngredientEmptyException.class).when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
         mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)

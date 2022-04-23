@@ -100,7 +100,7 @@ public class IngredientServiceImpl implements IngredientService
     }
 
     @Override
-    public Ingredient updateIngredient(final Ingredient ingredient)
+    public void updateIngredient(final Ingredient ingredient)
     {
         IngredientDTO ingredientDTO;
 
@@ -122,8 +122,6 @@ public class IngredientServiceImpl implements IngredientService
         {
             throw new DatabaseSaveException("couldn't persist updated ingredient");
         }
-
-        return mapToIngredient(ingredientDTO).orElseThrow(IngredientEmptyException::new);
     }
 
     @Override

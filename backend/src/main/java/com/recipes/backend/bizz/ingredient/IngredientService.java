@@ -21,5 +21,5 @@ public interface IngredientService
 
     boolean isIngredientPresent(long ingredientId);
 
-    Ingredient updateIngredient(Ingredient ingredient);
+    void updateIngredient(Ingredient ingredient);
 }

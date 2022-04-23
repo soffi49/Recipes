@@ -275,11 +275,10 @@ class IngredientServiceUnitTest
         ingredientDTO.setIngredientId(ID);
         when(ingredientRepository.findById(ID)).thenReturn(Optional.of(ingredientDTO));
 
-        var result = ingredientService.updateIngredient(ingredient);
+        ingredientService.updateIngredient(ingredient);
 
         verify(ingredientRepository, times(1)).findById(ID);
         verify(ingredientRepository, times(1)).save(captor.capture());
-        assertThat(result).isEqualTo(ingredient);
         assertThat(captor.getValue().getName()).isEqualTo(NEW_NAME);
     }
 

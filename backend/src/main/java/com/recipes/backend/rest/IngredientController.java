@@ -73,14 +73,14 @@ public class IngredientController
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteIngredient(@RequestHeader HttpHeaders headers,
+    public ResponseEntity<Object> deleteIngredient(@RequestHeader HttpHeaders headers,
                                                    @PathVariable(name = "id") Long ingredientId)
     {
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
         return ingredientService.deleteIngredient(ingredientId)
-                ? ResponseEntity.ok(ingredientId.toString())
+                ? ResponseEntity.ok().build()
                 : ResponseEntity.badRequest().body("Bad request!");
     }
 
@@ -93,9 +93,7 @@ public class IngredientController
         securityService.isAuthenticated(headers);
 
         var ingredient = mapToIngredient(ingredientRest).orElseThrow(IngredientEmptyException::new);
-        var updatedIngredient = ingredientService.updateIngredient(ingredient);
-        return mapToIngredientRest(updatedIngredient)
-                .map(ResponseEntity::ok)
-                .orElseThrow(IngredientEmptyException::new);
+        ingredientService.updateIngredient(ingredient);
+        return ResponseEntity.ok().build();
     }
 }
