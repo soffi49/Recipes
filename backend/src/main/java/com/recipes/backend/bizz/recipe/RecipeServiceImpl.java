@@ -18,8 +18,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -67,7 +69,8 @@ public class RecipeServiceImpl implements RecipeService
     {
 
         final Predicate<Recipe> filterByName = recipe -> (Objects.isNull(name)) || (recipe.getName().contains(name));
-        final Predicate<Recipe> filterByTags = recipe -> (Objects.isNull(tags)) || (recipe.getTags().stream().map(RecipeTagEnum::getName).collect(Collectors.toSet()).containsAll(tags));
+        final Predicate<Recipe> filterByTags = recipe -> (Objects.isNull(tags)) ||
+                (tags.stream().anyMatch(tag -> recipe.getTags().stream().map(RecipeTagEnum::getName).collect(Collectors.toSet()).contains(tag)));
 
         try
         {

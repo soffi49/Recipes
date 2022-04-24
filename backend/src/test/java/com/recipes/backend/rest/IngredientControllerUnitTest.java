@@ -134,7 +134,8 @@ class IngredientControllerUnitTest
         mockMvc.perform(get("/ingredients")
                                 .param("limit", "5")
                                 .param("page", "0")
-                                .param("name", "Name0"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\" : \"Name0\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ingredients", hasSize(1)));
     }

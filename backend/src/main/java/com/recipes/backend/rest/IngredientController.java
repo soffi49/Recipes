@@ -5,6 +5,7 @@ import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
+import com.recipes.backend.rest.domain.FiltersRest;
 import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,14 +57,15 @@ public class IngredientController
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
                                                                @RequestParam(value = "page") Integer page,
                                                                @RequestParam(value = "limit") Integer limit,
-                                                               @RequestParam(value = "name", required = false) String name)
+                                                               @RequestBody(required = false) FiltersRest filters)
     {
 
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
+        final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<IngredientRest> retrievedIngredients =
-                ingredientService.getAllIngredients(page, limit, name).stream()
+                ingredientService.getAllIngredients(page, limit, nameFilter).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)

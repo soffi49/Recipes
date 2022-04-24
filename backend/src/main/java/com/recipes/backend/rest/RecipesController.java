@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+
 @RestController
 @RequestMapping(path = "/recipes")
 public class RecipesController
@@ -86,7 +89,7 @@ public class RecipesController
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
-        recipeService.updateRecipe(RecipeMapper.mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
+        recipeService.updateRecipe(mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
         return ResponseEntity.ok().build();
     }
 }
