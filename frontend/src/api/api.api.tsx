@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { server } from '../constants/constants'
 
 export async function getIngredientsApi(page: number, limit: number) {
@@ -10,6 +11,7 @@ export async function getIngredientsApi(page: number, limit: number) {
             }});
         return response.data;
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
@@ -25,6 +27,7 @@ export async function addIngredientApi(name: string) {
               'security_header': key
         }})
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
@@ -38,6 +41,7 @@ export async function deleteIngredientApi(id: number) {
               'security_header': key
             }})
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
@@ -53,6 +57,7 @@ export async function editIngredientApi(name: string, id: number) {
               'security_header': key
         }})
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
@@ -65,6 +70,7 @@ export async function deleteRecipeApi(id: number) {
               'security_header': key
             }})
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
@@ -79,6 +85,7 @@ export async function getRecipesApi(page: number, limit: number) {
         return response.data;
 
     } catch (error) {
+        toast.error(String(error));
         throw error;
     }
 }
