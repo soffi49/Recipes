@@ -171,7 +171,7 @@ class IngredientControllerUnitTest
         doNothing().when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
-        mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)
+        mockMvc.perform(put("/ingredients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(ingredientRest)))
                 // then
@@ -188,7 +188,7 @@ class IngredientControllerUnitTest
         doThrow(IngredientEmptyException.class).when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
-        mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)
+        mockMvc.perform(put("/ingredients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(ingredientRest)))
                 // then

@@ -185,6 +185,51 @@ class RecipeServiceUnitTest
     }
 
     @Test
+    @DisplayName("Get all recipe one page with name filter")
+    void getAllRecipesOnePageWithNameFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name1", null);
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name1");
+    }
+
+    @Test
+    @DisplayName("Get all recipe one page with tags filter")
+    void getAllRecipesOnePageWithTagFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, Set.of("gluten free"));
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name2");
+    }
+
+    @Test
+    @DisplayName("Get all recipe one page with tags and name filter")
+    void getAllRecipesOnePageWithTagAndNameFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name3", Set.of("vegetarian"));
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name3");
+    }
+
+    @Test
     @DisplayName("Get all recipes internal database error")
     void getAllRecipesDatabaseError()
     {
@@ -339,6 +384,15 @@ class RecipeServiceUnitTest
             recipeDTO.setInstructions("Instructions");
             recipeDTO.setIngredientSet(Set.of(recipeIngredientDTO));
             recipeDTO.setTagSet(Set.of(mockTag));
+
+            if(idx == 2)
+            {
+                final TagDTO mockNextTag = new TagDTO();
+                mockNextTag.setName("gluten free");
+                mockNextTag.setTagId(2L);
+
+                recipeDTO.setTagSet(Set.of(mockTag, mockNextTag));
+            }
 
             mockRecipeSet.add(recipeDTO);
         });

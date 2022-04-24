@@ -19,7 +19,11 @@ public class IngredientMapper
         if (Objects.nonNull(ingredientRest))
         {
             final Ingredient ingredient = new Ingredient();
-            ingredient.setIngredientId(ingredientRest.getId());
+
+            if (Objects.nonNull(ingredientRest.getId()))
+            {
+                ingredient.setIngredientId(ingredientRest.getId());
+            }
             ingredient.setName(ingredientRest.getName());
             return Optional.of(ingredient);
         }

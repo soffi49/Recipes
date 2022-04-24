@@ -20,3 +20,4 @@ INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (1, 4);
 
 INSERT INTO recipe_ingredient (recipe_id, ingredient_id, quantity) VALUES (5, 1000, '10g');
 INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (1, 5);
+INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (2, 5);

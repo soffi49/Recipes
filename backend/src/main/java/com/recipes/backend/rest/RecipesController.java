@@ -81,9 +81,8 @@ public class RecipesController
         return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("Bad request!");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<Object> updateRecipe(@RequestHeader HttpHeaders headers,
-                                               @PathVariable(name = "id") Long recipeId,
                                                @RequestBody RecipeRest recipeRest)
     {
         logHeaders(headers);

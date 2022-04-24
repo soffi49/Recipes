@@ -87,7 +87,7 @@ public class IngredientController
                 : ResponseEntity.badRequest().body("Bad request!");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<IngredientRest> updateExistingIngredient(@RequestHeader HttpHeaders headers,
                                                                    @RequestBody @Valid IngredientRest ingredientRest)
     {

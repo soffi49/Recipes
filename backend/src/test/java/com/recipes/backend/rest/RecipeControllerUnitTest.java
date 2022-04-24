@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
+import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.rest.domain.IngredientRecipeRest;
 import com.recipes.backend.rest.domain.IngredientRest;
@@ -14,6 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashSet;
@@ -57,6 +59,51 @@ class RecipeControllerUnitTest
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.recipes", hasSize(3)))
                 .andExpect(jsonPath("$.recipes[0].name", is("Recipe0")));
+    }
+
+    @Test
+    @DisplayName("Get all recipes - correct parameters and name filter")
+    void getAllRecipesCorrectParamWithNameFilter() throws Exception
+    {
+        final Recipe recipe = new Recipe();
+        recipe.setRecipeId(1L);
+        recipe.setName("Recipe1");
+        recipe.setInstructions("Some Instructions");
+
+        Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, "Recipe1", null);
+        when(securityService.isAuthenticated(any())).thenReturn(true);
+
+        mockMvc.perform(get("/recipes")
+                                .param("limit", "5")
+                                .param("page", "0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\" : \"Recipe1\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.recipes", hasSize(1)))
+                .andExpect(jsonPath("$.recipes[0].name", is("Recipe1")));
+    }
+
+    @Test
+    @DisplayName("Get all recipes - correct parameters and tag filter")
+    void getAllRecipesCorrectParamWithTagFilter() throws Exception
+    {
+        final Recipe recipe = new Recipe();
+        recipe.setRecipeId(1L);
+        recipe.setName("Recipe1");
+        recipe.setTags(Set.of(RecipeTagEnum.LOW_CALORIE));
+        recipe.setInstructions("Some Instructions");
+
+        Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, null, Set.of("low calorie"));
+        when(securityService.isAuthenticated(any())).thenReturn(true);
+
+        mockMvc.perform(get("/recipes")
+                                .param("limit", "5")
+                                .param("page", "0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"tags\" : [\"low calorie\"]}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.recipes", hasSize(1)))
+                .andExpect(jsonPath("$.recipes[0].name", is("Recipe1")));
     }
 
     @Test

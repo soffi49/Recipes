@@ -84,10 +84,40 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
         assertThat(retrievedList1.stream().anyMatch(el -> el.getName().equals("Recipe5"))).isFalse();
     }
 
+    @Transactional
+    @Test
+    @DisplayName("Get all recipes more pages with name filter")
+    @Sql("/data/recipe/insert-5-recipes.sql")
+    @Order(3)
+    void getAllRecipesMorePagesWithNameFilter()
+    {
+        final int limit = 5;
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, "Recipe2", null);
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(retrievedList.stream().anyMatch(el -> el.getName().equals("Recipe2"))).isTrue();
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("Get all recipes more pages with tag filter")
+    @Sql("/data/recipe/insert-5-recipes.sql")
+    @Order(4)
+    void getAllRecipesMorePagesWithTagFilter()
+    {
+        final int limit = 5;
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, null, Set.of("gluten free"));
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(retrievedList.stream().anyMatch(el -> el.getName().equals("Recipe5"))).isTrue();
+    }
+
     @Test
     @DisplayName("Get all recipes empty without filters")
     @Sql({"/data/truncate-db.sql"})
-    @Order(3)
+    @Order(5)
     void getAllRecipesEmptyWithoutFilters()
     {
         final int limit = 5;
@@ -101,7 +131,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Count recipes non empty")
     @Sql({"/data/recipe/insert-5-recipes.sql"})
-    @Order(4)
+    @Order(6)
     void countIngredientsNonEmpty()
     {
         final long retrievedList = recipeService.getRecipesCount();
@@ -112,7 +142,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Count ingredients empty")
     @Sql({"/data/truncate-db.sql"})
-    @Order(5)
+    @Order(7)
     void countIngredientsEmpty()
     {
         final long retrievedList = recipeService.getRecipesCount();
@@ -123,7 +153,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Add recipe with correct data")
     @Sql({"/data/recipe/insert-1-recipe-ingredient.sql"})
-    @Order(6)
+    @Order(8)
     void addRecipeCorrectData()
     {
         assertThatNoException().isThrownBy(() -> recipeService.addRecipe(mockRecipe));
@@ -134,7 +164,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Add recipe duplicate")
-    @Order(7)
+    @Order(9)
     void addIngredientDuplicate()
     {
         assertThatThrownBy(() -> recipeService.addRecipe(mockRecipe))
@@ -145,7 +175,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Delete one not existing recipe")
     @Sql("/data/truncate-db.sql")
-    @Order(8)
+    @Order(10)
     void deleteOneNotExistingRecipe()
     {
         assertThatThrownBy(() -> recipeService.deleteRecipe(1L))
@@ -156,7 +186,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Delete one existing recipe")
     @Sql("/data/recipe/insert-1-recipe.sql")
-    @Order(9)
+    @Order(11)
     void deleteOneProperRecipe()
     {
         assertThat(recipeService.deleteRecipe((long) 1000)).isTrue();
@@ -170,7 +200,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Update recipe modify name")
     @Sql({"/data/truncate-db.sql", "/data/recipe/insert-1-recipe.sql"})
-    @Order(10)
+    @Order(12)
     void updateRecipeModifyName()
     {
         final String recipeNameBefore = recipeRepository.findById(1000L).get().getName();
@@ -189,7 +219,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Update recipe modify tags")
     @Sql({"/data/truncate-db.sql", "/data/recipe/insert-1-recipe.sql"})
-    @Order(11)
+    @Order(13)
     void updateRecipeModifyTags()
     {
         final int recipeTagsBefore = recipeRepository.findById(1000L).get().getTagSet().size();
@@ -206,7 +236,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
 
     @Test
     @DisplayName("Update recipe - recipe not found")
-    @Order(12)
+    @Order(14)
     void updateRecipeNotFound()
     {
         mockRecipe.setRecipeId(1000000L);
@@ -219,7 +249,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     @Test
     @DisplayName("Update recipe - ingredient not found")
     @Sql({"/data/truncate-db.sql", "/data/recipe/insert-1-recipe.sql"})
-    @Order(13)
+    @Order(15)
     void updateRecipeIngredientNotFound()
     {
         final Ingredient ingredient = new Ingredient();
