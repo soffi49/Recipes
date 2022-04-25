@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface LoginService {
 
-    Optional<String> loginToSystem(LoginRest loginForm);
+    String loginToSystem(LoginRest loginForm);
 }

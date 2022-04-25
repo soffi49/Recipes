@@ -1,5 +1,6 @@
 package com.recipes.backend.bizz.security;
 
+import com.recipes.backend.exception.domain.MissingSecurityHeaderException;
 import com.recipes.backend.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +26,7 @@ public class SecurityServiceImpl implements SecurityService {
     {
         if (Objects.isNull(headers) || !headers.containsKey(SECURITY_HEADER))
         {
-            return false;
+            throw new MissingSecurityHeaderException();
         }
 
         return userRepository.findByToken(headers.getFirst(SECURITY_HEADER)).isPresent();

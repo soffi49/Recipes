@@ -1,8 +1,5 @@
 package com.recipes.backend.rest;
 
-import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
-import static com.recipes.backend.utils.LogWriter.logHeaders;
-
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.RecipeEmptyException;
@@ -11,7 +8,6 @@ import com.recipes.backend.rest.domain.RecipeAllRest;
 import com.recipes.backend.rest.domain.RecipeRest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 @RestController
@@ -44,11 +41,7 @@ public class RecipesController
                                                        @RequestParam(name = "limit") int limit)
     {
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         final Set<RecipeRest> retrievedRecipes =
                 recipeService.getAllRecipes(page, limit).stream()
@@ -62,12 +55,10 @@ public class RecipesController
     }
 
     @PostMapping
-    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest) {
+    public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest)
+    {
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         final var recipeToAdd = mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new);
         recipeService.addRecipe(recipeToAdd);
@@ -80,12 +71,9 @@ public class RecipesController
                                                @PathVariable(name = "id") Long recipeId)
     {
         logHeaders(headers);
+        securityService.isAuthenticated(headers);
 
-        if (!securityService.isAuthenticated(headers))
-        {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok(recipeId.toString()) : ResponseEntity.badRequest().body("Bad request!");
+        return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("Bad request!");
     }
 
     @PutMapping("/{id}")
@@ -94,10 +82,7 @@ public class RecipesController
                                                @RequestBody RecipeRest recipeRest)
     {
         logHeaders(headers);
-
-        if (!securityService.isAuthenticated(headers)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        securityService.isAuthenticated(headers);
 
         recipeService.updateRecipe(RecipeMapper.mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
         return ResponseEntity.ok().build();
