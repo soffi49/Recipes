@@ -5,9 +5,17 @@ import App from './App';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import RequireAuth from './auth/RequireAuth';
 import LoginPage from './pages/loginPage';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+            <ToastContainer
+              position="top-right"
+              autoClose={8000}
+              theme="colored"
+            />
             <Routes>
                 <Route path="/*" element={
                     <RequireAuth>
