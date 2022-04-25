@@ -20,7 +20,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 @RestController
@@ -66,6 +65,29 @@ public class IngredientController
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit, nameFilter).stream()
+                        .map(IngredientMapper::mapToIngredientRest)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+        final long totalIngredients = ingredientService.getIngredientsCount();
+
+        return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));
+    }
+
+    // DISCLAIMER: the function below works like the one above. It's a temporary solution (in the future, this endpoint will
+    // allow users to get list a list of random ingredients
+
+    @GetMapping("/user")
+    public ResponseEntity<IngredientAllRest> getAllIngredientsForUser(@RequestHeader HttpHeaders headers,
+                                                                      @RequestParam(value = "page") Integer page,
+                                                                      @RequestParam(value = "limit") Integer limit)
+    {
+
+        logHeaders(headers);
+        securityService.isAuthenticated(headers);
+
+        final Set<IngredientRest> retrievedIngredients =
+                ingredientService.getAllIngredients(page, limit, null).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
