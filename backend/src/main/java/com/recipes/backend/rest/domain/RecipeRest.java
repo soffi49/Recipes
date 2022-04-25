@@ -22,7 +22,6 @@ public class RecipeRest implements Serializable {
 
     private static final long serialVersionUID = -6623215843380843476L;
 
-    @NotNull
     @JsonProperty("id")
     private Long id;
 

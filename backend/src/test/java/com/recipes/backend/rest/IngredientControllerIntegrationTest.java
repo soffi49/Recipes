@@ -28,7 +28,7 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
 
         // when
         final ResponseEntity<String> response = REST_TEMPLATE.exchange(
-                createURLWithPort("/ingredients/1000"),
+                createURLWithPort("/ingredients"),
                 HttpMethod.PUT,
                 entity,
                 String.class);
@@ -49,7 +49,7 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
 
         // when
         final ResponseEntity<String> response = REST_TEMPLATE.exchange(
-                createURLWithPort("/ingredients/100"),
+                createURLWithPort("/ingredients"),
                 HttpMethod.PUT,
                 entity,
                 String.class);

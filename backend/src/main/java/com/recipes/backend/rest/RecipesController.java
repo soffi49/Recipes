@@ -4,6 +4,7 @@ import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.RecipeEmptyException;
 import com.recipes.backend.mapper.RecipeMapper;
+import com.recipes.backend.rest.domain.FiltersRest;
 import com.recipes.backend.rest.domain.RecipeAllRest;
 import com.recipes.backend.rest.domain.RecipeRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,13 +40,16 @@ public class RecipesController
     @GetMapping
     public ResponseEntity<RecipeAllRest> getAllRecipes(@RequestHeader HttpHeaders headers,
                                                        @RequestParam(name = "page") int page,
-                                                       @RequestParam(name = "limit") int limit)
+                                                       @RequestParam(name = "limit") int limit,
+                                                       @RequestBody(required = false) FiltersRest filters)
     {
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
+        final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
+        final Set<String> tagFilter = Objects.nonNull(filters) ? filters.getTags() : null;
         final Set<RecipeRest> retrievedRecipes =
-                recipeService.getAllRecipes(page, limit).stream()
+                recipeService.getAllRecipes(page, limit, nameFilter, tagFilter).stream()
                         .map(RecipeMapper::mapToRecipeRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
@@ -76,15 +81,14 @@ public class RecipesController
         return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("Bad request!");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<Object> updateRecipe(@RequestHeader HttpHeaders headers,
-                                               @PathVariable(name = "id") Long recipeId,
                                                @RequestBody RecipeRest recipeRest)
     {
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
-        recipeService.updateRecipe(RecipeMapper.mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
+        recipeService.updateRecipe(mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
         return ResponseEntity.ok().build();
     }
 }

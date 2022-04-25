@@ -124,8 +124,8 @@ class IngredientControllerUnitTest
     }
 
     @Test
-    @DisplayName("Get all ingredients - incorrect parameters with filter")
-    void getAllIngredientsIncorrectParamWithFilters() throws Exception
+    @DisplayName("Get all ingredients - correct parameters with filter")
+    void getAllIngredientsCorrectParamWithFilters() throws Exception
     {
         final Set<Ingredient> resultSet = Set.of(setUpIngredientSet().stream().findFirst().get());
 
@@ -134,9 +134,35 @@ class IngredientControllerUnitTest
         mockMvc.perform(get("/ingredients")
                                 .param("limit", "5")
                                 .param("page", "0")
-                                .param("name", "Name0"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\" : \"Name0\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ingredients", hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("Get all ingredients for user - correct param")
+    void getAllIngredientsForUserCorrectParam() throws Exception
+    {
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+
+        mockMvc.perform(get("/ingredients/user")
+                                .param("limit", "5")
+                                .param("page", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.ingredients", hasSize(3)))
+                .andExpect(jsonPath("$.ingredients[2].name", is("Name2")));
+    }
+
+    @Test
+    @DisplayName("Get all ingredients for user - incorrect parameters")
+    void getAllIngredientsForUserInCorrectParam() throws Exception
+    {
+        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+
+        mockMvc.perform(get("/ingredients/user")
+                                .param("limit", "5"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -170,7 +196,7 @@ class IngredientControllerUnitTest
         doNothing().when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
-        mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)
+        mockMvc.perform(put("/ingredients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(ingredientRest)))
                 // then
@@ -187,7 +213,7 @@ class IngredientControllerUnitTest
         doThrow(IngredientEmptyException.class).when(ingredientService).updateIngredient(any(Ingredient.class));
 
         // when
-        mockMvc.perform(put("/ingredients/{id}", INGREDIENT_ID)
+        mockMvc.perform(put("/ingredients")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(ingredientRest)))
                 // then

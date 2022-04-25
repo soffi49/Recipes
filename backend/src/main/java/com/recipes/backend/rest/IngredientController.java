@@ -5,6 +5,7 @@ import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.security.SecurityService;
 import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.mapper.IngredientMapper;
+import com.recipes.backend.rest.domain.FiltersRest;
 import com.recipes.backend.rest.domain.IngredientAllRest;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.recipes.backend.mapper.IngredientMapper.mapToIngredient;
-import static com.recipes.backend.mapper.IngredientMapper.mapToIngredientRest;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 @RestController
@@ -55,14 +56,38 @@ public class IngredientController
     public ResponseEntity<IngredientAllRest> getAllIngredients(@RequestHeader HttpHeaders headers,
                                                                @RequestParam(value = "page") Integer page,
                                                                @RequestParam(value = "limit") Integer limit,
-                                                               @RequestParam(value = "name", required = false) String name)
+                                                               @RequestBody(required = false) FiltersRest filters)
+    {
+
+        logHeaders(headers);
+        securityService.isAuthenticated(headers);
+
+        final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
+        final Set<IngredientRest> retrievedIngredients =
+                ingredientService.getAllIngredients(page, limit, nameFilter).stream()
+                        .map(IngredientMapper::mapToIngredientRest)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toSet());
+        final long totalIngredients = ingredientService.getIngredientsCount();
+
+        return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));
+    }
+
+    // DISCLAIMER: the function below works like the one above. It's a temporary solution (in the future, this endpoint will
+    // allow users to get list a list of random ingredients
+
+    @GetMapping("/user")
+    public ResponseEntity<IngredientAllRest> getAllIngredientsForUser(@RequestHeader HttpHeaders headers,
+                                                                      @RequestParam(value = "page") Integer page,
+                                                                      @RequestParam(value = "limit") Integer limit)
     {
 
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
         final Set<IngredientRest> retrievedIngredients =
-                ingredientService.getAllIngredients(page, limit, name).stream()
+                ingredientService.getAllIngredients(page, limit, null).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
@@ -84,7 +109,7 @@ public class IngredientController
                 : ResponseEntity.badRequest().body("Bad request!");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public ResponseEntity<IngredientRest> updateExistingIngredient(@RequestHeader HttpHeaders headers,
                                                                    @RequestBody @Valid IngredientRest ingredientRest)
     {

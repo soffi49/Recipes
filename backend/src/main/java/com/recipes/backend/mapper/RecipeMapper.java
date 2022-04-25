@@ -53,7 +53,10 @@ public class RecipeMapper
             final Set<String> tagSet = Objects.isNull(recipeRest.getTags()) ? Collections.emptySet() : recipeRest.getTags();
             final Set<IngredientRecipeRest> ingredientSet = Objects.isNull(recipeRest.getIngredients()) ? Collections.emptySet() : recipeRest.getIngredients();
 
-            recipe.setRecipeId(recipeRest.getId());
+            if (Objects.nonNull(recipeRest.getId()))
+            {
+                recipe.setRecipeId(recipeRest.getId());
+            }
             recipe.setName(recipeRest.getName());
             recipe.setInstructions(recipeRest.getInstructions());
             recipe.setTags(tagSet.stream().map(RecipeTagEnum::findTagByName).collect(Collectors.toSet()));
@@ -96,7 +99,6 @@ public class RecipeMapper
         if (Objects.nonNull(recipe))
         {
             final RecipeDTO recipeDTO = new RecipeDTO();
-            recipeDTO.setRecipeId(recipe.getRecipeId());
             recipeDTO.setName(recipe.getName());
             recipeDTO.setInstructions(recipe.getInstructions());
             recipeDTO.setTagSet(

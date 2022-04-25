@@ -142,14 +142,14 @@ class RecipeServiceUnitTest
     }
 
     @Test
-    @DisplayName("Get all recipe one page")
-    void getAllRecipesOnePage()
+    @DisplayName("Get all recipe one page without filters")
+    void getAllRecipesOnePageWithoutFilters()
     {
         final int limit = 3;
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit);
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(3);
@@ -157,14 +157,14 @@ class RecipeServiceUnitTest
     }
 
     @Test
-    @DisplayName("Get all recipes more pages")
-    void getAllRecipesMorePages()
+    @DisplayName("Get all recipes more pages without filters")
+    void getAllRecipesMorePagesWithoutFilters()
     {
         final int limit = 2;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit);
-        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit);
+        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
+        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
 
         assertThat(retrievedList1).hasSize(2);
         assertThat(retrievedList2).hasSize(1);
@@ -172,16 +172,61 @@ class RecipeServiceUnitTest
     }
 
     @Test
-    @DisplayName("Get all recipes empty")
-    void getAllRecipesEmpty()
+    @DisplayName("Get all recipes empty without filters")
+    void getAllRecipesEmptyWithoutFilters()
     {
         final int limit = 5;
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(Collections.emptySet());
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit);
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
 
         assertThat(retrievedList).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Get all recipe one page with name filter")
+    void getAllRecipesOnePageWithNameFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name1", null);
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name1");
+    }
+
+    @Test
+    @DisplayName("Get all recipe one page with tags filter")
+    void getAllRecipesOnePageWithTagFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, Set.of("gluten free"));
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name2");
+    }
+
+    @Test
+    @DisplayName("Get all recipe one page with tags and name filter")
+    void getAllRecipesOnePageWithTagAndNameFilter()
+    {
+        final int limit = 3;
+        final int page = 0;
+        when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
+
+        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name3", Set.of("vegetarian"));
+        final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+
+        assertThat(retrievedList).hasSize(1);
+        assertThat(ingredientsNames).contains("Name3");
     }
 
     @Test
@@ -192,7 +237,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         lenient().when(recipeRepository.findAll()).thenThrow((mock(DataAccessException.class)));
 
-        assertThatThrownBy(() -> recipeService.getAllRecipes(page, limit))
+        assertThatThrownBy(() -> recipeService.getAllRecipes(page, limit, null, null))
                 .isExactlyInstanceOf(DatabaseFindException.class)
                 .hasMessage("Internal database error while reading data: couldn't retrieve full recipe list");
     }
@@ -339,6 +384,15 @@ class RecipeServiceUnitTest
             recipeDTO.setInstructions("Instructions");
             recipeDTO.setIngredientSet(Set.of(recipeIngredientDTO));
             recipeDTO.setTagSet(Set.of(mockTag));
+
+            if(idx == 2)
+            {
+                final TagDTO mockNextTag = new TagDTO();
+                mockNextTag.setName("gluten free");
+                mockNextTag.setTagId(2L);
+
+                recipeDTO.setTagSet(Set.of(mockTag, mockNextTag));
+            }
 
             mockRecipeSet.add(recipeDTO);
         });

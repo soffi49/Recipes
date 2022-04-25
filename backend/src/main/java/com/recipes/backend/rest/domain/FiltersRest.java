@@ -4,25 +4,23 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class IngredientRest implements Serializable {
+public class FiltersRest implements Serializable
+{
+    private static final long serialVersionUID = 794632159867963868L;
 
-    private static final long serialVersionUID = 780145697608886440L;
-
-    @JsonProperty(value = "id")
-    private Long id;
-
-    @NotNull
+    @JsonProperty(value = "name")
     @EqualsAndHashCode.Include
-    @JsonProperty(value = "name", required = true)
     private String name;
+
+    @JsonProperty(value = "tags")
+    @EqualsAndHashCode.Include
+    private Set<String> tags;
 
 }
