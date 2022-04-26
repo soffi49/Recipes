@@ -6,9 +6,10 @@ import {ResponseComposition} from "msw/lib/types/response";
 import LoginPage from "./loginPage";
 import {createMemoryHistory} from 'history';
 import { BrowserRouter, Router } from "react-router-dom";
+import RegistrationPage from "./registrationPage";
 
  const server = setupServer(
-     rest.post('*/login', async (request: MockedRequest, response: ResponseComposition, ctx) => {
+     rest.post('*/register', async (request: MockedRequest, response: ResponseComposition, ctx) => {
          await new Promise(resolve => setTimeout(resolve, 150))
          return response(ctx.json([
              {  
@@ -33,13 +34,13 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
-describe('Login page tests', () => {
+describe('Register page tests', () => {
     test('Login page renders a login text input', () => {
-        render(<BrowserRouter><LoginPage/></BrowserRouter>);
+        render(<BrowserRouter><RegistrationPage/></BrowserRouter>);
         expect(screen.getByLabelText("Username")).toBeTruthy();
     }),
     test('Login page renders a password text input', () => {
-        render(<BrowserRouter><LoginPage/></BrowserRouter>);
+        render(<BrowserRouter><RegistrationPage/></BrowserRouter>);
         expect(screen.getByLabelText("Password")).toBeTruthy();
     })
 });

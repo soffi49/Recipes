@@ -1,10 +1,10 @@
 import React, {ChangeEventHandler, useState} from "react";
 import styled from "@emotion/styled";
-import {Box, Button, Link, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField, Typography} from "@mui/material";
 import { LoginInformation } from "../models/models";
 import {useNavigate} from "react-router-dom";
-import AuthService from "../servies/AuthService";
-const LoginPage = () => {
+import { registerApi } from "../api/api.api";
+const RegistrationPage = () => {
 
     let navigate = useNavigate();
     const [loginInfo, setLoginInfo] = useState<LoginInformation>({
@@ -22,27 +22,25 @@ const LoginPage = () => {
         <>
             <StyledBox>
                 <StyledTypography>
-                    You are not logged in
+                    Registration
                 </StyledTypography>
                 <div>
                     <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
                 </div>
                 <div>
-                    <StyledTextField label="Password" type="password" onChange={handleChangePassword}/>
+                    <StyledTextField label="Password" type="password" style={{ marginBottom: '20px' }} onChange={handleChangePassword}/>
                 </div>
                 <div>
-                    <div>
-                        <Link component="button"
-                              variant="body2"
-                              style={{ marginBottom: '20px' }}
-                              onClick={async () => {
-                            navigate('/registration')
-                        }}>I do not have Account</Link>
-                    </div>
+                    <Button variant="contained" onClick={async () => {
+                        navigate('/not-authorized')
+                    }}>Cancel</Button>
                     <StyledButton variant="contained" onClick={async () => {
-                        await AuthService.login(loginInfo);
-                        navigate('/');
-                    }}>Login</StyledButton>
+                        const msgBuffer = new TextEncoder().encode(loginInfo.password); 
+                        const passwordBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+                        const hashArray = Array.from(new Uint8Array(passwordBuffer));         
+                        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                        await registerApi(loginInfo.login, hashHex).then((response) => { console.log(response); navigate('/not-authorized');});
+                    }}>Register</StyledButton>
                 </div>
             </StyledBox>
         </>
@@ -77,4 +75,4 @@ const StyledButton = styled(Button)`
     margin-left: 100px;
 `
 
-export default LoginPage;
+export default RegistrationPage;

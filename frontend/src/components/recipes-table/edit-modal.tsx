@@ -64,7 +64,7 @@ const EditModal: React.FC<Props> = ({visible,onCancel,recipe,editRecipe}) => {
                 <IngredientsModal visible = {ingredientsModal.isVisible} ingredients = {recipeIngredients}
                 onCancel={() =>setIngredientsModal({isVisible: false,ingredients: recipeIngredients})}
                 onAccept={(newIngredients : IngredientDetailsQuantity[]) =>{setIngredientsModal({isVisible: false,ingredients: recipeIngredients});
-                            setRecipeIngredients(newIngredients); console.log(recipeIngredients)}}
+                            setRecipeIngredients(newIngredients);}}
                 ></IngredientsModal>
             </Dialog>
         </>

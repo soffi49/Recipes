@@ -25,24 +25,19 @@ const IngredientsModal: React.FC<Props> = ({visible,onCancel,ingredients,onAccep
     const [newIngredients,setNewIngredients] = useState<IngredientDetailsQuantity[]>(ingredients);
     
     const getAllIngredients = () => {
-        getIngredientsApi(1, 20).then((response) => {
-          //  setIsFetching(true);
+        getIngredientsApi(0, 20).then((response) => {
+            setIsFetching(true);
             if(!!response){
-                setAllIngredients(response);
+                setAllIngredients(response.ingredients);
             }
-     //   setIsFetching(false);
+        setIsFetching(false);
     })};
     const addIngredient = (ingredient: IngredientDetailsQuantity) =>{
         setIsFetching( true);
         setNewIngredients([...newIngredients, ingredient]);
-        
-        console.log(isFetching);
-        console.log(ingredient);
-        console.log(newIngredients);
     }
     const deleteIngredient = (ingredient: IngredientDetailsQuantity) =>{
         setNewIngredients(newIngredients => newIngredients?.filter(x => x.ingredient.id!==ingredient.ingredient.id));
-        console.log(newIngredients);
     }
     useEffect(() => {
         getAllIngredients();
