@@ -109,6 +109,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    protected  ResponseEntity<Object> handleForbiddenException(final UserAlreadyExistsException ex,
+                                                               final WebRequest webRequest)
+    {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.DATABASE_DUPLICATE;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     //Common
 
     @ExceptionHandler(DatabaseSaveException.class)

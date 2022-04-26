@@ -13,22 +13,22 @@ import javax.validation.Valid;
 import static com.recipes.backend.utils.LogWriter.logHeaders;
 
 @RestController
-@RequestMapping("/login")
-public class LoginController {
+@RequestMapping("/register")
+public class RegisterController {
 
     private final LoginService loginService;
 
     @Autowired
-    public LoginController(final LoginService loginService) {
+    public RegisterController(final LoginService loginService) {
         this.loginService = loginService;
     }
 
     @PostMapping
-    public ResponseEntity<TokenRest> login(@RequestHeader HttpHeaders headers,
-                                           @RequestBody @Valid LoginRest loginForm) {
+    public ResponseEntity<TokenRest> register(@RequestHeader HttpHeaders headers,
+                                              @RequestBody @Valid LoginRest loginForm) {
         logHeaders(headers);
 
-        final String retrievedToken = loginService.loginToSystem(loginForm);
+        final String retrievedToken = loginService.registerUser(loginForm);
 
         return ResponseEntity.ok(new TokenRest(retrievedToken));
     }
