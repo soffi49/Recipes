@@ -1,6 +1,7 @@
 import {LoginInformation} from "../models/models";
 import axios from "axios";
 import {server} from "../constants/constants";
+import { toast } from "react-toastify";
 
 interface AuthService {
     login: (loginInfo: LoginInformation) => void;
@@ -21,12 +22,14 @@ function createAuthService(): AuthService {
             if (response.data) {
                 data = response.data.token;
                 sessionStorage.setItem('key', response.data.token);
+                toast.success("Successfully logged in!")
             }
-        });
+        }).catch((error) => toast.error("Somethintg went wrong while logging in!"));
         return data;
     }
     const logout = () => {
         sessionStorage.removeItem('key');
+        toast.success("Successfully logged out!")
     }
     const getCurrentUserToken = () => {
     }

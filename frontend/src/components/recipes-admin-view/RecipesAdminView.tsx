@@ -15,7 +15,7 @@ export default function RecipesAdminView() {
     const getAllRecipes = () => {
         getRecipesApi(page, limit).then((response) => {
             if(!!response){
-                setRecipes(response)
+                setRecipes(response.recipes)
                 setCount(response.total_recipes)
             };
         setIsFetching(false);

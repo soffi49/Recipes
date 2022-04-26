@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getIngredientsApi, addIngredientApi, deleteIngredientApi, deleteRecipeApi, editIngredientApi, editRecipeApi} from "./api.api";
+import {getIngredientsApi, addIngredientApi, deleteIngredientApi, deleteRecipeApi, editIngredientApi, editRecipeApi, registerApi} from "./api.api";
 import data from "../constants/ingredient-table.data.json";
 
 describe("Api tests", () => {
@@ -7,13 +7,13 @@ describe("Api tests", () => {
 
     it("should get ingredients", async () => {
         const payload = { data: data };
-        axios.get = jest.fn().mockImplementationOnce(() => Promise.resolve(payload));
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.resolve(payload));
         await expect(getIngredientsApi(0, 100)).resolves.toEqual(data);
     });
 
     it("should thorw error while getting ingredients", async () => {
         const errorMessage = new Error("rejected");
-        axios.get = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
         await expect(getIngredientsApi(0, 100)).rejects.toThrow(errorMessage);
     });
 
@@ -83,5 +83,16 @@ describe("Api tests", () => {
               "biedny"
             ]
           },0)).rejects.toThrow(errorMessage);
+    });
+
+    it("register", async () => {
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.resolve());
+        await expect(registerApi("piwo","piwo")).resolves.toBeUndefined();
+    });
+
+    it("should throw error while registering", async () => {
+        const errorMessage = new Error("rejected");
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
+        await expect(registerApi("piwo","Piwo")).rejects.toThrow(errorMessage);
     });
 });
