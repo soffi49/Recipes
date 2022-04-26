@@ -23,3 +23,4 @@ INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (3, 300000);
 -- Inserts for login tests --
 
 INSERT INTO user (user_id, username, password, token, is_admin) VALUES (100000, 'test username', 'test password', 'test token', 0);
+INSERT INTO user (user_id, username, password, token, is_admin) VALUES (200000, 'duplicatedUser', 'test password', 'duplicated token', 0);

@@ -16,6 +16,7 @@ DELETE FROM recipe WHERE name in
     ('testRecipe1', 'testRecipe2', 'testRecipe3', 'newRecipe', 'newRecipeNoTags', 'newRecipeNoIngredients', 'updatedRecipe');
 
 DELETE FROM user WHERE user_id = 100000;
+DELETE FROM user WHERE username in ('newUser', 'duplicatedUser');
 
 SET FOREIGN_KEY_CHECKS = 1;
 SET SQL_SAFE_UPDATES = 1;
