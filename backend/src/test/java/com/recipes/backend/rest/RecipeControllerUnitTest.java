@@ -53,7 +53,7 @@ class RecipeControllerUnitTest
         Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
-        mockMvc.perform(get("/recipes")
+        mockMvc.perform(post("/recipes/all")
                                 .param("limit", "5")
                                 .param("page", "0"))
                 .andExpect(status().isOk())
@@ -73,7 +73,7 @@ class RecipeControllerUnitTest
         Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, "Recipe1", null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
-        mockMvc.perform(get("/recipes")
+        mockMvc.perform(post("/recipes/all")
                                 .param("limit", "5")
                                 .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +96,7 @@ class RecipeControllerUnitTest
         Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, null, Set.of("low calorie"));
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
-        mockMvc.perform(get("/recipes")
+        mockMvc.perform(post("/recipes/all")
                                 .param("limit", "5")
                                 .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -113,7 +113,7 @@ class RecipeControllerUnitTest
         Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
-        mockMvc.perform(get("/recipes")
+        mockMvc.perform(post("/recipes/all")
                                 .param("limit", "5")
                                 .param("other", "0"))
                 .andExpect(status().isBadRequest());

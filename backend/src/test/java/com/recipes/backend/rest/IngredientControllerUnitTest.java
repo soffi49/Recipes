@@ -103,7 +103,7 @@ class IngredientControllerUnitTest
     {
         Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
 
-        mockMvc.perform(get("/ingredients")
+        mockMvc.perform(post("/ingredients/all")
                                 .param("limit", "5")
                                 .param("page", "0"))
                 .andExpect(status().isOk())
@@ -117,7 +117,7 @@ class IngredientControllerUnitTest
     {
         Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
 
-        mockMvc.perform(get("/ingredients")
+        mockMvc.perform(post("/ingredients/all")
                                 .param("limit", "5")
                                 .param("other", "0"))
                 .andExpect(status().isBadRequest());
@@ -131,7 +131,7 @@ class IngredientControllerUnitTest
 
         Mockito.doReturn(resultSet).when(ingredientService).getAllIngredients(0, 5, "Name0");
 
-        mockMvc.perform(get("/ingredients")
+        mockMvc.perform(post("/ingredients/all")
                                 .param("limit", "5")
                                 .param("page", "0")
                                 .contentType(MediaType.APPLICATION_JSON)
