@@ -7,7 +7,6 @@ import IngredientsTable from '../ingredients-table/ingredients-table.component';
 import { IngredientDetails } from '../../models/models';
 import AddIngredient from '../ingredients-table-add-ingredient/add-ingredient.component';
 import { Button, MenuItem, TextField } from '@mui/material';
-import { CollectionsBookmarkRounded } from '@mui/icons-material';
 import styled from '@emotion/styled';
 export default function IngredientsTableAdminView() {
     const [ingredients, setIngredients] = useState<IngredientDetails[]>([]);
@@ -37,7 +36,7 @@ export default function IngredientsTableAdminView() {
             setIsFetching(true);
             if(!!response.ingredients){
                 setIngredients(response.ingredients);
-                setCount(10); //change total_ingredients
+                setCount(response.total_ingredients);
             };
         setIsFetching(false);
         
@@ -49,7 +48,7 @@ export default function IngredientsTableAdminView() {
             setIsFetching(true);
             if(!!response.ingredients){
                 setIngredients(response.ingredients);
-                setCount(10); //change total_ingredients
+                setCount(response.total_ingredients);
             };
         setIsFetching(false);
         
