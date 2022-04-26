@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getIngredientsApi, addIngredientApi, deleteIngredientApi, deleteRecipeApi, editIngredientApi} from "./api.api";
+import {getIngredientsApi, addIngredientApi, deleteIngredientApi, deleteRecipeApi, editIngredientApi, editRecipeApi, registerApi} from "./api.api";
 import data from "../constants/ingredient-table.data.json";
 
 describe("Api tests", () => {
@@ -7,13 +7,13 @@ describe("Api tests", () => {
 
     it("should get ingredients", async () => {
         const payload = { data: data };
-        axios.get = jest.fn().mockImplementationOnce(() => Promise.resolve(payload));
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.resolve(payload));
         await expect(getIngredientsApi(0, 100)).resolves.toEqual(data);
     });
 
     it("should thorw error while getting ingredients", async () => {
         const errorMessage = new Error("rejected");
-        axios.get = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
+        axios.post = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
         await expect(getIngredientsApi(0, 100)).rejects.toThrow(errorMessage);
     });
 
@@ -47,17 +47,43 @@ describe("Api tests", () => {
     it("should throw error while deleting recipe", async () => {
         const errorMessage = new Error("rejected");
         axios.delete = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
-        await expect(deleteRecipeApi(0)).rejects.toThrow(errorMessage);
+        await expect(deleteRecipeApi(0)).rejects.toThrow();
     });
 
-    it("edit recipe", async () => {
+    it("edit ingredient", async () => {
         axios.put = jest.fn().mockImplementationOnce(() => Promise.resolve());
         await expect(editIngredientApi("piwo",0)).resolves.toBeUndefined();
+    });
+
+    it("should throw error while editing ingredient", async () => {
+        const errorMessage = new Error("rejected");
+        axios.put = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
+        await expect(editIngredientApi("piwo",0)).rejects.toThrow(errorMessage);
     });
 
     it("should throw error while editing recipe", async () => {
         const errorMessage = new Error("rejected");
         axios.put = jest.fn().mockImplementationOnce(() => Promise.reject(errorMessage));
-        await expect(editIngredientApi("piwo",0)).rejects.toThrow(errorMessage);
+        await expect(editRecipeApi({
+            "id": 0,
+            "name": "super jedzenie",
+            "instructions": "fajny nowy opis",
+            "ingredients": [
+              {
+                "ingredient": {
+                  "id": 2,
+                  "name": "piwo2"
+                },
+                "quantity": 1
+              }
+            ],
+            "tags": [
+              "pyszne",
+              "student",
+              "biedny"
+            ]
+          },0)).rejects.toThrow(errorMessage);
     });
+
+    
 });

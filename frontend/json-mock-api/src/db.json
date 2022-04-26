@@ -81,4 +81,15 @@
         "bardzo biedny"
     ]
 }
-]}
+],
+"ingredients": {
+    "ingredients":[{
+    "id": "0",
+    "name": "piwo"
+},
+ {
+    "id": "1",
+    "name": "piwo"
+}]}
+
+}
