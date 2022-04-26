@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { server } from '../constants/constants'
+import { RecipeDetails } from '../models/models';
 
 export async function getIngredientsApi(page: number, limit: number) {
     const key = "" + sessionStorage.getItem("key");
@@ -8,6 +9,7 @@ export async function getIngredientsApi(page: number, limit: number) {
             headers: {
               'security_header': key
             }});
+            
         return response.data;
     } catch (error) {
         throw error;
@@ -68,6 +70,24 @@ export async function deleteRecipeApi(id: number) {
 export async function getRecipesApi(page: number, limit: number) {
     try {
         const response = await axios.get(`${server}/recipes?page=${page}&limit=${limit}`);
+        return response.data;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function editRecipeApi(recipe: RecipeDetails, id: number) {
+    try {
+        console.log(recipe);
+        const response = await axios.put(`${server}/recipes/${id}`,{
+            id:recipe.id,
+            name:recipe.name,
+            instructions:recipe.instructions,
+            ingredients:recipe.ingredients,
+            tags:recipe.tags
+
+        })
         return response.data;
 
     } catch (error) {

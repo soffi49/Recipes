@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { deleteRecipeApi, getRecipesApi } from '../../api/api.api';
+import { deleteRecipeApi, editRecipeApi, getRecipesApi } from '../../api/api.api';
 import Box from '@mui/system/Box';
 import { RecipeDetails } from '../../models/models';
 import RecipesTable from '../recipes-table/recipes-table';
@@ -14,8 +14,8 @@ export default function RecipesAdminView() {
     const [count, setCount] = useState<number>(0);
     const getAllRecipes = () => {
         getRecipesApi(page, limit).then((response) => {
-            if(!!response.recipes){
-                setRecipes(response.recipes)
+            if(!!response){
+                setRecipes(response)
                 setCount(response.total_recipes)
             };
         setIsFetching(false);
@@ -42,6 +42,10 @@ export default function RecipesAdminView() {
         setIsFetching(true);
         deleteRecipeApi(id).then(() => getAllRecipes());
     }
+    const editRecipe = (recipe:RecipeDetails,id: number) => {
+        setIsFetching(true);
+        editRecipeApi(recipe,id).then(() => getAllRecipes());
+    }
 
     useEffect(() => {
         getAllRecipes();
@@ -61,6 +65,7 @@ export default function RecipesAdminView() {
                 handleChangeRowsPerPage={handleChangeRowsPerPage}
                 handleChangePage={handleChangePage}
                 deleteRecipe={deleteRecipe}
+                editRecipe={editRecipe}
             />
         </>
       );
