@@ -19,6 +19,7 @@ class IngredientMapperTest {
     private Ingredient mockIngredient;
     private IngredientRest mockIngredientRest;
     private IngredientDTO mockIngredientDTO;
+    private IngredientRecipeRest mockIngredientRecipeRest;
 
     @BeforeEach
     public void setUp() {
@@ -33,6 +34,10 @@ class IngredientMapperTest {
         mockIngredientDTO = new IngredientDTO();
         mockIngredientDTO.setIngredientId(1);
         mockIngredientDTO.setName("Test IngredientDTO");
+
+        mockIngredientRecipeRest = new IngredientRecipeRest();
+        mockIngredientRecipeRest.setIngredient(mockIngredientRest);
+        mockIngredientRecipeRest.setQuantity("50g");
     }
 
     @Test
@@ -84,6 +89,32 @@ class IngredientMapperTest {
     @DisplayName("Map to ingredient from ingredientDTO with null quantity")
     void mapToIngredientFromIngredientDTOWithQuantityNull() {
         final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient(mockIngredientDTO, null);
+
+        Assertions.assertTrue(retrievedIngredient.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Map to ingredient from quantity with null ingredientDTO")
+    void mapToIngredientFromQuantityWithIngredientDTONull() {
+        final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient(null, "10g");
+
+        Assertions.assertTrue(retrievedIngredient.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Map to ingredient from ingredientRecipeRest all data")
+    void mapToIngredientFromIngredientRecipeRestAllData() {
+        final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient(mockIngredientRecipeRest);
+
+        Assertions.assertTrue(retrievedIngredient.isPresent());
+        Assertions.assertEquals("Test IngredientRest", retrievedIngredient.get().getName());
+        Assertions.assertEquals("50g", retrievedIngredient.get().getQuantity());
+    }
+
+    @Test
+    @DisplayName("Map to ingredient from ingredientRecipeRest null")
+    void mapToIngredientFromIngredientRecipeRestNull() {
+        final Optional<Ingredient> retrievedIngredient = IngredientMapper.mapToIngredient((IngredientRecipeRest) null);
 
         Assertions.assertTrue(retrievedIngredient.isEmpty());
     }

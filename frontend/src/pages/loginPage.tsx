@@ -1,6 +1,6 @@
 import React, {ChangeEventHandler, useState} from "react";
 import styled from "@emotion/styled";
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, Link, TextField, Typography} from "@mui/material";
 import { LoginInformation } from "../models/models";
 import {useNavigate} from "react-router-dom";
 import AuthService from "../servies/AuthService";
@@ -28,9 +28,17 @@ const LoginPage = () => {
                     <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
                 </div>
                 <div>
-                    <StyledTextField label="Password" type="password" style={{ marginBottom: '20px' }} onChange={handleChangePassword}/>
+                    <StyledTextField label="Password" type="password" onChange={handleChangePassword}/>
                 </div>
                 <div>
+                    <div>
+                        <Link component="button"
+                              variant="body2"
+                              style={{ marginBottom: '20px' }}
+                              onClick={async () => {
+                            navigate('/registration')
+                        }}>I do not have Account</Link>
+                    </div>
                     <StyledButton variant="contained" onClick={async () => {
                         await AuthService.login(loginInfo);
                         navigate('/');

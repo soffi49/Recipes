@@ -1,25 +1,25 @@
 package com.recipes.backend.repo;
 
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
-import com.recipes.backend.repo.domain.IngredientDTO;
 import com.recipes.backend.repo.domain.RecipeDTO;
-import com.recipes.backend.repo.domain.RecipeIngredientDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.jdbc.Sql;
 
 import javax.validation.ConstraintViolationException;
-
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Sql({"/data/drop-db.sql","/data/create-db.sql", "/data/recipe/insert-1-recipe.sql"})
-public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
+class RecipeRepositoryTest extends AbstractIntegrationTestConfig
+{
 
     @Autowired
     private RecipeRepository recipeRepository;
@@ -27,13 +27,17 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
     private RecipeDTO mockRecipeDTO;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp()
+    {
         setUpRecipeDTO();
     }
 
     @Test
     @DisplayName("Save non empty recipe")
-    void saveRecipeNotEmpty() {
+    @Sql({"/data/truncate-db.sql", "/data/recipe/insert-1-recipe.sql"})
+    @Order(1)
+    void saveRecipeNotEmpty()
+    {
         mockRecipeDTO.setName("Test name");
 
         final RecipeDTO savedRecipe = recipeRepository.save(mockRecipeDTO);
@@ -42,14 +46,18 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Save recipe with empty name")
-    void saveRecipeWithoutName() {
+    @Order(2)
+    void saveRecipeWithoutName()
+    {
         assertThatThrownBy(() -> recipeRepository.save(mockRecipeDTO))
                 .hasRootCauseInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
     @DisplayName("Save recipe duplicate")
-    void saveRecipeDuplicate() {
+    @Order(3)
+    void saveRecipeDuplicate()
+    {
         mockRecipeDTO.setName("Recipe");
 
         assertThatThrownBy(() -> recipeRepository.save(mockRecipeDTO))
@@ -58,7 +66,9 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Find recipe by id when present")
-    void findByIdPresent() {
+    @Order(4)
+    void findByIdPresent()
+    {
         final Optional<RecipeDTO> retrieverRecipe = recipeRepository.findById(1000L);
 
         assertThat(retrieverRecipe).isPresent();
@@ -67,7 +77,9 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Find recipe by id when not present")
-    void findByIdNotPresent() {
+    @Order(5)
+    void findByIdNotPresent()
+    {
         final Optional<RecipeDTO> retrievedRecipe = recipeRepository.findById(4000L);
 
         assertThat(retrievedRecipe).isEmpty();
@@ -75,15 +87,49 @@ public class RecipeRepositoryTest extends AbstractIntegrationTestConfig {
 
     @Test
     @DisplayName("Find all recipes not empty")
-    @Sql("/data/recipe/insert-1-recipe.sql")
-    void findAllIngredients() {
+    @Order(6)
+    void findAllRecipesNonEmpty()
+    {
         final List<RecipeDTO> databaseRecipes = (List<RecipeDTO>) recipeRepository.findAll();
 
-        assertThat(databaseRecipes.size()).isEqualTo(1);
-        assertThat(databaseRecipes.get(0).getName()).isEqualTo("Recipe");
+        assertThat(databaseRecipes).hasSize(2);
+        assertThat(databaseRecipes.stream()).anyMatch(recipe -> recipe.getName().equals("Test name"));
     }
 
-    private void setUpRecipeDTO() {
+    @Test
+    @DisplayName("Find all recipes empty")
+    @Sql("/data/truncate-db.sql")
+    @Order(7)
+    void findAllRecipesEmpty()
+    {
+        final List<RecipeDTO> databaseRecipes = (List<RecipeDTO>) recipeRepository.findAll();
+
+        assertThat(databaseRecipes).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Delete existing recipe by id")
+    @Sql("/data/recipe/insert-1-recipe.sql")
+    @Order(8)
+    void deleteByIdExistingRecipe()
+    {
+        recipeRepository.deleteById(1000L);
+
+        assertThat(recipeRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Delete non existing recipe by id")
+    @Order(9)
+    void deleteByIdNonExistingRecipe()
+    {
+        assertThatThrownBy(() -> recipeRepository.deleteById(1000L))
+                .isExactlyInstanceOf(EmptyResultDataAccessException.class)
+                .hasMessage("No class com.recipes.backend.repo.domain.RecipeDTO entity with id 1000 exists!");
+    }
+
+    private void setUpRecipeDTO()
+    {
         mockRecipeDTO = new RecipeDTO();
         mockRecipeDTO.setInstructions("Test instructions");
     }

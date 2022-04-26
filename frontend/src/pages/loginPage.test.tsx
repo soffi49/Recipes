@@ -34,10 +34,6 @@ afterEach(() => {
 afterAll(() => server.close());
 
 describe('Login page tests', () => {
-    test('Login page renders a login button', () => {
-        render(<BrowserRouter><LoginPage/></BrowserRouter>);
-        expect(screen.getByRole("button")).toBeTruthy();
-    }),
     test('Login page renders a login text input', () => {
         render(<BrowserRouter><LoginPage/></BrowserRouter>);
         expect(screen.getByLabelText("Username")).toBeTruthy();

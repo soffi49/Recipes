@@ -6,6 +6,7 @@ export interface LoginInformation {
 export interface IngredientDetails {
     id: number;
     name: string;
+    quantity?: number;
 }
 export interface IngredientDetailsQuantity {
     ingredient: IngredientDetails;

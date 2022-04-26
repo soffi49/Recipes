@@ -1,32 +1,33 @@
-{"recipes":
-[{
-    "id": 0,
-    "name": "harnas ice tea",
-    "instructions": "wymieszaj i wypij pyszna lodoherbate",
-    "ingredients": [
+{
+  "recipes": [
+    {
+      "id": 0,
+      "name": "harnas ice tea",
+      "instructions": "super nowy opis",
+      "ingredients": [
         {
-            "ingredient":{
-                "id": 0,
-                "name": "piwo"
-            },
-            "quantity": "6"
+          "ingredient": {
+            "id": 0,
+            "name": "piwo"
+          },
+          "quantity": "6"
         },
         {
-            "ingredient":{
-                "id": 1,
-                "name": "ice tea"
-            },
-            "quantity": "3"
+          "ingredient": {
+            "id": 2,
+            "name": "zubrowa"
+          },
+          "quantity": 1
         },
         {
-            "ingredient":{
-                "id": 2,
-                "name": "zubrowa"
-            },
-            "quantity": "1"
+          "ingredient": {
+            "id": 1,
+            "name": "ice tea"
+          },
+          "quantity": 1
         }
-    ],
-    "tags":[
+      ],
+      "tags": [
         "pyszne",
         "student",
         "biedny"

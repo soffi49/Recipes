@@ -13,6 +13,7 @@ import { RecipeDetails } from '../../models/models';
 import { useState } from 'react';
 import DetailsModal from './details-modal';
 import { TableFooter, TablePagination } from '@mui/material';
+import EditModal from './edit-modal';
 interface RecipeTableProps {
     recipes: RecipeDetails[];
     page: number;
@@ -21,14 +22,23 @@ interface RecipeTableProps {
     handleChangeRowsPerPage: ( event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     handleChangePage: ( event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void;
     deleteRecipe: (id: number) => void;
+    editRecipe: (recipe: RecipeDetails, id:number) => void;
 }
-interface propsDetailsModal{
+interface propsDetailsModal {
   isVisible: boolean;
-  recipe?: RecipeDetails;
+  recipe: RecipeDetails;
 }
 
-export default function RecipesTable({recipes, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteRecipe}: RecipeTableProps) {
-    const [detailsState,setDetailsState] = useState<propsDetailsModal>({isVisible: false});
+export default function RecipesTable({recipes, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteRecipe,editRecipe}: RecipeTableProps) {
+    const placeholder = {
+      id:-1,
+      name:"placeholder",
+      instructions:" ",
+      ingredients: [],
+      tags: []
+    }
+    const [detailsState,setDetailsState] = useState<propsDetailsModal>({isVisible: false,recipe: placeholder});
+    const [editState,setEditState] = useState<propsDetailsModal>({isVisible: false,recipe: placeholder});
     return (
         <>
           <TableContainer component={Paper}>
@@ -48,8 +58,8 @@ export default function RecipesTable({recipes, page, limit, count, handleChangeR
                     <TableCell align="center">{row.id}</TableCell>
                     <TableCell align="center">{row.name}</TableCell>
                     <TableCell align="center">
-                        <IconButton aria-label="Edit button">
-                            <EditIcon />
+                        <IconButton aria-label="Edit button" onClick = {() => setEditState({isVisible: true, recipe: row})}>
+                          <EditIcon/>
                         </IconButton>
                         <IconButton aria-label="Delete button">
                             <DeleteIcon onClick={() => deleteRecipe(row.id)}/>
@@ -73,6 +83,7 @@ export default function RecipesTable({recipes, page, limit, count, handleChangeR
             </Table>
           </TableContainer>
           <DetailsModal visible={detailsState.isVisible} onCancel={() =>setDetailsState({isVisible: false,recipe: detailsState.recipe})} recipe = {detailsState.recipe}/>
+          <EditModal  visible={editState.isVisible} onCancel={() =>setEditState({isVisible: false,recipe: editState.recipe})} recipe = {editState.recipe} editRecipe = {editRecipe}/>
         </>
       );
 }

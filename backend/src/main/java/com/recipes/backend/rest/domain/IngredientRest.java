@@ -17,7 +17,6 @@ public class IngredientRest implements Serializable {
 
     private static final long serialVersionUID = 780145697608886440L;
 
-    @NotNull
     @JsonProperty(value = "id")
     private Long id;
 
