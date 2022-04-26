@@ -1,84 +1,63 @@
-{"recipes":
-[{
-    "id": 0,
-    "name": "harnas ice tea",
-    "instructions": "wymieszaj i wypij pyszna lodoherbate",
-    "ingredients": [
+{
+  "recipes": [
+    {
+      "id": 0,
+      "name": "harnas ice tea",
+      "instructions": "super nowy opis",
+      "ingredients": [
         {
-            "ingredient":{
-                "id": 0,
-                "name": "piwo"
-            },
-            "quantity": "6"
+          "ingredient": {
+            "id": 0,
+            "name": "piwo"
+          },
+          "quantity": "6"
         },
         {
-            "ingredient":{
-                "id": 1,
-                "name": "ice tea"
-            },
-            "quantity": "3"
+          "ingredient": {
+            "id": 2,
+            "name": "zubrowa"
+          },
+          "quantity": 1
         },
         {
-            "ingredient":{
-                "id": 2,
-                "name": "zubrowa"
-            },
-            "quantity": "1"
+          "ingredient": {
+            "id": 1,
+            "name": "ice tea"
+          },
+          "quantity": 1
         }
-    ],
-    "tags":[
+      ],
+      "tags": [
         "pyszne",
         "student",
         "biedny"
-    ]
-},
-{
-    "id": 1,
-    "name": "kociolek panoramixa",
-    "instructions": "wymieszaj i wypij pyszny wywar",
-    "ingredients": [
-        {
-            "ingredient":{
-                "id": 0,
-                "name": "piwo"
-            },
-            "quantity": "6"
-        },
-        {
-            "ingredient":{
-                "id": 1,
-                "name": "zubrowa"
-            },
-            "quantity": "3"
-        },
-        {
-            "ingredient":{
-                "id": 2,
-                "name": "whisky"
-            },
-            "quantity": "1"
-        },
-        {
-            "ingredient":{
-                "id": 3,
-                "name": "wino"
-            },
-            "quantity": "1"
-        }
-    ],
-    "tags":[
-        "mniej pyszne",
-        "student",
-        "bardzo biedny",
-        "mniej pyszne",
-        "student",
-        "bardzo biedny",
-        "mniej pyszne",
-        "student",
-        "bardzo biedny",
-        "mniej pyszne",
-        "student",
-        "bardzo biedny"
-    ]
+      ]
+    }
+  ],
+  "ingredients": [
+    {
+      "id": 0,
+      "name": "piwo"
+    },
+    {
+      "id": 1,
+      "name": "ice tea"
+    },
+    {
+      "id": 2,
+      "name": "zubrowa"
+    },
+    {
+      "id": 3,
+      "name": "piwo 2"
+    },
+    {
+      "id": 4,
+      "name": "piwo 3"
+    },
+    {
+      "id": 5,
+      "name": "piwo 4"
+    }
+  ]
 }
-]}

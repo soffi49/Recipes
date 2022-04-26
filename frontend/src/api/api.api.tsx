@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { server } from '../constants/constants'
+import { RecipeDetails } from '../models/models';
 
 export async function getIngredientsApi(page: number, limit: number) {
     const key = "" + sessionStorage.getItem("key");
@@ -9,6 +10,7 @@ export async function getIngredientsApi(page: number, limit: number) {
             headers: {
               'security_header': key
             }});
+            
         return response.data;
     } catch (error) {
         toast.error(String(error));
@@ -86,6 +88,24 @@ export async function getRecipesApi(page: number, limit: number) {
 
     } catch (error) {
         toast.error(String(error));
+        throw error;
+    }
+}
+
+export async function editRecipeApi(recipe: RecipeDetails, id: number) {
+    try {
+        console.log(recipe);
+        const response = await axios.put(`${server}/recipes/${id}`,{
+            id:recipe.id,
+            name:recipe.name,
+            instructions:recipe.instructions,
+            ingredients:recipe.ingredients,
+            tags:recipe.tags
+
+        })
+        return response.data;
+
+    } catch (error) {
         throw error;
     }
 }

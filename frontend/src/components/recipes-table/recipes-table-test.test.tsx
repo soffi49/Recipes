@@ -14,6 +14,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getAllByRole("columnheader").length).toEqual(3);
@@ -29,6 +30,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getAllByRole("row").length).toEqual(2);
@@ -44,6 +46,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Delete button")).toBeTruthy();
@@ -59,6 +62,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Edit button")).toBeTruthy();
@@ -73,6 +77,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Details button")).toBeTruthy();
@@ -87,12 +92,32 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         const button =screen.getByLabelText("Details button");
         fireEvent.click(button);
         expect(screen.getByText("piwo")).toBeTruthy();
     })
+    it("should render a modal with editing", () => {
+        render(
+            <RecipesTable
+                recipes={data as unknown as RecipeDetails[]}
+                page={0}
+                limit={10}
+                count={data.length}
+                handleChangeRowsPerPage={() => {}}
+                handleChangePage={() => {}}
+                deleteRecipe={() => {}}
+                editRecipe={() => {}}
+            />
+        )
+        const button =screen.getByLabelText("Edit button");
+        fireEvent.click(button);
+        expect(screen.getByText("Instructions:")).toBeTruthy();
+    })
+   
+    
 
     it("should render next page button", () => {
         render(
@@ -104,6 +129,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to next page")).toBeTruthy();
@@ -119,6 +145,7 @@ describe("AddIngredient", () => {
                 handleChangeRowsPerPage={() => {}}
                 handleChangePage={() => {}}
                 deleteRecipe={() => {}}
+                editRecipe={() => {}}
             />
         )
         expect(screen.getByLabelText("Go to previous page")).toBeTruthy();
