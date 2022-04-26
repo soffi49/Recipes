@@ -24,7 +24,7 @@ interface RecipeTableProps {
     deleteRecipe: (id: number) => void;
     editRecipe: (recipe: RecipeDetails, id:number) => void;
 }
-interface propsDetailsModal{
+interface propsDetailsModal {
   isVisible: boolean;
   recipe: RecipeDetails;
 }
