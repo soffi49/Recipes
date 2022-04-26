@@ -43,7 +43,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         final Ingredient ingredientToAdd =
                 mapToIngredient(ingredient).orElseThrow(IngredientEmptyException::new);
@@ -60,7 +60,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<IngredientRest> retrievedIngredients =
@@ -84,7 +84,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         final Set<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit, null).stream()
@@ -102,7 +102,7 @@ public class IngredientController
                                                    @PathVariable(name = "id") Long ingredientId)
     {
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         return ingredientService.deleteIngredient(ingredientId)
                 ? ResponseEntity.ok().build()
@@ -115,7 +115,7 @@ public class IngredientController
     {
 
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         var ingredient = mapToIngredient(ingredientRest).orElseThrow(IngredientEmptyException::new);
         ingredientService.updateIngredient(ingredient);

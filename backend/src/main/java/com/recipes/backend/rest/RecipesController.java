@@ -44,7 +44,7 @@ public class RecipesController
                                                        @RequestBody(required = false) FiltersRest filters)
     {
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<String> tagFilter = Objects.nonNull(filters) ? filters.getTags() : null;
@@ -63,7 +63,7 @@ public class RecipesController
     public ResponseEntity<Object> addRecipe(@RequestHeader HttpHeaders headers, @RequestBody @Valid RecipeRest recipeRest)
     {
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         final var recipeToAdd = mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new);
         recipeService.addRecipe(recipeToAdd);
@@ -76,7 +76,7 @@ public class RecipesController
                                                @PathVariable(name = "id") Long recipeId)
     {
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         return recipeService.deleteRecipe(recipeId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().body("Bad request!");
     }
@@ -86,7 +86,7 @@ public class RecipesController
                                                @RequestBody RecipeRest recipeRest)
     {
         logHeaders(headers);
-        securityService.isAuthenticated(headers);
+        //securityService.isAuthenticated(headers);
 
         recipeService.updateRecipe(mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
         return ResponseEntity.ok().build();
