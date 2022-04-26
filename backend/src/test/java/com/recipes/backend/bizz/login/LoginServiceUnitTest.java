@@ -1,5 +1,6 @@
 package com.recipes.backend.bizz.login;
 
+import com.recipes.backend.bizz.login.domain.UserToken;
 import com.recipes.backend.exception.domain.IncorrectPasswordException;
 import com.recipes.backend.exception.domain.UserNotFoundException;
 import com.recipes.backend.repo.UserRepository;
@@ -47,9 +48,9 @@ class LoginServiceUnitTest
 
         when(userRepository.findByUsername("username")).thenReturn(Optional.of(userEntity));
 
-        final String token = loginService.loginToSystem(new LoginRest("username", "password"));
+        final UserToken token = loginService.loginToSystem(new LoginRest("username", "password"));
 
-        assertThat(token).isEqualTo("token");
+        assertThat(token.getUserToken()).isEqualTo("token");
     }
 
     @ParameterizedTest

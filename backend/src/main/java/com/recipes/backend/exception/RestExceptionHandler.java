@@ -117,6 +117,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler
         return handleCustomException(exceptionType, ex, webRequest);
     }
 
+    @ExceptionHandler(TokenEmptyException.class)
+    protected  ResponseEntity<Object> handleForbiddenException(final TokenEmptyException ex,
+                                                               final WebRequest webRequest)
+    {
+        final ExceptionTypeEnum exceptionType = ExceptionTypeEnum.MAPPER_NULL;
+        return handleCustomException(exceptionType, ex, webRequest);
+    }
+
     //Common
 
     @ExceptionHandler(DatabaseSaveException.class)

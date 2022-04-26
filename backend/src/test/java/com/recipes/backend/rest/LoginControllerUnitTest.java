@@ -2,6 +2,7 @@ package com.recipes.backend.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipes.backend.bizz.login.LoginService;
+import com.recipes.backend.bizz.login.domain.UserToken;
 import com.recipes.backend.exception.domain.UserNotFoundException;
 import com.recipes.backend.rest.domain.LoginRest;
 import org.junit.jupiter.api.DisplayName;
@@ -22,8 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(LoginController.class)
 @ExtendWith(MockitoExtension.class)
-class LoginControllerUnitTest
-{
+class LoginControllerUnitTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final LoginRest USER = new LoginRest("USER", "PASSWD");
@@ -37,21 +37,20 @@ class LoginControllerUnitTest
 
     @Test
     @DisplayName("Log in with correct credentials")
-    void shouldCorrectlyLogin() throws Exception
-    {
-        when(loginService.loginToSystem(USER)).thenReturn(TOKEN);
+    void shouldCorrectlyLogin() throws Exception {
+        when(loginService.loginToSystem(USER)).thenReturn(new UserToken(TOKEN, false));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(MAPPER.writeValueAsString(USER)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token", is(TOKEN)));
+                .andExpect(jsonPath("$.token", is(TOKEN)))
+                .andExpect(jsonPath("$.isAdmin", is(0)));
     }
 
     @Test
     @DisplayName("Log in with incorrect credentials")
-    void shouldResponseForbiddenGivenWrongUser() throws Exception
-    {
+    void shouldResponseForbiddenGivenWrongUser() throws Exception {
         when(loginService.loginToSystem(USER)).thenThrow(UserNotFoundException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/login")

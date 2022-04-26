@@ -1,6 +1,9 @@
 package com.recipes.backend.rest;
 
 import com.recipes.backend.bizz.login.LoginService;
+import com.recipes.backend.bizz.login.domain.UserToken;
+import com.recipes.backend.bizz.login.mapper.TokenMapper;
+import com.recipes.backend.exception.domain.TokenEmptyException;
 import com.recipes.backend.rest.domain.LoginRest;
 import com.recipes.backend.rest.domain.TokenRest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +31,9 @@ public class RegisterController {
                                               @RequestBody @Valid LoginRest loginForm) {
         logHeaders(headers);
 
-        final String retrievedToken = loginService.registerUser(loginForm);
+        final UserToken retrievedToken = loginService.registerUser(loginForm);
 
-        return ResponseEntity.ok(new TokenRest(retrievedToken));
+        return ResponseEntity.ok(TokenMapper.mapToTokenRest(retrievedToken).orElseThrow(TokenEmptyException::new));
     }
 }
 

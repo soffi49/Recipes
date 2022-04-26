@@ -1,5 +1,6 @@
 package com.recipes.backend.bizz.login;
 
+import com.recipes.backend.bizz.login.domain.UserToken;
 import com.recipes.backend.common.AbstractIntegrationTestConfig;
 import com.recipes.backend.exception.domain.IncorrectPasswordException;
 import com.recipes.backend.exception.domain.UserAlreadyExistsException;
@@ -7,6 +8,7 @@ import com.recipes.backend.exception.domain.UserNotFoundException;
 import com.recipes.backend.repo.UserRepository;
 import com.recipes.backend.repo.domain.UserDTO;
 import com.recipes.backend.rest.domain.LoginRest;
+import com.recipes.backend.rest.domain.TokenRest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,9 +34,9 @@ class LoginServiceIntegrationTest extends AbstractIntegrationTestConfig {
     void logInToSystemCorrectCredentials() {
         final LoginRest loginRest = new LoginRest("username", "password");
 
-        final String token = loginService.loginToSystem(loginRest);
+        final UserToken token = loginService.loginToSystem(loginRest);
 
-        assertThat(token).isEqualTo("security_token");
+        assertThat(token.getUserToken()).isEqualTo("security_token");
     }
 
     @Test
@@ -66,12 +68,12 @@ class LoginServiceIntegrationTest extends AbstractIntegrationTestConfig {
     void registerNotExistingUser() {
         final LoginRest loginRest = new LoginRest("username2", "password2");
 
-        final String token = loginService.registerUser(loginRest);
+        final UserToken token = loginService.registerUser(loginRest);
 
         final Optional<UserDTO> retrievedUser = userRepository.findByUsername("username2");
 
         assertThat(retrievedUser).isPresent();
-        assertThat(retrievedUser.get().getToken()).isEqualTo(token);
+        assertThat(retrievedUser.get().getToken()).isEqualTo(token.getUserToken());
         assertThat(retrievedUser.get().getPassword()).isEqualTo("password2");
     }
 
