@@ -37,7 +37,7 @@ public class RecipesController
         this.securityService = securityService;
     }
 
-    @GetMapping
+    @PostMapping("/all")
     public ResponseEntity<RecipeAllRest> getAllRecipes(@RequestHeader HttpHeaders headers,
                                                        @RequestParam(name = "page") int page,
                                                        @RequestParam(name = "limit") int limit,
