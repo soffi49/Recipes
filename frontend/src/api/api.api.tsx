@@ -22,6 +22,32 @@ export async function getIngredientsApi(page: number, limit: number) {
     throw error;
   }
 }
+export async function getFilteredIngredientsApi(
+  page: number,
+  limit: number,
+  filter: string
+) {
+  if (filter === "" || filter === undefined)
+    return getIngredientsApi(page, limit);
+
+  const key = "" + sessionStorage.getItem("key");
+  try {
+    const response = await axios.post(
+      `${server}/ingredients/all?page=${page}&limit=${limit}`,
+      {
+        name: filter,
+      },
+      {
+        headers: {
+          security_header: key,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function addIngredientApi(name: string) {
   const key = "" + sessionStorage.getItem("key");
@@ -123,7 +149,7 @@ export async function editRecipeApi(recipe: RecipeDetails, id: number) {
   const key = "" + sessionStorage.getItem("key");
   try {
     const response = await axios.put(
-      `${server}/recipes/${id}`,
+      `${server}/recipes`,
       {
         id: recipe.id,
         name: recipe.name,

@@ -8,9 +8,11 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IngredientDetails } from '../../models/models';
+import { TextField } from '@mui/material';
 import { TableFooter } from '@mui/material';
 import { TablePagination } from '@mui/material';
 import EditIngredient from '../ingredients-table-edit-ingredient/edit-ingredient.component';
+import { Filter2Sharp } from '@mui/icons-material';
 interface IngredientTableProps {
     ingredients: IngredientDetails[];
     page: number;
@@ -21,6 +23,7 @@ interface IngredientTableProps {
     deleteIngredient: (id: number) => void;
     editIngredient: (name: string, id: number) => void;
 }
+
 
 export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteIngredient, editIngredient}: IngredientTableProps) {
     return (
