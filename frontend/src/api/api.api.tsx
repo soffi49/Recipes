@@ -149,7 +149,7 @@ export async function editRecipeApi(recipe: RecipeDetails, id: number) {
   const key = "" + sessionStorage.getItem("key");
   try {
     const response = await axios.put(
-      `${server}/recipes/${id}`,
+      `${server}/recipes`,
       {
         id: recipe.id,
         name: recipe.name,
