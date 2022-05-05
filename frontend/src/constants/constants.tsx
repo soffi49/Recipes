@@ -1,1 +1,1 @@
-export const server = 'https://cross-testing-backend.azurewebsites.net:80';
+export const server = 'https://cross-testing-backend.azurewebsites.net';
