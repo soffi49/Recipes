@@ -170,6 +170,31 @@ export async function editRecipeApi(recipe: RecipeDetails, id: number) {
   }
 }
 
+export async function addRecipeApi(recipe: RecipeDetails) {
+  const key = "" + sessionStorage.getItem("key");
+  console.log(recipe.ingredients);
+  try {
+    const response = await axios.post(
+      `${server}/recipes`,
+      {
+        name: recipe.name,
+        instructions: recipe.instructions,
+        ingredients: recipe.ingredients,
+        tags: recipe.tags,
+      },
+      {
+        headers: {
+          security_header: key,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(String(error));
+    throw error;
+  }
+}
+
 export async function registerApi(username: string, password: string) {
   try {
     const response = await axios.post(`${server}/register`, {
@@ -177,8 +202,10 @@ export async function registerApi(username: string, password: string) {
       password: password,
     });
     return response;
-  } catch (error) {
-    toast.error(String(error));
+  } catch (error: unknown) {
+      if(error instanceof Error) {
+        toast.error(String(error.message));
+      }
     throw error;
   }
 }

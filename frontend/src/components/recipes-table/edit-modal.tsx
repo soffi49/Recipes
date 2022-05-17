@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import {
     Button,
-    Card,
     Dialog,
     DialogActions,
     DialogContent,
@@ -70,34 +69,6 @@ const EditModal: React.FC<Props> = ({visible,onCancel,recipe,editRecipe}) => {
         </>
     )
 }
-const CardsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;  
-  justify-content: space-around;
-  max-width:30vw;
-  min-width:20vw;
-`;
-const TagsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;  
-  justify-content: space-around;
-  max-width:30vw;
-  min-width:20vw;
-`;
-const StyledCard = styled(Card)`
-  padding: 10px;
-  background-color: LavenderBlush;
-  margin:5px;
-  display:inline;
-`;
-const Tag = styled(Card)`
-  padding: 10px;
-  background-color: AliceBlue;
-  margin:5px;
-  display:inline;
-`;
 const Instructions = styled.textarea`
   min-width:20vw;
   min-heigth:30vw;
