@@ -1,5 +1,6 @@
 package com.recipes.backend.rest;
 
+import com.recipes.backend.exception.domain.IngredientNotFound;
 import com.recipes.backend.rest.domain.IngredientRest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -47,15 +48,15 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
         var expectedString = "The object was not found";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(ingredient), HEADERS);
 
-        // when
-        final ResponseEntity<String> response = REST_TEMPLATE.exchange(
-                createURLWithPort("/ingredients"),
-                HttpMethod.PUT,
-                entity,
-                String.class);
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody()).contains(expectedString);
+        try {
+            // when
+            final ResponseEntity<String> response = REST_TEMPLATE.exchange(
+                    createURLWithPort("/ingredients"),
+                    HttpMethod.PUT,
+                    entity,
+                    String.class);
+        } catch (final IngredientNotFound notFoundException) {
+            assertThat(notFoundException.getMessage()).isEqualTo("The object was not found");
+        }
     }
 }
