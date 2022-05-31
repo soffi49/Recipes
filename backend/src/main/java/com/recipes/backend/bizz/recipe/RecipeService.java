@@ -1,5 +1,6 @@
 package com.recipes.backend.bizz.recipe;
 
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.sun.istack.Nullable;
 
@@ -20,4 +21,6 @@ public interface RecipeService {
     long getRecipesCount();
 
     void updateRecipe(Recipe recipe);
+
+    List<Recipe> findRecipes(List<Ingredient> ingredients);
 }
