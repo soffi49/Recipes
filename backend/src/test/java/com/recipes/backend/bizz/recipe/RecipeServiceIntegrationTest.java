@@ -60,8 +60,8 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
-        final Set<String> recipesNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
+        final List<String> recipesNames = retrievedList.stream().map(Recipe::getName).toList();
 
         assertThat(retrievedList).hasSize(5);
         assertThat(recipesNames).contains("Recipe2");
@@ -76,8 +76,8 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     {
         final int limit = 3;
 
-        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
-        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
+        final List<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
+        final List<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
 
         assertThat(retrievedList1).hasSize(3);
         assertThat(retrievedList2).hasSize(2);
@@ -93,7 +93,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     {
         final int limit = 5;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, "Recipe2", null);
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, "Recipe2", null);
 
         assertThat(retrievedList).hasSize(1);
         assertThat(retrievedList.stream().anyMatch(el -> el.getName().equals("Recipe2"))).isTrue();
@@ -108,7 +108,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
     {
         final int limit = 5;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, null, Set.of("gluten free"));
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(0, limit, null, Set.of("gluten free"));
 
         assertThat(retrievedList).hasSize(1);
         assertThat(retrievedList.stream().anyMatch(el -> el.getName().equals("Recipe5"))).isTrue();
@@ -123,7 +123,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
 
         assertThat(retrievedList).isEmpty();
     }

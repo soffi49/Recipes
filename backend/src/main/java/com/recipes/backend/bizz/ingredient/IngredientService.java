@@ -4,6 +4,7 @@ package com.recipes.backend.bizz.ingredient;
 import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import org.springframework.lang.Nullable;
 
+import java.util.List;
 import java.util.Set;
 
 public interface IngredientService
@@ -13,9 +14,9 @@ public interface IngredientService
 
     boolean deleteIngredient(Long ingredientId);
 
-    Set<Ingredient> getAllIngredients(Integer page,
-                                      Integer limit,
-                                      @Nullable String name);
+    List<Ingredient> getAllIngredients(Integer page,
+                                       Integer limit,
+                                       @Nullable String name);
 
     long getIngredientsCount();
 

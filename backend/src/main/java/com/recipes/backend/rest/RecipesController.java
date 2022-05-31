@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -48,12 +49,12 @@ public class RecipesController
 
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<String> tagFilter = Objects.nonNull(filters) ? filters.getTags() : null;
-        final Set<RecipeRest> retrievedRecipes =
+        final List<RecipeRest> retrievedRecipes =
                 recipeService.getAllRecipes(page, limit, nameFilter, tagFilter).stream()
                         .map(RecipeMapper::mapToRecipeRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toSet());
+                        .toList();
         final long totalRecipes = recipeService.getRecipesCount();
 
         return ResponseEntity.ok(new RecipeAllRest(totalRecipes, retrievedRecipes));

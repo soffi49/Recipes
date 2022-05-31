@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,6 +25,6 @@ public class IngredientAllRest implements Serializable {
 
     @NotNull
     @JsonProperty(value = "ingredients", required = true)
-    private Set<IngredientRest> ingredients;
+    private List<IngredientRest> ingredients;
 
 }
