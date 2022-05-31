@@ -1,6 +1,7 @@
 package com.recipes.backend.bizz.recipe;
 
 import com.recipes.backend.bizz.ingredient.IngredientService;
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.recipes.backend.bizz.recipe.domain.RecipeTagEnum;
 import com.recipes.backend.exception.domain.*;
@@ -10,6 +11,7 @@ import com.recipes.backend.repo.RecipeRepository;
 import com.recipes.backend.repo.TagRepository;
 import com.recipes.backend.repo.domain.RecipeDTO;
 import com.sun.istack.Nullable;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static com.recipes.backend.mapper.RecipeMapper.mapToRecipeDTO;
+import static java.util.stream.StreamSupport.stream;
 
 @Slf4j
 @Service
@@ -54,7 +57,7 @@ public class RecipeServiceImpl implements RecipeService
     {
         try
         {
-            return StreamSupport.stream(recipeRepository.findAll().spliterator(), false).count();
+            return stream(recipeRepository.findAll().spliterator(), false).count();
         } catch (final DataAccessException e)
         {
             throw new DatabaseFindException("couldn't retrieve recipes count");
@@ -74,7 +77,7 @@ public class RecipeServiceImpl implements RecipeService
 
         try
         {
-            return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
+            return stream(recipeRepository.findAll().spliterator(), false)
                     .map(RecipeMapper::mapToRecipe)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
@@ -152,6 +155,20 @@ public class RecipeServiceImpl implements RecipeService
         } catch (final DataAccessException e)
         {
             throw new DatabaseSaveException("couldn't update the ingredient list for recipe");
+        }
+    }
+
+    @Override
+    public Set<Recipe> findRecipes(List<Ingredient> ingredients) {
+        try {
+            return stream(recipeRepository.findAll().spliterator(), false)
+                .map(RecipeMapper::mapToRecipe)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(recipe -> recipe.getIngredients().containsAll(ingredients))
+                .collect(Collectors.toSet());
+        } catch (final DataAccessException e) {
+            throw new DatabaseFindException("couldn't retrieve full recipe list");
         }
     }
 }

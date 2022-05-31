@@ -1,25 +1,36 @@
 package com.recipes.backend.rest;
 
+import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
+import static com.recipes.backend.utils.LogWriter.logHeaders;
+
 import com.recipes.backend.bizz.recipe.RecipeService;
 import com.recipes.backend.bizz.security.SecurityService;
+import com.recipes.backend.exception.domain.IngredientEmptyException;
 import com.recipes.backend.exception.domain.RecipeEmptyException;
+import com.recipes.backend.mapper.IngredientMapper;
 import com.recipes.backend.mapper.RecipeMapper;
 import com.recipes.backend.rest.domain.FiltersRest;
+import com.recipes.backend.rest.domain.IngredientRest;
 import com.recipes.backend.rest.domain.RecipeAllRest;
 import com.recipes.backend.rest.domain.RecipeRest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.recipes.backend.mapper.RecipeMapper.mapToRecipe;
-import static com.recipes.backend.utils.LogWriter.logHeaders;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/recipes")
@@ -90,5 +101,22 @@ public class RecipesController
 
         recipeService.updateRecipe(mapToRecipe(recipeRest).orElseThrow(RecipeEmptyException::new));
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<Object> getRecipes(@RequestHeader HttpHeaders headers,
+        @RequestBody List<IngredientRest> ingredientRests) {
+        logHeaders(headers);
+        securityService.isAuthenticated(headers);
+
+        var ingredients = ingredientRests.stream()
+            .map(i -> IngredientMapper.mapToIngredient(i).orElseThrow(IngredientEmptyException::new))
+            .collect(Collectors.toList());
+
+        var foundRecipes = recipeService.findRecipes(ingredients).stream()
+            .map(r -> RecipeMapper.mapToRecipeRest(r).orElseThrow(RecipeEmptyException::new))
+            .collect(Collectors.toSet());
+
+        return ResponseEntity.ok(new RecipeAllRest(foundRecipes.size(), foundRecipes));
     }
 }

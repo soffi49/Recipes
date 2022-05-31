@@ -1,7 +1,9 @@
 package com.recipes.backend.bizz.recipe;
 
+import com.recipes.backend.bizz.ingredient.domain.Ingredient;
 import com.recipes.backend.bizz.recipe.domain.Recipe;
 import com.sun.istack.Nullable;
+import java.util.List;
 import java.util.Set;
 
 public interface RecipeService {
@@ -18,4 +20,6 @@ public interface RecipeService {
     long getRecipesCount();
 
     void updateRecipe(Recipe recipe);
+
+    Set<Recipe> findRecipes(List<Ingredient> ingredients);
 }
