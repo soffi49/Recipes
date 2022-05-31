@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import {
+  addRecipeApi,
   deleteRecipeApi,
   editRecipeApi,
   getRecipesApi,
@@ -10,6 +11,7 @@ import Box from "@mui/system/Box";
 import { RecipeDetails } from "../../models/models";
 import RecipesTable from "../recipes-table/recipes-table";
 import { RecipesFilters } from "../recipes-filters";
+import AddRecipeModal from "../recipes-add-recipe/recipes-add-recipe.component";
 
 export default function RecipesAdminView() {
   const [recipes, setRecipes] = useState<RecipeDetails[]>([]);
@@ -17,6 +19,7 @@ export default function RecipesAdminView() {
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(10);
   const [count, setCount] = useState<number>(0);
+  const [isAddModalVisible,setModalVisible] = useState<boolean>(false);
 
   const getAllRecipes = () => {
     getRecipesApi(page, limit).then((response) => {
@@ -53,6 +56,12 @@ export default function RecipesAdminView() {
     editRecipeApi(recipe, id).then(() => getAllRecipes());
   };
 
+  const addRecipe = (recipe: RecipeDetails) => {
+    setIsFetching(true);
+    addRecipeApi(recipe).then(() => getAllRecipes());
+    setModalVisible(false);
+  };
+
   const handleOnFilterClick = (name: string, tag: string) => {
     setIsFetching(true);
     getRecipesApi(page, limit, name, tag).then((response) => {
@@ -75,6 +84,12 @@ export default function RecipesAdminView() {
   ) : (
     <>
       <RecipesFilters onFilterClick={handleOnFilterClick} />
+      <AddRecipeModal 
+        visible={isAddModalVisible}
+        onCancel={() => setModalVisible(false)}
+        handleOpen={() => setModalVisible(true)}
+        addRecipe={addRecipe}
+      />
       <RecipesTable
         recipes={recipes}
         page={page}

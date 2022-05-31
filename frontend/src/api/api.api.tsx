@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { server } from "../constants/constants";
 import { RecipeDetails } from "../models/models";
 
+
 export async function getIngredientsApi(page: number, limit: number) {
   const key = "" + sessionStorage.getItem("key");
   try {
@@ -15,10 +16,36 @@ export async function getIngredientsApi(page: number, limit: number) {
         },
       }
     );
-
     return response.data;
   } catch (error) {
     toast.error(String(error));
+    throw error;
+  }
+}
+export async function getFilteredIngredientsApi(
+  page: number,
+  limit: number,
+  filter: string
+) {
+  if (filter === "" || filter === undefined)
+    return getIngredientsApi(page, limit);
+
+  const key = "" + sessionStorage.getItem("key");
+  try {
+    const response = await axios.post(
+      `${server}/ingredients/all?page=${page}&limit=${limit}`,
+      {
+        name: filter,
+      },
+      {
+        headers: {
+          security_header: key,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
     throw error;
   }
 }
@@ -112,6 +139,7 @@ export async function getRecipesApi(
         },
       }
     );
+
     return response.data;
   } catch (error) {
     toast.error(String(error));
@@ -123,9 +151,34 @@ export async function editRecipeApi(recipe: RecipeDetails, id: number) {
   const key = "" + sessionStorage.getItem("key");
   try {
     const response = await axios.put(
-      `${server}/recipes/${id}`,
+      `${server}/recipes`,
       {
         id: recipe.id,
+        name: recipe.name,
+        instructions: recipe.instructions,
+        ingredients: recipe.ingredients,
+        tags: recipe.tags,
+      },
+      {
+        headers: {
+          security_header: key,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(String(error));
+    throw error;
+  }
+}
+
+export async function addRecipeApi(recipe: RecipeDetails) {
+  const key = "" + sessionStorage.getItem("key");
+  console.log(recipe.ingredients);
+  try {
+    const response = await axios.post(
+      `${server}/recipes`,
+      {
         name: recipe.name,
         instructions: recipe.instructions,
         ingredients: recipe.ingredients,
@@ -151,8 +204,10 @@ export async function registerApi(username: string, password: string) {
       password: password,
     });
     return response;
-  } catch (error) {
-    toast.error(String(error));
+  } catch (error: unknown) {
+      if(error instanceof Error) {
+        toast.error(String(error.message));
+      }
     throw error;
   }
 }

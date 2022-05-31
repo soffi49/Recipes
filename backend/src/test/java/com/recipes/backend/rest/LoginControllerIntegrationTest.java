@@ -28,7 +28,7 @@ class LoginControllerIntegrationTest extends AbstractControllerIntegrationTest
     {
         // given
         var user = new LoginRest("username", "password");
-        var expectedString = "{\"token\":\"security_token\"}";
+        var expectedString = "{\"token\":\"security_token\",\"isAdmin\":0}";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
 
         // when
@@ -47,7 +47,6 @@ class LoginControllerIntegrationTest extends AbstractControllerIntegrationTest
     {
         // given
         var user = new LoginRest("username", "wrongPassword");
-        var expectedString = "{\"token\":\"security_token\"}";
         var entity = new HttpEntity<>(MAPPER.writeValueAsString(user), HEADERS);
 
         // when

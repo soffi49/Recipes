@@ -1,10 +1,12 @@
 package com.recipes.backend.bizz.login;
 
+import com.recipes.backend.bizz.login.domain.UserToken;
 import com.recipes.backend.rest.domain.LoginRest;
+import com.recipes.backend.rest.domain.TokenRest;
 
 public interface LoginService {
 
-    String loginToSystem(LoginRest loginForm);
+    UserToken loginToSystem(LoginRest loginForm);
 
-    String registerUser(LoginRest loginForm);
+    UserToken registerUser(LoginRest loginForm);
 }

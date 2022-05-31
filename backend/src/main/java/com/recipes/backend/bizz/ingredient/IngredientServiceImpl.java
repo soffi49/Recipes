@@ -12,11 +12,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.comparator.Comparators;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -67,7 +65,7 @@ public class IngredientServiceImpl implements IngredientService
     }
 
     @Override
-    public Set<Ingredient> getAllIngredients(final Integer page,
+    public List<Ingredient> getAllIngredients(final Integer page,
                                              final Integer limit,
                                              @Nullable final String name) {
         try {
@@ -78,9 +76,10 @@ public class IngredientServiceImpl implements IngredientService
                     .map(IngredientMapper::mapToIngredient)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
+                    .sorted(Comparator.comparing((Ingredient::getName)))
                     .skip((long) page * limit)
                     .limit(limit)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         } catch (final DataAccessException e)
         {
             throw new DatabaseFindException("couldn't retrieve full ingredient list");

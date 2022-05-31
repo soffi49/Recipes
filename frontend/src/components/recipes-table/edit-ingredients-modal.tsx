@@ -25,7 +25,7 @@ const IngredientsModal: React.FC<Props> = ({visible,onCancel,ingredients,onAccep
     const [newIngredients,setNewIngredients] = useState<IngredientDetailsQuantity[]>(ingredients);
     
     const getAllIngredients = () => {
-        getIngredientsApi(0, 20).then((response) => {
+        getIngredientsApi(0, 100).then((response) => {
             setIsFetching(true);
             if(!!response){
                 setAllIngredients(response.ingredients);
