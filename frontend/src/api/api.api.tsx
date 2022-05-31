@@ -3,10 +3,6 @@ import { toast } from "react-toastify";
 import { server } from "../constants/constants";
 import { RecipeDetails } from "../models/models";
 
-const sortArrayByName = ( array : any[] ) => {
-  array.sort((a : any, b : any) => a.name.localeCompare(b.name))
-}
-
 
 export async function getIngredientsApi(page: number, limit: number) {
   const key = "" + sessionStorage.getItem("key");
@@ -20,8 +16,6 @@ export async function getIngredientsApi(page: number, limit: number) {
         },
       }
     );
-    sortArrayByName(response.data['ingredients'])
-
     return response.data;
   } catch (error) {
     toast.error(String(error));
@@ -49,7 +43,6 @@ export async function getFilteredIngredientsApi(
         },
       }
     );
-    sortArrayByName(response.data['ingredients'])
 
     return response.data;
   } catch (error) {
@@ -146,7 +139,6 @@ export async function getRecipesApi(
         },
       }
     );
-    sortArrayByName(response.data['recipes'])
 
     return response.data;
   } catch (error) {

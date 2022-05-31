@@ -59,12 +59,12 @@ public class RecipesController
 
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
         final Set<String> tagFilter = Objects.nonNull(filters) ? filters.getTags() : null;
-        final Set<RecipeRest> retrievedRecipes =
+        final List<RecipeRest> retrievedRecipes =
                 recipeService.getAllRecipes(page, limit, nameFilter, tagFilter).stream()
                         .map(RecipeMapper::mapToRecipeRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
         final long totalRecipes = recipeService.getRecipesCount();
 
         return ResponseEntity.ok(new RecipeAllRest(totalRecipes, retrievedRecipes));
@@ -115,7 +115,7 @@ public class RecipesController
 
         var foundRecipes = recipeService.findRecipes(ingredients).stream()
             .map(r -> RecipeMapper.mapToRecipeRest(r).orElseThrow(RecipeEmptyException::new))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toList());
 
         return ResponseEntity.ok(new RecipeAllRest(foundRecipes.size(), foundRecipes));
     }

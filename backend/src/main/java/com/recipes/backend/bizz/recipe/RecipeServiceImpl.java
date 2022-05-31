@@ -20,9 +20,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -65,10 +63,10 @@ public class RecipeServiceImpl implements RecipeService
     }
 
     @Override
-    public Set<Recipe> getAllRecipes(final Integer page,
-                                     final Integer limit,
-                                     @Nullable final String name,
-                                     @Nullable final Set<String> tags)
+    public List<Recipe> getAllRecipes(final Integer page,
+                                      final Integer limit,
+                                      @Nullable final String name,
+                                      @Nullable final Set<String> tags)
     {
 
         final Predicate<Recipe> filterByName = recipe -> (Objects.isNull(name)) || (recipe.getName().contains(name));
@@ -82,9 +80,10 @@ public class RecipeServiceImpl implements RecipeService
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .filter(filterByName.and(filterByTags))
+                    .sorted(Comparator.comparing(Recipe::getName))
                     .skip((long) page * limit)
                     .limit(limit)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         } catch (final DataAccessException e)
         {
             throw new DatabaseFindException("couldn't retrieve full recipe list");

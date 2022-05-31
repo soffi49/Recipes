@@ -18,7 +18,7 @@ class IngredientControllerIntegrationTest extends AbstractControllerIntegrationT
 
     @Test
     @DisplayName("Update existing ingredient")
-    @Sql("/data/ingredient/insert-1-ingredient.sql")
+    @Sql({"/data/truncate-db.sql", "/data/user/insert-test-user.sql", "/data/ingredient/insert-1-ingredient.sql"})
     @Order(1)
     void shouldCorrectlyUpdateIngredientGivenExistingId() throws JsonProcessingException
     {
