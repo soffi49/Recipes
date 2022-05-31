@@ -61,7 +61,7 @@ class RecipeServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int page = 0;
 
         final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
-        final List<String> recipesNames = retrievedList.stream().map(Recipe::getName).toList();
+        final List<String> recipesNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toList());
 
         assertThat(retrievedList).hasSize(5);
         assertThat(recipesNames).contains("Recipe2");

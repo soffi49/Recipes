@@ -80,7 +80,7 @@ public class RecipeServiceImpl implements RecipeService
                     .sorted(Comparator.comparing(Recipe::getName))
                     .skip((long) page * limit)
                     .limit(limit)
-                    .toList();
+                    .collect(Collectors.toList());
         } catch (final DataAccessException e)
         {
             throw new DatabaseFindException("couldn't retrieve full recipe list");

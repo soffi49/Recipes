@@ -54,7 +54,7 @@ public class RecipesController
                         .map(RecipeMapper::mapToRecipeRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .toList();
+                        .collect(Collectors.toList());
         final long totalRecipes = recipeService.getRecipesCount();
 
         return ResponseEntity.ok(new RecipeAllRest(totalRecipes, retrievedRecipes));

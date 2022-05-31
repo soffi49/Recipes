@@ -69,7 +69,7 @@ public class IngredientController
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .toList();
+                        .collect(Collectors.toList());
         final long totalIngredients = ingredientService.getIngredientsCount();
 
         return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));
@@ -92,7 +92,7 @@ public class IngredientController
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .toList();
+                        .collect(Collectors.toList());
         final long totalIngredients = ingredientService.getIngredientsCount();
 
         return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));

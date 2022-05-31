@@ -79,7 +79,7 @@ public class IngredientServiceImpl implements IngredientService
                     .sorted(Comparator.comparing((Ingredient::getName)))
                     .skip((long) page * limit)
                     .limit(limit)
-                    .toList();
+                    .collect(Collectors.toList());
         } catch (final DataAccessException e)
         {
             throw new DatabaseFindException("couldn't retrieve full ingredient list");

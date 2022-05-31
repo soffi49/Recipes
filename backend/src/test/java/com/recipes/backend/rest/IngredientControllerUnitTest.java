@@ -20,8 +20,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -101,7 +101,7 @@ class IngredientControllerUnitTest
     @DisplayName("Get all ingredients - correct parameters without filters")
     void getAllIngredientsCorrectParamWithoutFilters() throws Exception
     {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+        Mockito.doReturn(setUpIngredientList()).when(ingredientService).getAllIngredients(0, 5, null);
 
         mockMvc.perform(post("/ingredients/all")
                                 .param("limit", "5")
@@ -115,7 +115,7 @@ class IngredientControllerUnitTest
     @DisplayName("Get all ingredients - incorrect parameters without filters")
     void getAllIngredientsIncorrectParamWithoutFilters() throws Exception
     {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+        Mockito.doReturn(setUpIngredientList()).when(ingredientService).getAllIngredients(0, 5, null);
 
         mockMvc.perform(post("/ingredients/all")
                                 .param("limit", "5")
@@ -127,7 +127,7 @@ class IngredientControllerUnitTest
     @DisplayName("Get all ingredients - correct parameters with filter")
     void getAllIngredientsCorrectParamWithFilters() throws Exception
     {
-        final Set<Ingredient> resultSet = Set.of(setUpIngredientSet().stream().findFirst().get());
+        final List<Ingredient> resultSet = List.of(setUpIngredientList().stream().findFirst().get());
 
         Mockito.doReturn(resultSet).when(ingredientService).getAllIngredients(0, 5, "Name0");
 
@@ -144,7 +144,7 @@ class IngredientControllerUnitTest
     @DisplayName("Get all ingredients for user - correct param")
     void getAllIngredientsForUserCorrectParam() throws Exception
     {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+        Mockito.doReturn(setUpIngredientList()).when(ingredientService).getAllIngredients(0, 5, null);
 
         mockMvc.perform(get("/ingredients/user")
                                 .param("limit", "5")
@@ -158,7 +158,7 @@ class IngredientControllerUnitTest
     @DisplayName("Get all ingredients for user - incorrect parameters")
     void getAllIngredientsForUserInCorrectParam() throws Exception
     {
-        Mockito.doReturn(setUpIngredientSet()).when(ingredientService).getAllIngredients(0, 5, null);
+        Mockito.doReturn(setUpIngredientList()).when(ingredientService).getAllIngredients(0, 5, null);
 
         mockMvc.perform(get("/ingredients/user")
                                 .param("limit", "5"))
@@ -220,9 +220,9 @@ class IngredientControllerUnitTest
                 .andExpect(status().isForbidden());
     }
 
-    private Set<Ingredient> setUpIngredientSet()
+    private List<Ingredient> setUpIngredientList()
     {
-        final Set<Ingredient> ingredientRestSet = new HashSet<>();
+        final List<Ingredient> ingredientRestSet = new ArrayList<>();
 
         LongStream.range(0, 3).forEach(val -> {
             final Ingredient ingredient = new Ingredient();

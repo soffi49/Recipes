@@ -131,7 +131,7 @@ class IngredientServiceUnitTest
         final int page = 0;
         when(ingredientRepository.findAll()).thenReturn(mockIngredientSet);
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Ingredient::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(3);
@@ -145,8 +145,8 @@ class IngredientServiceUnitTest
         final int limit = 2;
         when(ingredientRepository.findAll()).thenReturn(mockIngredientSet);
 
-        final Set<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit, null);
-        final Set<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit, null);
+        final List<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit, null);
+        final List<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit, null);
 
         assertThat(retrievedList1).hasSize(2);
         assertThat(retrievedList2).hasSize(1);
@@ -161,7 +161,7 @@ class IngredientServiceUnitTest
         final int page = 0;
         when(ingredientRepository.findAll()).thenReturn(mockIngredientSet);
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name1");
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name1");
 
         assertThat(retrievedList.size()).isOne();
     }
@@ -174,7 +174,7 @@ class IngredientServiceUnitTest
         final int page = 0;
         when(ingredientRepository.findAll()).thenReturn(mockIngredientSet);
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name10");
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name10");
 
         assertThat(retrievedList).isEmpty();
     }
@@ -187,7 +187,7 @@ class IngredientServiceUnitTest
         final int page = 0;
         when(ingredientRepository.findAll()).thenReturn(Collections.emptySet());
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
 
         assertThat(retrievedList).isEmpty();
     }

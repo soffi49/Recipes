@@ -18,7 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.LongStream;
 
@@ -50,7 +51,7 @@ class RecipeControllerUnitTest
     @DisplayName("Get all recipes - correct parameters and without filters")
     void getAllRecipesCorrectParamNoFilters() throws Exception
     {
-        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
+        Mockito.doReturn(setUpRecipeList()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(post("/recipes/all")
@@ -70,7 +71,7 @@ class RecipeControllerUnitTest
         recipe.setName("Recipe1");
         recipe.setInstructions("Some Instructions");
 
-        Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, "Recipe1", null);
+        Mockito.doReturn(List.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, "Recipe1", null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(post("/recipes/all")
@@ -93,7 +94,7 @@ class RecipeControllerUnitTest
         recipe.setTags(Set.of(RecipeTagEnum.LOW_CALORIE));
         recipe.setInstructions("Some Instructions");
 
-        Mockito.doReturn(Set.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, null, Set.of("low calorie"));
+        Mockito.doReturn(List.of(recipe)).when(recipeServiceMock).getAllRecipes(0, 5, null, Set.of("low calorie"));
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(post("/recipes/all")
@@ -110,7 +111,7 @@ class RecipeControllerUnitTest
     @DisplayName("Get all recipes - incorrect parameters and without filters")
     void getAllRecipesIncorrectParamNoFilters() throws Exception
     {
-        Mockito.doReturn(setUpRecipeSet()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
+        Mockito.doReturn(setUpRecipeList()).when(recipeServiceMock).getAllRecipes(0, 5, null, null);
         when(securityService.isAuthenticated(any())).thenReturn(true);
 
         mockMvc.perform(post("/recipes/all")
@@ -151,9 +152,9 @@ class RecipeControllerUnitTest
     }
 
 
-    private Set<Recipe> setUpRecipeSet()
+    private List<Recipe> setUpRecipeList()
     {
-        final Set<Recipe> recipeSet = new HashSet<>();
+        final List<Recipe> recipeSet = new ArrayList<>();
 
         LongStream.range(0, 3).forEach(val -> {
             final Recipe recipe = new Recipe();

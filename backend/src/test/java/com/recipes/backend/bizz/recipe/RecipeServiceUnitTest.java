@@ -149,7 +149,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(3);
@@ -163,8 +163,8 @@ class RecipeServiceUnitTest
         final int limit = 2;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
-        final Set<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
+        final List<Recipe> retrievedList1 = recipeService.getAllRecipes(0, limit, null, null);
+        final List<Recipe> retrievedList2 = recipeService.getAllRecipes(1, limit, null, null);
 
         assertThat(retrievedList1).hasSize(2);
         assertThat(retrievedList2).hasSize(1);
@@ -179,7 +179,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(Collections.emptySet());
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, null);
 
         assertThat(retrievedList).isEmpty();
     }
@@ -192,7 +192,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name1", null);
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name1", null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(1);
@@ -207,7 +207,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, Set.of("gluten free"));
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, null, Set.of("gluten free"));
         final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(1);
@@ -222,7 +222,7 @@ class RecipeServiceUnitTest
         final int page = 0;
         when(recipeRepository.findAll()).thenReturn(mockRecipeSet);
 
-        final Set<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name3", Set.of("vegetarian"));
+        final List<Recipe> retrievedList = recipeService.getAllRecipes(page, limit, "Name3", Set.of("vegetarian"));
         final Set<String> ingredientsNames = retrievedList.stream().map(Recipe::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(1);
