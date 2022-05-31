@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -63,12 +64,12 @@ public class IngredientController
         securityService.isAuthenticated(headers);
 
         final String nameFilter = Objects.nonNull(filters) ? filters.getName() : null;
-        final Set<IngredientRest> retrievedIngredients =
+        final List<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit, nameFilter).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
         final long totalIngredients = ingredientService.getIngredientsCount();
 
         return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));
@@ -86,12 +87,12 @@ public class IngredientController
         logHeaders(headers);
         securityService.isAuthenticated(headers);
 
-        final Set<IngredientRest> retrievedIngredients =
+        final List<IngredientRest> retrievedIngredients =
                 ingredientService.getAllIngredients(page, limit, null).stream()
                         .map(IngredientMapper::mapToIngredientRest)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(Collectors.toSet());
+                        .collect(Collectors.toList());
         final long totalIngredients = ingredientService.getIngredientsCount();
 
         return ResponseEntity.ok(new IngredientAllRest(totalIngredients, retrievedIngredients));

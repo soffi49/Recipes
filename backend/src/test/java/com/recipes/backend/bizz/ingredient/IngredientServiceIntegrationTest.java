@@ -83,7 +83,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
         final Set<String> ingredientsNames = retrievedList.stream().map(Ingredient::getName).collect(Collectors.toSet());
 
         assertThat(retrievedList).hasSize(5);
@@ -97,8 +97,8 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
     {
         final int limit = 3;
 
-        final Set<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit, null);
-        final Set<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit, null);
+        final List<Ingredient> retrievedList1 = ingredientService.getAllIngredients(0, limit, null);
+        final List<Ingredient> retrievedList2 = ingredientService.getAllIngredients(1, limit, null);
 
         assertThat(retrievedList1).hasSize(3);
         assertThat(retrievedList2).hasSize(2);
@@ -113,7 +113,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name1");
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name1");
 
         assertThat(retrievedList.size()).isOne();
     }
@@ -126,7 +126,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name10");
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, "Name10");
 
         assertThat(retrievedList).isEmpty();
     }
@@ -140,7 +140,7 @@ class IngredientServiceIntegrationTest extends AbstractIntegrationTestConfig
         final int limit = 5;
         final int page = 0;
 
-        final Set<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
+        final List<Ingredient> retrievedList = ingredientService.getAllIngredients(page, limit, null);
 
         assertThat(retrievedList).isEmpty();
     }

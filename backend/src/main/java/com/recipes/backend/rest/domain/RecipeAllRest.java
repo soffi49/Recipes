@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -24,5 +25,5 @@ public class RecipeAllRest implements Serializable {
 
     @NotNull
     @JsonProperty("recipes")
-    private Set<RecipeRest> recipes;
+    private List<RecipeRest> recipes;
 }
