@@ -158,14 +158,14 @@ public class RecipeServiceImpl implements RecipeService
     }
 
     @Override
-    public Set<Recipe> findRecipes(List<Ingredient> ingredients) {
+    public List<Recipe> findRecipes(List<Ingredient> ingredients) {
         try {
             return stream(recipeRepository.findAll().spliterator(), false)
                 .map(RecipeMapper::mapToRecipe)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(recipe -> recipe.getIngredients().containsAll(ingredients))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
         } catch (final DataAccessException e) {
             throw new DatabaseFindException("couldn't retrieve full recipe list");
         }
