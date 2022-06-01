@@ -1,1 +1,0 @@
-INSERT INTO user (user_id, username, password, token, is_admin) VALUES (1337, "test-name", "test-password", "test-token", 0);

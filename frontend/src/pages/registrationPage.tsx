@@ -21,20 +21,20 @@ const RegistrationPage = () => {
     return (
         <>
             <StyledBox>
-                <StyledTypography>
+                <StyledTypography id={'registration-page-label'}>
                     Registration
                 </StyledTypography>
                 <div>
-                    <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
+                    <StyledTextField id={'register-username-field'} label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
                 </div>
                 <div>
-                    <StyledTextField label="Password" type="password" style={{ marginBottom: '20px' }} onChange={handleChangePassword}/>
+                    <StyledTextField id={'register-password-field'} label="Password" type="password" style={{ marginBottom: '20px' }} onChange={handleChangePassword}/>
                 </div>
                 <div>
-                    <Button variant="contained" onClick={async () => {
+                    <Button id={'cancel-registration-button'} variant="contained" onClick={async () => {
                         navigate('/not-authorized')
                     }}>Cancel</Button>
-                    <StyledButton variant="contained" onClick={async () => {
+                    <StyledButton id={'register-button'} variant="contained" onClick={async () => {
                         const msgBuffer = new TextEncoder().encode(loginInfo.password); 
                         const passwordBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
                         const hashArray = Array.from(new Uint8Array(passwordBuffer));         

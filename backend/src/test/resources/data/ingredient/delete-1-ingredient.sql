@@ -1,1 +1,0 @@
-DELETE FROM ingredient WHERE ingredient_id=1000;
