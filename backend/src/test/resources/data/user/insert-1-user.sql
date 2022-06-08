@@ -1,0 +1,1 @@
+INSERT INTO user (user_id, username, password, token, is_admin) VALUES (1, "username", "password", "security_token", 0);

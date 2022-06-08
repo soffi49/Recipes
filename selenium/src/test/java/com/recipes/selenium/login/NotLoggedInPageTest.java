@@ -79,8 +79,8 @@ public class NotLoggedInPageTest {
     @Test
     void checkRegisterAccountAndProceedCorrectInput() {
 
-        final String username = "testingUsername1";
-        final String password = "testingPassword1";
+        final String username = "testingUsername5";
+        final String password = "testingPassword5";
 
         notLoggedInPage.createAccountButton.click();
 
