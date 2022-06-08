@@ -22,7 +22,7 @@ export default function Menu() {
         }}
         open
       >
-        <div>
+        <div id={'main-menu'}>
             <Toolbar />
             <Divider />
             <List>

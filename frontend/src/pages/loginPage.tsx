@@ -21,25 +21,25 @@ const LoginPage = () => {
     return (
         <>
             <StyledBox>
-                <StyledTypography>
+                <StyledTypography id={'not-logged-in-label'}>
                     You are not logged in
                 </StyledTypography>
                 <div>
-                    <StyledTextField label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
+                    <StyledTextField id={'username-field'} label="Username" style={{ marginBottom: '20px' }} onChange={handleChangeLogin}/>
                 </div>
                 <div>
-                    <StyledTextField label="Password" type="password" onChange={handleChangePassword}/>
+                    <StyledTextField id={'password-field'} label="Password" type="password" onChange={handleChangePassword}/>
                 </div>
                 <div>
                     <div>
-                        <Link component="button"
+                        <Link id={'create-account-button'} component="button"
                               variant="body2"
                               style={{ marginBottom: '20px' }}
                               onClick={async () => {
                             navigate('/registration')
                         }}>I do not have Account</Link>
                     </div>
-                    <StyledButton variant="contained" onClick={async () => {
+                    <StyledButton id={'log-in-button'} variant="contained" onClick={async () => {
                         await AuthService.login(loginInfo);
                         navigate('/');
                     }}>Login</StyledButton>
