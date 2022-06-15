@@ -30,7 +30,8 @@ export default function AddIngredient({ addIngredient }: AddIngredientProps) {
 
     return (
       <div>
-        <Button 
+        <Button
+            id={'add-ingredient-button'}
             variant="contained"
             sx={{mb: 1}}
             onClick={handleOpen}
