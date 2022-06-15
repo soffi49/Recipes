@@ -41,16 +41,16 @@ export default function RecipesTable({recipes, page, limit, count, handleChangeR
     const [editState,setEditState] = useState<propsDetailsModal>({isVisible: false,recipe: placeholder});
     return (
         <>
-          <TableContainer component={Paper}>
+          <TableContainer id={'recipe-table-container'} component={Paper}>
             <Table>
-              <TableHead>
+              <TableHead id={'recipe-table-header'}>
                 <TableRow>
                   <TableCell align="center">Id</TableCell>
                   <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody id={'recipe-table-body'}>
                 {recipes.map((row) => (
                   <TableRow
                     key={row.id}
@@ -71,7 +71,7 @@ export default function RecipesTable({recipes, page, limit, count, handleChangeR
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter>
+              <TableFooter id={'recipe-table-footer'}>
                 <TablePagination
                   count={count}
                   page={page}

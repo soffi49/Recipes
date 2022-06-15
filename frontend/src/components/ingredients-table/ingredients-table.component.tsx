@@ -28,16 +28,16 @@ interface IngredientTableProps {
 export default function IngredientsTable({ingredients, page, limit, count, handleChangeRowsPerPage, handleChangePage, deleteIngredient, editIngredient}: IngredientTableProps) {
     return (
         <>
-          <TableContainer component={Paper}>
+          <TableContainer id={'ingredient-table-container'} component={Paper}>
             <Table>
-              <TableHead>
+              <TableHead id={'ingredient-table-header'}>
                 <TableRow>
                   <TableCell align="center">Id</TableCell>
                   <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody id={'ingredient-table-body'}>
                 {ingredients.map((row) => (
                   <TableRow
                     key={row.id}
@@ -53,7 +53,7 @@ export default function IngredientsTable({ingredients, page, limit, count, handl
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter>
+              <TableFooter id={'ingredient-table-footer'}>
                 <TablePagination
                   count={count}
                   page={page}

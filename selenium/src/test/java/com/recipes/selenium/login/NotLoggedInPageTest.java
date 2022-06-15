@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.*;
-import static com.recipes.selenium.config.SeleniumConfig.NOT_LOGGED_IN_PAGE;
+import static com.recipes.selenium.config.SeleniumConfig.MAIN_PAGE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,7 +25,7 @@ public class NotLoggedInPageTest {
 
     @BeforeEach
     public void setUp() {
-        open(NOT_LOGGED_IN_PAGE);
+        open(MAIN_PAGE);
     }
 
     @AfterEach

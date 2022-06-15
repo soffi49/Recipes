@@ -40,7 +40,8 @@ const AddRecipeModal: React.FC<Props> = ({visible,onCancel,addRecipe, handleOpen
 
     return (
         <div>
-          <Button 
+          <Button
+              id={'add-recipe-button'}
             variant="contained"
             sx={{mb: 1}}
             onClick={handleOpen}

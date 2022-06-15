@@ -29,7 +29,7 @@ export default function Menu() {
                 {menuList.map((item, index) => {
                 const {text, icon, to} = item;
                 return(
-                <ListItem key={text} component={Link} to={to} aria-label={text} >
+                <ListItem id={text} key={text} component={Link} to={to} aria-label={text} >
                     <ListItemIcon>{icon}</ListItemIcon>
                     <ListItemText sx={{color: "white"}} primary={text} />
                 </ListItem>
@@ -37,7 +37,7 @@ export default function Menu() {
                 })}
                 <StyledDiv>
                     <Divider />
-                    <ListItem button key="Logout" onClick={logoutOnClick} aria-label="Logout" >
+                    <ListItem id={'log-out-button'} key="Logout" onClick={logoutOnClick} aria-label="Logout" >
                         <ListItemIcon><LogoutIcon /></ListItemIcon>
                         <ListItemText sx={{color: "white"}} primary="Logout" />
                     </ListItem>
